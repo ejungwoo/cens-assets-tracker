@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+import argparse
+import http.server
+import os
+import socketserver
+import ssl
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent
+PUBLIC = ROOT / "public"
+CERT_DIR = ROOT / ".devcert"
+CERT_FILE = CERT_DIR / "localhost.pem"
+KEY_FILE = CERT_DIR / "localhost-key.pem"
+
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(PUBLIC), **kwargs)
+
+
+def ensure_cert():
+    CERT_DIR.mkdir(exist_ok=True)
+    if CERT_FILE.exists() and KEY_FILE.exists():
+        return
+    subprocess.run(
+        [
+            "openssl",
+            "req",
+            "-x509",
+            "-newkey",
+            "rsa:2048",
+            "-keyout",
+            str(KEY_FILE),
+            "-out",
+            str(CERT_FILE),
+            "-sha256",
+            "-days",
+            "365",
+            "-nodes",
+            "-subj",
+            "/CN=localhost",
+        ],
+        check=True,
+    )
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Serve CENS Assets Tracker locally.")
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=5173)
+    parser.add_argument("--https", action="store_true")
+    args = parser.parse_args()
+
+    os.chdir(PUBLIC)
+    with socketserver.TCPServer((args.host, args.port), Handler) as httpd:
+        protocol = "http"
+        if args.https:
+            ensure_cert()
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+            context.load_cert_chain(certfile=CERT_FILE, keyfile=KEY_FILE)
+            httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
+            protocol = "https"
+        print(f"Serving {PUBLIC} at {protocol}://{args.host}:{args.port}")
+        httpd.serve_forever()
+
+
+if __name__ == "__main__":
+    main()
