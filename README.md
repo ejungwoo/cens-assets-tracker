@@ -1,6 +1,6 @@
 # CENS Assets Tracker
 
-Phone-first English PWA for laboratory asset tracking. It is a static web app designed for Firebase Hosting and starts with local browser storage.
+Phone-first PWA for laboratory asset tracking. The UI supports English and Korean. It is a static web app designed for Firebase Hosting and starts with local browser storage.
 
 ## Run Locally
 
