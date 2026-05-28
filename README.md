@@ -2,25 +2,50 @@
 
 Phone-first PWA for laboratory asset tracking. The UI supports English and Korean. It is a static web app designed for Firebase Hosting and starts with local browser storage.
 
+## Service Ports
+
+- Frontend: `5040`
+- Backend: `8040` reserved for future API work
+- Override local defaults in `.env.local` using `.env.example`.
+
 ## Run Locally
 
 Camera QR scanning requires HTTPS or localhost. For phone testing on the same network, use an HTTPS tunnel or a local HTTPS server.
 
-Basic desktop test:
+Recommended start:
 
 ```sh
-python3 -m http.server 5173 -d public
+./start.sh
 ```
 
-Open `http://localhost:5173`.
+Check status or stop:
+
+```sh
+./status.sh
+./stop.sh
+```
+
+Basic desktop test without the helper:
+
+```sh
+python3 -m http.server 5040 -d public
+```
+
+Open `http://localhost:5040`.
 
 Phone camera test on the same network:
 
 ```sh
-python3 dev-server.py --https --host 0.0.0.0 --port 5173
+FRONTEND_HOST=0.0.0.0 FRONTEND_PORT=5040 python3 dev-server.py --https
 ```
 
-Open `https://YOUR_COMPUTER_LAN_IP:5173` on the phone and accept the local development certificate warning. The app itself stays static; this helper only serves files for local testing.
+Open `https://YOUR_COMPUTER_LAN_IP:5040` on the phone and accept the local development certificate warning. The app itself stays static; this helper only serves files for local testing.
+
+## Data And Configuration
+
+- Runtime app data is stored in browser `localStorage` with `cens.*` keys.
+- `.env.local` is machine-specific and ignored by Git.
+- `GOOGLE_APPS_SCRIPT_URL` is reserved for future Google Sheets sync configuration. The current app also has an in-app backend URL setting.
 
 ## Firebase Hosting
 

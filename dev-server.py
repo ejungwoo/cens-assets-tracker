@@ -13,6 +13,8 @@ PUBLIC = ROOT / "public"
 CERT_DIR = ROOT / ".devcert"
 CERT_FILE = CERT_DIR / "localhost.pem"
 KEY_FILE = CERT_DIR / "localhost-key.pem"
+DEFAULT_FRONTEND_HOST = os.environ.get("FRONTEND_HOST", "127.0.0.1")
+DEFAULT_FRONTEND_PORT = int(os.environ.get("FRONTEND_PORT", "5040"))
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -48,8 +50,8 @@ def ensure_cert():
 
 def main():
     parser = argparse.ArgumentParser(description="Serve CENS Assets Tracker locally.")
-    parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=5173)
+    parser.add_argument("--host", default=DEFAULT_FRONTEND_HOST)
+    parser.add_argument("--port", type=int, default=DEFAULT_FRONTEND_PORT)
     parser.add_argument("--https", action="store_true")
     args = parser.parse_args()
 
