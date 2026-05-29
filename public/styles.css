@@ -375,10 +375,6 @@ label {
     align-items: end;
   }
 
-  .fields {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .form-grid {
     grid-template-columns: 1fr 1fr;
   }

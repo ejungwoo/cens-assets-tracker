@@ -257,7 +257,7 @@ const I18N = {
     acquisitionPriceKrwField: "취득 단가 KRW (Unit Price at Acquisition)",
     manufacturerProviderField: "제조사/공급자 (Manufacturer/Provider)",
     acquisitionDateField: "취득일 (Acquisition date)",
-    accountHolderField: "회계 책임자 (Account holder)",
+    accountHolderField: "책임자",
     lastInOutDateField: "최근 반출/반입일 (lastInOutDate)",
     lastVerifiedDateField: "최근 확인일 (lastVerifiedDate)",
     lastVerifiedByField: "최근 확인자 (lastVerifiedBy)",
