@@ -29,6 +29,7 @@ const state = {
   homeMode: "empty",
   homeResults: [],
   openHomeAssetId: "",
+  editingHomeAssetId: "",
   language: "en",
   backendUrl: "",
   listSearch: "",
@@ -160,6 +161,7 @@ const I18N = {
     seedAssetsLoaded: "{count} CENS Equipment assets loaded.",
     nameShort: "name",
     save: "save",
+    cancel: "cancel",
     edit: "edit",
     find: "find",
     locationShort: "location",
@@ -303,6 +305,7 @@ const I18N = {
     seedAssetsLoaded: "CENS Equipment 자산 {count}개를 불러왔습니다.",
     nameShort: "name",
     save: "save",
+    cancel: "cancel",
     edit: "edit",
     find: "find",
     locationShort: "location",
@@ -654,6 +657,7 @@ function renderHomeMyListItem(asset) {
 }
 
 function renderHomeAssetDetails(asset, alreadyAdded) {
+  if (state.editingHomeAssetId === asset.assetId) return renderHomeInlineAssetForm(asset);
   const photos = [asset.photo1, asset.photo2, asset.photo3].filter(Boolean);
   return `
     <div class="compact-detail">
@@ -668,10 +672,31 @@ function renderHomeAssetDetails(asset, alreadyAdded) {
         <span>${escapeHtml(t("verified"))}: ${escapeHtml(asset.lastVerifiedDate || "-")} ${escapeHtml(t("by"))} ${escapeHtml(asset.lastVerifiedBy || "-")}</span>
       </div>
       <div class="quick-actions two">
-        <button class="secondary" data-nav="asset/${encodeURIComponent(asset.assetId)}">${escapeHtml(t("edit"))}</button>
+        <button class="secondary" data-action="edit-home-asset" data-asset-id="${escapeAttr(asset.assetId)}">${escapeHtml(t("edit"))}</button>
         <button data-action="home-add-asset" data-asset-id="${escapeAttr(asset.assetId)}" ${alreadyAdded ? "disabled" : ""}>${escapeHtml(t("add"))}</button>
       </div>
     </div>`;
+}
+
+function renderHomeInlineAssetForm(asset) {
+  return `
+    <form class="compact-detail compact-form inline-edit-form" data-form="asset" data-return-home="true">
+      ${field("assetId", t("assetIdField"), asset.assetId, "text", "readonly")}
+      ${field("name", t("nameField"), asset.name)}
+      <label class="wide">${escapeHtml(t("descriptionField"))}<textarea name="description">${escapeHtml(asset.description || "")}</textarea></label>
+      ${field("location", t("locationField"), asset.location)}
+      ${field("photo1", t("photo1Field"), asset.photo1, "url")}
+      ${field("photo2", t("photo2Field"), asset.photo2, "url")}
+      ${field("photo3", t("photo3Field"), asset.photo3, "url")}
+      ${field("acquisitionPriceKrw", t("acquisitionPriceKrwField"), asset.acquisitionPriceKrw)}
+      ${field("manufacturerProvider", t("manufacturerProviderField"), asset.manufacturerProvider)}
+      ${field("acquisitionDate", t("acquisitionDateField"), asset.acquisitionDate, "date")}
+      ${field("accountHolder", t("accountHolderField"), asset.accountHolder)}
+      <div class="quick-actions two">
+        <button type="submit">${escapeHtml(t("save"))}</button>
+        <button type="button" class="secondary" data-action="cancel-home-edit">${escapeHtml(t("cancel"))}</button>
+      </div>
+    </form>`;
 }
 
 function renderHomeNewAssetForm() {
@@ -937,6 +962,15 @@ function handleClick(event) {
   if (action === "back") history.length > 1 ? history.back() : navigate("home");
   if (action === "open-asset") openAssetFromCard(event, target);
   if (action === "toggle-home-asset") toggleHomeAsset(event, target);
+  if (action === "edit-home-asset") {
+    state.openHomeAssetId = target.dataset.assetId;
+    state.editingHomeAssetId = target.dataset.assetId;
+    render();
+  }
+  if (action === "cancel-home-edit") {
+    state.editingHomeAssetId = "";
+    render();
+  }
   if (action === "preview-photo") previewPhoto(event, target);
   if (action === "toggle-name-lock") toggleNameLock();
   if (action === "location-find") findLocations();
@@ -952,17 +986,20 @@ function handleClick(event) {
   if (action === "show-new-asset") {
     state.homeMode = "newAsset";
     state.openHomeAssetId = "";
+    state.editingHomeAssetId = "";
     render();
   }
   if (action === "show-total-list") {
     state.homeMode = "total";
     state.homeResults = sortedAssets();
     state.openHomeAssetId = "";
+    state.editingHomeAssetId = "";
     render();
   }
   if (action === "show-home-my-list") {
     state.homeMode = "my";
     state.openHomeAssetId = "";
+    state.editingHomeAssetId = "";
     render();
   }
   if (action === "home-add-asset") {
@@ -1034,6 +1071,7 @@ function findLocations() {
   state.homeMode = "locations";
   state.homeResults = getLocationEntries().filter((location) => !query || normalize(location.name).includes(query));
   state.openHomeAssetId = "";
+  state.editingHomeAssetId = "";
   render();
 }
 
@@ -1044,6 +1082,7 @@ function createLocation() {
   state.homeMode = "locations";
   state.homeResults = [entry];
   state.openHomeAssetId = "";
+  state.editingHomeAssetId = "";
   persist();
   render();
 }
@@ -1071,6 +1110,7 @@ function captureLocationPhoto(name) {
       state.homeMode = "locations";
       state.homeResults = [entry];
       state.openHomeAssetId = "";
+      state.editingHomeAssetId = "";
       persist();
       render();
     });
@@ -1084,6 +1124,7 @@ function findHomeAssets() {
   state.homeMode = "assets";
   state.homeResults = query ? sortedAssets().filter((asset) => [asset.assetId, asset.name, asset.description].some((value) => normalize(value).includes(query))) : [];
   state.openHomeAssetId = "";
+  state.editingHomeAssetId = "";
   render();
 }
 
@@ -1156,6 +1197,7 @@ function toggleHomeAsset(event, target) {
   if (event.target.closest("button, img, a, input")) return;
   const assetId = target.dataset.assetId;
   state.openHomeAssetId = state.openHomeAssetId === assetId ? "" : assetId;
+  if (state.openHomeAssetId !== assetId) state.editingHomeAssetId = "";
   render();
 }
 
@@ -1198,9 +1240,17 @@ function saveAsset(formData, returnHome = false) {
   persist();
   showNotice(t("assetSaved"));
   if (returnHome) {
-    state.homeMode = "assets";
     state.assetQuery = asset.assetId;
-    state.homeResults = [asset];
+    state.openHomeAssetId = asset.assetId;
+    state.editingHomeAssetId = "";
+    if (state.homeMode === "my") {
+      state.homeResults = [];
+    } else if (state.homeMode === "total") {
+      state.homeResults = sortedAssets();
+    } else {
+      state.homeMode = "assets";
+      state.homeResults = [asset];
+    }
     navigate("home");
     render();
   } else {
