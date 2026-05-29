@@ -135,6 +135,16 @@ label {
   text-align: center;
 }
 
+.topbar-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.topbar-actions button {
+  min-width: 0;
+  padding: 0 10px;
+}
+
 .page {
   display: grid;
   gap: 14px;
