@@ -936,6 +936,7 @@ function applyPrintSettings() {
   document.body.classList.toggle("print-simple-request", activeRequestType === "simple");
   updatePrintTitle();
   markEmptyRequestFields();
+  updateRequestPrintValues();
   resizeTextareasForPrint();
 }
 
@@ -957,6 +958,18 @@ function updatePrintTitle() {
 function markEmptyRequestFields() {
   requestInputs.forEach((input) => {
     input.closest("label").classList.toggle("is-print-empty", !input.value.trim());
+  });
+}
+
+function updateRequestPrintValues() {
+  requestInputs.forEach((input) => {
+    let printValue = input.parentElement.querySelector(".request-print-value");
+    if (!printValue) {
+      printValue = document.createElement("span");
+      printValue.className = "request-print-value";
+      input.insertAdjacentElement("afterend", printValue);
+    }
+    printValue.textContent = input.value.trim();
   });
 }
 

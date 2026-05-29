@@ -157,6 +157,10 @@ select {
   line-height: 1.35;
 }
 
+.request-print-value {
+  display: none;
+}
+
 .request-wide-field {
   grid-column: 1 / -1;
 }
@@ -831,26 +835,24 @@ button {
     content: ": ";
   }
 
-  .request-input {
+  .request-info-panel .request-input {
+    display: none;
+  }
+
+  .request-print-value {
     display: inline;
-    width: auto;
-    height: auto;
+    max-width: 100%;
+    min-height: 0;
     border: 0;
     border-radius: 0;
     padding: 0;
     background: #fff !important;
     color: #111 !important;
     font-size: inherit;
-  }
-
-  .request-textarea {
-    display: block;
-    width: 100%;
-    min-height: 0;
     line-height: 1.35;
-    resize: none;
     white-space: pre-wrap;
-    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .request-info-panel label.is-print-empty {
