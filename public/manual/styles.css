@@ -827,11 +827,11 @@ button {
     font-weight: 400;
   }
 
-  .request-info-panel label span {
+  .request-info-panel label > span:first-child {
     font-weight: 700;
   }
 
-  .request-info-panel label span::after {
+  .request-info-panel label > span:first-child::after {
     content: ": ";
   }
 
@@ -839,8 +839,7 @@ button {
     display: none;
   }
 
-  .request-info-panel label::after {
-    content: attr(data-print-value);
+  .request-print-value {
     display: inline;
     max-width: 100%;
     min-height: 0;

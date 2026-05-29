@@ -861,6 +861,7 @@ function applyListData(data) {
     });
   } finally {
     isRestoring = false;
+    updateRequestPrintValues();
     scheduleAutoSave();
   }
 }
@@ -961,9 +962,19 @@ function markEmptyRequestFields() {
   });
 }
 
-function updateRequestPrintValues() {
+function ensureRequestPrintValues() {
   requestInputs.forEach((input) => {
-    input.closest("label").dataset.printValue = input.value.trim();
+    if (input.parentElement.querySelector(".request-print-value")) return;
+    const printValue = document.createElement("span");
+    printValue.className = "request-print-value";
+    input.insertAdjacentElement("afterend", printValue);
+  });
+}
+
+function updateRequestPrintValues() {
+  ensureRequestPrintValues();
+  requestInputs.forEach((input) => {
+    input.parentElement.querySelector(".request-print-value").textContent = input.value.trim();
   });
 }
 
@@ -1054,8 +1065,14 @@ requestTypeButtons.forEach((button) => {
   button.addEventListener("click", () => setRequestType(button.dataset.requestType));
 });
 requestInputs.forEach((input) => {
-  input.addEventListener("input", scheduleAutoSave);
+  input.addEventListener("input", () => {
+    updateRequestPrintValues();
+    scheduleAutoSave();
+  });
 });
+
+ensureRequestPrintValues();
+updateRequestPrintValues();
 
 function updateRowNumbers() {
   rowsEl.querySelectorAll("tr").forEach((row, index) => {
