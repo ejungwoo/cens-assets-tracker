@@ -328,10 +328,9 @@ function bindPhotoCell(cell) {
     event.preventDefault();
     dropZone.classList.remove("drag-over");
 
-    const movedPhoto = event.dataTransfer.getData("text/plain");
-    if (movedPhoto && draggedPhotoCell && draggedPhotoCell !== cell) {
-      setImagePreviewSrc(movedPhoto, dropZone, preview);
-      clearPhotoCell(draggedPhotoCell);
+    const copiedPhoto = event.dataTransfer.getData("text/plain");
+    if (copiedPhoto && draggedPhotoCell && draggedPhotoCell !== cell) {
+      setImagePreviewSrc(copiedPhoto, dropZone, preview);
       draggedPhotoCell = null;
       return;
     }
@@ -348,7 +347,7 @@ function bindPhotoCell(cell) {
       return;
     }
     draggedPhotoCell = cell;
-    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.effectAllowed = "copy";
     event.dataTransfer.setData("text/plain", preview.dataset.imageSrc);
   });
 
