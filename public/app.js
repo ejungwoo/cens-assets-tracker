@@ -538,7 +538,7 @@ function renderTopbar() {
   }[state.route] || t("appName");
   const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
   const rightButton = state.route === "home"
-    ? `<div class="topbar-actions"><button class="ghost small" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></div>`
+    ? `<div class="topbar-actions"><button class="ghost small" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
     : `<button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button>`;
   return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
 }
@@ -577,12 +577,12 @@ function renderHomePage() {
           <button class="small" data-action="asset-find">${escapeHtml(t("find"))}</button>
         </div>
         <div class="quick-actions two optional-controls">
-          <button data-action="show-new-asset">${escapeHtml(t("new"))}</button>
-          <button class="warning" data-action="scan-home-asset">${escapeHtml(t("camera"))}</button>
+          <button class="small" data-action="show-new-asset">${escapeHtml(t("new"))}</button>
+          <button class="warning small" data-action="scan-home-asset">${escapeHtml(t("camera"))}</button>
         </div>
         <div class="quick-actions two optional-controls">
-          <button class="secondary" data-action="show-total-list">${escapeHtml(t("totalList"))}</button>
-          <button class="secondary" data-action="show-home-my-list">${escapeHtml(t("myListTitle"))} (${state.myList.length})</button>
+          <button class="secondary small" data-action="show-total-list">${escapeHtml(t("totalList"))}</button>
+          <button class="secondary small" data-action="show-home-my-list">${escapeHtml(t("myListTitle"))} (${state.myList.length})</button>
         </div>
       </section>
       <div class="rule"></div>
@@ -595,6 +595,7 @@ function renderHomeListSpace() {
   if (state.homeMode === "assets" || state.homeMode === "total") return renderHomeAssetResults();
   if (state.homeMode === "my") return renderHomeMyList();
   if (state.homeMode === "newAsset") return renderHomeNewAssetForm();
+  if (state.homeMode === "settings") return renderSettingsContent();
   return empty(t("listSpaceHint"));
 }
 
@@ -646,10 +647,10 @@ function renderHomeMyList() {
   return `
     <div class="list-stack">
       <div class="quick-actions two">
-        <button data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
-        <button data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
+        <button class="small" data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
+        <button class="small" data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
       </div>
-      <button class="warning" data-action="verify">${escapeHtml(t("verifyLocation"))}</button>
+      <button class="warning small" data-action="verify">${escapeHtml(t("verifyLocation"))}</button>
       ${assets.length ? assets.map(renderHomeMyListItem).join("") : empty(t("myListEmpty"))}
     </div>`;
 }
@@ -847,10 +848,10 @@ function renderMyListPage() {
     <main class="page">
       <section class="panel">
         <div class="split">
-          <button data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
-          <button data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
+          <button class="small" data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
+          <button class="small" data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
         </div>
-        <button class="warning" data-action="verify">${escapeHtml(t("verifyLocation"))}</button>
+        <button class="warning small" data-action="verify">${escapeHtml(t("verifyLocation"))}</button>
       </section>
       <section class="asset-list">
         ${assets.length ? assets.map((asset) => renderAssetCard(asset, `<button class="danger small" data-action="remove-mylist" data-remove-id="${escapeAttr(asset.assetId)}">${escapeHtml(t("remove"))}</button>`)).join("") : empty(t("myListEmpty"))}
@@ -921,8 +922,11 @@ function renderPreset(preset) {
 }
 
 function renderSettingsPage() {
+  return `<main class="page">${renderSettingsContent()}</main>`;
+}
+
+function renderSettingsContent() {
   return `
-    <main class="page">
       <section class="panel">
         <label>${escapeHtml(t("language"))}
           <select data-bind="language">
@@ -947,8 +951,7 @@ function renderSettingsPage() {
           <span>${escapeHtml(t("presetLists"))}: ${state.presets.length}</span>
           <span>${escapeHtml(t("myListTitle"))}: ${state.myList.length}</span>
         </div>
-      </section>
-    </main>`;
+      </section>`;
 }
 
 function field(name, labelText, value, type = "text", extra = "") {
@@ -977,6 +980,12 @@ function handleClick(event) {
   if (action === "toggle-home-controls") {
     state.homeControlsHidden = !state.homeControlsHidden;
     persist();
+    render();
+  }
+  if (action === "show-home-settings") {
+    state.homeMode = "settings";
+    state.openHomeAssetId = "";
+    state.editingHomeAssetId = "";
     render();
   }
   if (action === "edit-home-asset") {

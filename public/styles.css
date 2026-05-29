@@ -12,6 +12,8 @@
   --danger: #b42318;
   --ok: #0f7b58;
   --shadow: 0 10px 24px rgba(23, 32, 51, 0.08);
+  --control-height: 38px;
+  --control-x: 10px;
 }
 
 * {
@@ -38,13 +40,14 @@ select {
 }
 
 button {
-  min-height: 46px;
+  min-height: var(--control-height);
   border: 0;
   border-radius: 8px;
-  padding: 0 16px;
+  padding: 0 var(--control-x);
   color: #fff;
   background: var(--primary);
   font-weight: 700;
+  line-height: 1.15;
   touch-action: manipulation;
 }
 
@@ -73,8 +76,8 @@ button.ghost {
 }
 
 button.small {
-  min-height: 36px;
-  padding: 0 12px;
+  min-height: var(--control-height);
+  padding: 0 var(--control-x);
   font-size: 14px;
 }
 
@@ -83,19 +86,25 @@ button:disabled {
 }
 
 input,
-textarea,
 select {
   width: 100%;
-  min-height: 46px;
+  min-height: var(--control-height);
+  height: var(--control-height);
   border: 1px solid var(--border);
   border-radius: 8px;
   background: #fff;
   color: var(--text);
-  padding: 10px 12px;
+  padding: 0 var(--control-x);
 }
 
 textarea {
-  min-height: 96px;
+  width: 100%;
+  min-height: 84px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  padding: 8px var(--control-x);
   resize: vertical;
 }
 
@@ -191,8 +200,9 @@ label {
 
 .compact-row input {
   min-width: 0;
-  min-height: 40px;
-  padding: 8px 10px;
+  min-height: var(--control-height);
+  height: var(--control-height);
+  padding: 0 var(--control-x);
 }
 
 .compact-row input:disabled {
@@ -515,6 +525,7 @@ label {
 .check-row input {
   width: 22px;
   min-height: 22px;
+  height: 22px;
   margin-top: 2px;
 }
 
