@@ -112,6 +112,7 @@ function bindRow(row) {
   const clearTextBtn = row.querySelector(".clear-text-btn");
   const clearRowBtn = row.querySelector(".clear-row-btn");
   const saveRowPhotosBtn = row.querySelector(".save-row-photos-btn");
+  const swapRowPhotosBtn = row.querySelector(".swap-row-photos-btn");
   const message = row.querySelector(".row-message");
 
   assetNumberInput.addEventListener("input", () => {
@@ -180,6 +181,7 @@ function bindRow(row) {
   clearTextBtn.addEventListener("click", () => clearTextFields(row));
   clearRowBtn.addEventListener("click", () => clearRow(row));
   saveRowPhotosBtn.addEventListener("click", () => saveRowPhotos(row));
+  swapRowPhotosBtn.addEventListener("click", () => swapRowPhotos(row));
 
   row.querySelectorAll(".photo-cell").forEach(bindPhotoCell);
 }
@@ -386,6 +388,37 @@ function setImagePreviewSrc(src, dropZone, preview) {
   preview.src = src;
   preview.dataset.imageSrc = src;
   dropZone.classList.add("has-image");
+  scheduleAutoSave();
+}
+
+function applyPhotoPreviewSrc(src, cell) {
+  const input = cell.querySelector(".photo-input");
+  const dropZone = cell.querySelector(".drop-zone");
+  const preview = cell.querySelector(".photo-preview");
+  input.value = "";
+
+  if (!src) {
+    preview.src = "";
+    delete preview.dataset.imageSrc;
+    preview.removeAttribute("src");
+    dropZone.classList.remove("has-image", "drag-over");
+    return;
+  }
+
+  preview.src = src;
+  preview.dataset.imageSrc = src;
+  dropZone.classList.add("has-image");
+  dropZone.classList.remove("drag-over");
+}
+
+function swapRowPhotos(row) {
+  const numberPhotoCell = row.querySelector('[data-photo-type="number"]');
+  const wholePhotoCell = row.querySelector('[data-photo-type="whole"]');
+  const numberPhoto = numberPhotoCell.querySelector(".photo-preview").dataset.imageSrc || "";
+  const wholePhoto = wholePhotoCell.querySelector(".photo-preview").dataset.imageSrc || "";
+
+  applyPhotoPreviewSrc(wholePhoto, numberPhotoCell);
+  applyPhotoPreviewSrc(numberPhoto, wholePhotoCell);
   scheduleAutoSave();
 }
 
