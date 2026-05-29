@@ -136,7 +136,11 @@ const I18N = {
     locationField: "location",
     lastInOutDateField: "lastInOutDate",
     lastVerifiedDateField: "lastVerifiedDate",
-    lastVerifiedByField: "lastVerifiedBy"
+    lastVerifiedByField: "lastVerifiedBy",
+    loadSeedAssets: "Load CENS Equipment Assets",
+    seedAssetsAvailable: "Seed assets available",
+    loadSeedConfirm: "Replace the current asset list with CENS Equipment seed assets?",
+    seedAssetsLoaded: "{count} CENS Equipment assets loaded."
   },
   ko: {
     appName: "CENS 자산 추적기",
@@ -248,7 +252,11 @@ const I18N = {
     locationField: "위치 (location)",
     lastInOutDateField: "최근 반출/반입일 (lastInOutDate)",
     lastVerifiedDateField: "최근 확인일 (lastVerifiedDate)",
-    lastVerifiedByField: "최근 확인자 (lastVerifiedBy)"
+    lastVerifiedByField: "최근 확인자 (lastVerifiedBy)",
+    loadSeedAssets: "CENS Equipment 자산 불러오기",
+    seedAssetsAvailable: "사용 가능한 시드 자산",
+    loadSeedConfirm: "현재 자산 목록을 CENS Equipment 시드 자산으로 교체할까요?",
+    seedAssetsLoaded: "CENS Equipment 자산 {count}개를 불러왔습니다."
   }
 };
 
@@ -285,7 +293,8 @@ class BackendGateway {
 
 const LocalStore = {
   loadAll() {
-    const assets = readJson(STORAGE_KEYS.assets, null) || seedAssets();
+    const storedAssets = readJson(STORAGE_KEYS.assets, null);
+    const assets = shouldUseSeedAssets(storedAssets) ? seedAssets() : storedAssets;
     const records = readJson(STORAGE_KEYS.records, []);
     const presets = readJson(STORAGE_KEYS.presets, []);
     const myList = readJson(STORAGE_KEYS.myList, []);
@@ -331,6 +340,9 @@ function readJson(key, fallback) {
 }
 
 function seedAssets() {
+  if (Array.isArray(window.CENS_SEED_ASSETS) && window.CENS_SEED_ASSETS.length) {
+    return window.CENS_SEED_ASSETS.map((asset) => ({ ...asset }));
+  }
   const now = new Date().toISOString();
   const today = dateOnly();
   return [
@@ -363,6 +375,12 @@ function seedAssets() {
       updatedAt: now
     }
   ];
+}
+
+function shouldUseSeedAssets(storedAssets) {
+  if (!Array.isArray(storedAssets) || storedAssets.length === 0) return true;
+  const ids = storedAssets.map((asset) => asset && asset.assetId).sort();
+  return storedAssets.length === 2 && ids[0] === "1001" && ids[1] === "1002";
 }
 
 function routeFromHash() {
@@ -652,6 +670,10 @@ function renderSettingsPage() {
         <button data-action="test-sync">${escapeHtml(t("testSync"))}</button>
       </section>
       <section class="panel">
+        <strong>${escapeHtml(t("seedAssetsAvailable"))}: ${seedAssets().length}</strong>
+        <button data-action="load-seed-assets">${escapeHtml(t("loadSeedAssets"))}</button>
+      </section>
+      <section class="panel">
         <strong>${escapeHtml(t("currentStorage"))}</strong>
         <div class="fields">
           <span>${escapeHtml(t("assets"))}: ${state.assets.length}</span>
@@ -710,6 +732,7 @@ function handleClick(event) {
   if (action === "load-preset") loadPreset(target.dataset.presetId);
   if (action === "delete-preset") deletePreset(target.dataset.presetId);
   if (action === "test-sync") testSync();
+  if (action === "load-seed-assets") loadSeedAssets();
 }
 
 function handleInput(event) {
@@ -947,6 +970,16 @@ function deletePreset(listId) {
 async function testSync() {
   const result = await backend.syncWithGoogleSheets();
   showNotice(result.message, !result.ok);
+}
+
+function loadSeedAssets() {
+  const assets = seedAssets();
+  if (!assets.length) return;
+  if (!confirm(t("loadSeedConfirm"))) return;
+  state.assets = assets;
+  persist();
+  showNotice(t("seedAssetsLoaded", { count: assets.length }));
+  navigate("assets");
 }
 
 function requireOperator() {

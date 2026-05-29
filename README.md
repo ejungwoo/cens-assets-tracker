@@ -44,6 +44,7 @@ Open `https://YOUR_COMPUTER_LAN_IP:5040` on the phone and accept the local devel
 ## Data And Configuration
 
 - Runtime app data is stored in browser `localStorage` with `cens.*` keys.
+- Initial asset data is generated from the Google Sheets `CENS Equipment` tab into `public/seed-assets.js`.
 - `.env.local` is machine-specific and ignored by Git.
 - `GOOGLE_APPS_SCRIPT_URL` is reserved for future Google Sheets sync configuration. The current app also has an in-app backend URL setting.
 

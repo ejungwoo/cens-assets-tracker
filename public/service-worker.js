@@ -1,8 +1,9 @@
-const CACHE_NAME = "cens-assets-tracker-v2";
+const CACHE_NAME = "cens-assets-tracker-v3";
 const STATIC_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
+  "/seed-assets.js",
   "/app.js",
   "/manifest.webmanifest",
   "/icons/icon-192.svg",
