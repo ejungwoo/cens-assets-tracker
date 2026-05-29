@@ -22,6 +22,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(PUBLIC), **kwargs)
 
 
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+
 def ensure_cert():
     CERT_DIR.mkdir(exist_ok=True)
     if CERT_FILE.exists() and KEY_FILE.exists():
@@ -56,7 +60,7 @@ def main():
     args = parser.parse_args()
 
     os.chdir(PUBLIC)
-    with socketserver.TCPServer((args.host, args.port), Handler) as httpd:
+    with ReusableTCPServer((args.host, args.port), Handler) as httpd:
         protocol = "http"
         if args.https:
             ensure_cert()
