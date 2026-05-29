@@ -75,6 +75,12 @@ button.ghost {
   border: 1px solid var(--border);
 }
 
+button.show-controls {
+  color: #fff;
+  background: var(--ok);
+  border-color: var(--ok);
+}
+
 button.small {
   min-height: var(--control-height);
   padding: 0 var(--control-x);
@@ -172,11 +178,30 @@ label {
 }
 
 .home-console.controls-hidden {
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr;
 }
 
 .home-console.controls-hidden .optional-controls {
   display: none;
+}
+
+.folded-strip {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px dashed #9fb3ce;
+  color: var(--primary-dark);
+  background: #eaf2ff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.folded-strip span {
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #9fb3ce 0 6px, transparent 6px 10px);
 }
 
 .quick-panel {

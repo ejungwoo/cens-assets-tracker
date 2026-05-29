@@ -167,6 +167,7 @@ const I18N = {
     edit: "edit",
     hide: "hide",
     show: "show",
+    controlsFolded: "controls folded",
     find: "find",
     locationShort: "location",
     assetNumberShort: "asset number",
@@ -313,6 +314,7 @@ const I18N = {
     edit: "edit",
     hide: "hide",
     show: "show",
+    controlsFolded: "접힌 메뉴",
     find: "find",
     locationShort: "location",
     assetNumberShort: "asset number",
@@ -538,7 +540,7 @@ function renderTopbar() {
   }[state.route] || t("appName");
   const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
   const rightButton = state.route === "home"
-    ? `<div class="topbar-actions"><button class="ghost small" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
+    ? `<div class="topbar-actions"><button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
     : `<button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button>`;
   return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
 }
@@ -570,6 +572,7 @@ function renderHomePage() {
         </div>
       </section>
       <div class="rule optional-controls"></div>
+      ${state.homeControlsHidden ? `<button class="folded-strip" data-action="toggle-home-controls" aria-label="${escapeAttr(t("show"))}"><span></span>${escapeHtml(t("controlsFolded"))}<span></span></button>` : ""}
       <section class="quick-panel">
         <div class="compact-row">
           <label for="home-asset">${escapeHtml(t("assetNumberShort"))}:</label>
