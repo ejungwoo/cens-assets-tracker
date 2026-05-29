@@ -1304,9 +1304,7 @@ function addSelectedResults() {
 }
 
 function addToMyList(assetIds) {
-  const before = state.myList.length;
   state.myList = [...new Set([...state.myList, ...assetIds])];
-  showNotice(t("addedToList", { count: state.myList.length - before }));
 }
 
 function removeFromMyList(assetId) {
