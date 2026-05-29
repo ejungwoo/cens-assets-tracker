@@ -574,11 +574,6 @@ function renderHomePage() {
       <div class="rule optional-controls"></div>
       ${state.homeControlsHidden ? `<button class="folded-strip" data-action="toggle-home-controls" aria-label="${escapeAttr(t("show"))}"><span></span>${escapeHtml(t("controlsFolded"))}<span></span></button>` : ""}
       <section class="quick-panel">
-        <div class="compact-row">
-          <label for="home-asset">${escapeHtml(t("assetNumberShort"))}:</label>
-          <input id="home-asset" data-bind="assetQuery" data-enter-action="asset-find" value="${escapeAttr(state.assetQuery)}" inputmode="numeric">
-          <button class="small" data-action="asset-find">${escapeHtml(t("find"))}</button>
-        </div>
         <div class="quick-actions two optional-controls">
           <button class="small" data-action="show-new-asset">${escapeHtml(t("new"))}</button>
           <button class="warning small" data-action="scan-home-asset">${escapeHtml(t("camera"))}</button>
@@ -586,6 +581,11 @@ function renderHomePage() {
         <div class="quick-actions two optional-controls">
           <button class="secondary small" data-action="show-total-list">${escapeHtml(t("totalList"))}</button>
           <button class="secondary small" data-action="show-home-my-list">${escapeHtml(t("myListTitle"))} (${state.myList.length})</button>
+        </div>
+        <div class="compact-row">
+          <label for="home-asset">${escapeHtml(t("assetNumberShort"))}:</label>
+          <input id="home-asset" data-bind="assetQuery" data-enter-action="asset-find" value="${escapeAttr(state.assetQuery)}" inputmode="numeric">
+          <button class="small" data-action="asset-find">${escapeHtml(t("find"))}</button>
         </div>
       </section>
       <div class="rule"></div>
