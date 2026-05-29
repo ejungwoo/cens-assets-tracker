@@ -44,6 +44,7 @@ Open `https://YOUR_COMPUTER_LAN_IP:5040` on the phone and accept the local devel
 ## Data And Configuration
 
 - Runtime app data is stored in browser `localStorage` with `cens.*` keys.
+- The home screen is a phone-first work console with locked name/location inputs, asset search, QR scan, new asset entry, total list, and My List inside one list space.
 - Initial asset data is generated from the Google Sheets `CENS Equipment` tab into `public/seed-assets.js`.
 - Sheet fields for unit price, manufacturer/provider, acquisition date, and account holder are stored as separate asset fields, not appended to `description`.
 - `.env.local` is machine-specific and ignored by Git.

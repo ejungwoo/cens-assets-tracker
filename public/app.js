@@ -2,8 +2,12 @@ const STORAGE_KEYS = {
   assets: "cens.assets",
   records: "cens.records",
   presets: "cens.presets",
+  locations: "cens.locations",
   myList: "cens.myList",
   operator: "cens.operator",
+  operatorLocked: "cens.operatorLocked",
+  selectedLocation: "cens.selectedLocation",
+  locationLocked: "cens.locationLocked",
   language: "cens.language",
   backendUrl: "cens.backendUrl"
 };
@@ -14,8 +18,16 @@ const state = {
   assets: [],
   records: [],
   presets: [],
+  locations: [],
   myList: [],
   operator: "",
+  operatorLocked: false,
+  locationQuery: "",
+  selectedLocation: "",
+  locationLocked: false,
+  assetQuery: "",
+  homeMode: "empty",
+  homeResults: [],
   language: "en",
   backendUrl: "",
   listSearch: "",
@@ -144,7 +156,29 @@ const I18N = {
     loadSeedAssets: "Load CENS Equipment Assets",
     seedAssetsAvailable: "Seed assets available",
     loadSeedConfirm: "Replace the current asset list with CENS Equipment seed assets?",
-    seedAssetsLoaded: "{count} CENS Equipment assets loaded."
+    seedAssetsLoaded: "{count} CENS Equipment assets loaded.",
+    nameShort: "name",
+    save: "save",
+    edit: "edit",
+    find: "find",
+    locationShort: "location",
+    assetNumberShort: "asset number",
+    new: "new",
+    camera: "camera",
+    totalList: "total list",
+    select: "select",
+    add: "add",
+    newLocation: "new location",
+    locationSaved: "Location selected.",
+    locationCreated: "New location created.",
+    locationPhotoSaved: "Location photo saved.",
+    noLocations: "No matching locations.",
+    noMatches: "No matching assets.",
+    listSpaceHint: "Results will appear here.",
+    nameSaved: "Name saved.",
+    assetAdded: "Asset added to My List.",
+    takePhoto: "Take photo",
+    compactInfo: "info"
   },
   ko: {
     appName: "CENS 자산 추적기",
@@ -264,7 +298,29 @@ const I18N = {
     loadSeedAssets: "CENS Equipment 자산 불러오기",
     seedAssetsAvailable: "사용 가능한 시드 자산",
     loadSeedConfirm: "현재 자산 목록을 CENS Equipment 시드 자산으로 교체할까요?",
-    seedAssetsLoaded: "CENS Equipment 자산 {count}개를 불러왔습니다."
+    seedAssetsLoaded: "CENS Equipment 자산 {count}개를 불러왔습니다.",
+    nameShort: "name",
+    save: "save",
+    edit: "edit",
+    find: "find",
+    locationShort: "location",
+    assetNumberShort: "asset number",
+    new: "new",
+    camera: "camera",
+    totalList: "total list",
+    select: "선택",
+    add: "add",
+    newLocation: "new location",
+    locationSaved: "위치가 선택되었습니다.",
+    locationCreated: "새 위치가 등록되었습니다.",
+    locationPhotoSaved: "위치 사진이 저장되었습니다.",
+    noLocations: "일치하는 위치가 없습니다.",
+    noMatches: "일치하는 자산이 없습니다.",
+    listSpaceHint: "목록이 여기에 표시됩니다.",
+    nameSaved: "이름이 저장되었습니다.",
+    assetAdded: "내 목록에 추가했습니다.",
+    takePhoto: "사진 촬영",
+    compactInfo: "정보"
   }
 };
 
@@ -305,18 +361,26 @@ const LocalStore = {
     const assets = shouldUseSeedAssets(storedAssets) || shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets;
     const records = readJson(STORAGE_KEYS.records, []);
     const presets = readJson(STORAGE_KEYS.presets, []);
+    const locations = readJson(STORAGE_KEYS.locations, []);
     const myList = readJson(STORAGE_KEYS.myList, []);
     const operator = localStorage.getItem(STORAGE_KEYS.operator) || "";
+    const operatorLocked = localStorage.getItem(STORAGE_KEYS.operatorLocked) === "true";
+    const selectedLocation = localStorage.getItem(STORAGE_KEYS.selectedLocation) || "";
+    const locationLocked = localStorage.getItem(STORAGE_KEYS.locationLocked) === "true";
     const language = localStorage.getItem(STORAGE_KEYS.language) || "en";
     const backendUrl = localStorage.getItem(STORAGE_KEYS.backendUrl) || "";
-    return { assets, records, presets, myList, operator, language, backendUrl };
+    return { assets, records, presets, locations, myList, operator, operatorLocked, selectedLocation, locationQuery: selectedLocation, locationLocked, language, backendUrl };
   },
   saveAll(data) {
     localStorage.setItem(STORAGE_KEYS.assets, JSON.stringify(data.assets));
     localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(data.records));
     localStorage.setItem(STORAGE_KEYS.presets, JSON.stringify(data.presets));
+    localStorage.setItem(STORAGE_KEYS.locations, JSON.stringify(data.locations));
     localStorage.setItem(STORAGE_KEYS.myList, JSON.stringify(data.myList));
     localStorage.setItem(STORAGE_KEYS.operator, data.operator || "");
+    localStorage.setItem(STORAGE_KEYS.operatorLocked, data.operatorLocked ? "true" : "false");
+    localStorage.setItem(STORAGE_KEYS.selectedLocation, data.selectedLocation || "");
+    localStorage.setItem(STORAGE_KEYS.locationLocked, data.locationLocked ? "true" : "false");
     localStorage.setItem(STORAGE_KEYS.language, data.language || "en");
     localStorage.setItem(STORAGE_KEYS.backendUrl, data.backendUrl || "");
   }
@@ -334,6 +398,7 @@ async function init() {
   document.addEventListener("click", handleClick);
   document.addEventListener("input", handleInput);
   document.addEventListener("change", handleChange);
+  document.addEventListener("keydown", handleKeydown);
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/service-worker.js").catch(() => {});
   routeFromHash();
 }
@@ -418,8 +483,12 @@ function persist() {
     assets: state.assets,
     records: state.records,
     presets: state.presets,
+    locations: state.locations,
     myList: state.myList,
     operator: state.operator,
+    operatorLocked: state.operatorLocked,
+    selectedLocation: state.selectedLocation,
+    locationLocked: state.locationLocked,
     language: state.language,
     backendUrl: state.backendUrl
   });
@@ -469,22 +538,128 @@ function renderPage() {
 
 function renderHomePage() {
   return `
-    <main class="page">
-      <section class="brand">
-        <h2>${escapeHtml(t("appName"))}</h2>
-        <p>${escapeHtml(t("homeLead"))}</p>
+    <main class="page home-console">
+      <section class="quick-panel">
+        <div class="compact-row">
+          <label for="home-name">${escapeHtml(t("nameShort"))}:</label>
+          <input id="home-name" data-bind="operator" data-enter-action="toggle-name-lock" value="${escapeAttr(state.operator)}" ${state.operatorLocked ? "disabled" : ""} autocomplete="name">
+          <button class="small" data-action="toggle-name-lock">${escapeHtml(state.operatorLocked ? t("edit") : t("save"))}</button>
+        </div>
+        <div class="compact-row">
+          <label for="home-location">${escapeHtml(t("locationShort"))}:</label>
+          <input id="home-location" data-bind="locationQuery" data-enter-action="location-find" value="${escapeAttr(state.locationQuery || state.selectedLocation)}" ${state.locationLocked ? "disabled" : ""}>
+          <button class="small" data-action="${state.locationLocked ? "edit-location" : "location-find"}">${escapeHtml(state.locationLocked ? t("edit") : t("find"))}</button>
+        </div>
       </section>
-      <section class="panel">
-        <label>${escapeHtml(t("currentOperator"))}
-          <input data-bind="operator" value="${escapeAttr(state.operator)}" placeholder="${escapeAttr(t("enterName"))}" autocomplete="name">
-        </label>
+      <div class="rule"></div>
+      <section class="quick-panel">
+        <div class="compact-row">
+          <label for="home-asset">${escapeHtml(t("assetNumberShort"))}:</label>
+          <input id="home-asset" data-bind="assetQuery" data-enter-action="asset-find" value="${escapeAttr(state.assetQuery)}" inputmode="numeric">
+          <button class="small" data-action="asset-find">${escapeHtml(t("find"))}</button>
+        </div>
+        <div class="quick-actions two">
+          <button data-action="show-new-asset">${escapeHtml(t("new"))}</button>
+          <button class="warning" data-action="scan-home-asset">${escapeHtml(t("camera"))}</button>
+        </div>
+        <div class="quick-actions two">
+          <button class="secondary" data-action="show-total-list">${escapeHtml(t("totalList"))}</button>
+          <button class="secondary" data-action="show-home-my-list">${escapeHtml(t("myListTitle"))} (${state.myList.length})</button>
+        </div>
       </section>
-      <section class="button-stack">
-        <button data-nav="assets">${escapeHtml(t("assetsTitle"))}</button>
-        <button data-nav="grab">${escapeHtml(t("grabTitle"))}</button>
-        <button data-nav="records">${escapeHtml(t("recordsTitle"))}</button>
-      </section>
+      <div class="rule"></div>
+      <section class="list-space">${renderHomeListSpace()}</section>
     </main>`;
+}
+
+function renderHomeListSpace() {
+  if (state.homeMode === "locations") return renderLocationResults();
+  if (state.homeMode === "assets" || state.homeMode === "total") return renderHomeAssetResults();
+  if (state.homeMode === "my") return renderHomeMyList();
+  if (state.homeMode === "newAsset") return renderHomeNewAssetForm();
+  return empty(t("listSpaceHint"));
+}
+
+function renderLocationResults() {
+  const query = state.locationQuery.trim();
+  const rows = state.homeResults;
+  return `
+    <div class="list-stack">
+      ${query ? `<button class="secondary" data-action="create-location">${escapeHtml(t("newLocation"))}: ${escapeHtml(query)}</button>` : ""}
+      ${rows.length ? rows.map(renderLocationCard).join("") : empty(t("noLocations"))}
+    </div>`;
+}
+
+function renderLocationCard(location) {
+  const photo = location.photo ? `<img class="mini-photo" src="${escapeAttr(location.photo)}" alt="${escapeAttr(location.name)}">` : `<button class="warning small" data-action="capture-location-photo" data-location-name="${escapeAttr(location.name)}">${escapeHtml(t("camera"))}</button>`;
+  return `
+    <article class="compact-card">
+      <div class="mini-media">${photo}</div>
+      <div class="compact-body">
+        <strong>${escapeHtml(location.name)}</strong>
+        <span class="meta">${escapeHtml(location.source || "")}</span>
+      </div>
+      <button class="small" data-action="select-location" data-location-name="${escapeAttr(location.name)}">${escapeHtml(t("select"))}</button>
+    </article>`;
+}
+
+function renderHomeAssetResults() {
+  const rows = state.homeResults;
+  return `<div class="list-stack">${rows.length ? rows.map((asset) => renderHomeAssetCard(asset)).join("") : empty(t("noMatches"))}</div>`;
+}
+
+function renderHomeAssetCard(asset) {
+  const alreadyAdded = state.myList.includes(asset.assetId);
+  return `
+    <article class="compact-card asset-compact" data-asset-id="${escapeAttr(asset.assetId)}" data-action="open-asset">
+      <div class="compact-body">
+        <strong>${escapeHtml(asset.assetId)} ${escapeHtml(asset.name || t("unnamedAsset"))}</strong>
+        <span>${escapeHtml(asset.description || t("noDescription"))}</span>
+        <span class="meta">${escapeHtml(asset.location || t("noLocation"))}${asset.accountHolder ? ` | ${escapeHtml(t("accountHolderField"))}: ${escapeHtml(asset.accountHolder)}` : ""}</span>
+      </div>
+      <button class="small" data-action="home-add-asset" data-asset-id="${escapeAttr(asset.assetId)}" ${alreadyAdded ? "disabled" : ""}>${escapeHtml(t("add"))}</button>
+    </article>`;
+}
+
+function renderHomeMyList() {
+  const assets = state.myList.map((id) => state.assets.find((asset) => asset.assetId === id)).filter(Boolean);
+  return `
+    <div class="list-stack">
+      <div class="quick-actions two">
+        <button data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
+        <button data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
+      </div>
+      <button class="warning" data-action="verify">${escapeHtml(t("verifyLocation"))}</button>
+      ${assets.length ? assets.map(renderHomeMyListItem).join("") : empty(t("myListEmpty"))}
+    </div>`;
+}
+
+function renderHomeMyListItem(asset) {
+  return `
+    <article class="compact-card asset-compact" data-asset-id="${escapeAttr(asset.assetId)}" data-action="open-asset">
+      <div class="compact-body">
+        <strong>${escapeHtml(asset.assetId)} ${escapeHtml(asset.name || t("unnamedAsset"))}</strong>
+        <span>${escapeHtml(asset.description || t("noDescription"))}</span>
+        <span class="meta">${escapeHtml(asset.location || t("noLocation"))}</span>
+      </div>
+      <button class="danger small" data-action="remove-mylist" data-remove-id="${escapeAttr(asset.assetId)}">${escapeHtml(t("remove"))}</button>
+    </article>`;
+}
+
+function renderHomeNewAssetForm() {
+  const data = { ...emptyAsset(), assetId: state.assetQuery, location: state.selectedLocation || state.locationQuery };
+  return `
+    <form class="panel form-grid compact-form" data-form="asset" data-return-home="true">
+      ${field("assetId", t("assetIdField"), data.assetId)}
+      ${field("name", t("nameField"), data.name)}
+      <label class="wide">${escapeHtml(t("descriptionField"))}<textarea name="description">${escapeHtml(data.description)}</textarea></label>
+      ${field("location", t("locationField"), data.location)}
+      ${field("photo1", t("photo1Field"), data.photo1, "url")}
+      ${field("acquisitionPriceKrw", t("acquisitionPriceKrwField"), data.acquisitionPriceKrw)}
+      ${field("manufacturerProvider", t("manufacturerProviderField"), data.manufacturerProvider)}
+      ${field("accountHolder", t("accountHolderField"), data.accountHolder)}
+      <button class="wide" type="submit">${escapeHtml(t("saveAsset"))}</button>
+    </form>`;
 }
 
 function renderAssetsPage() {
@@ -734,6 +909,35 @@ function handleClick(event) {
   if (action === "back") history.length > 1 ? history.back() : navigate("home");
   if (action === "open-asset") openAssetFromCard(event, target);
   if (action === "preview-photo") previewPhoto(event, target);
+  if (action === "toggle-name-lock") toggleNameLock();
+  if (action === "location-find") findLocations();
+  if (action === "edit-location") editLocation();
+  if (action === "create-location") createLocation();
+  if (action === "select-location") selectLocation(target.dataset.locationName);
+  if (action === "capture-location-photo") captureLocationPhoto(target.dataset.locationName);
+  if (action === "asset-find") findHomeAssets();
+  if (action === "scan-home-asset") openScanner((text) => {
+    state.assetQuery = extractAssetNumber(text);
+    findHomeAssets();
+  });
+  if (action === "show-new-asset") {
+    state.homeMode = "newAsset";
+    render();
+  }
+  if (action === "show-total-list") {
+    state.homeMode = "total";
+    state.homeResults = sortedAssets();
+    render();
+  }
+  if (action === "show-home-my-list") {
+    state.homeMode = "my";
+    render();
+  }
+  if (action === "home-add-asset") {
+    addToMyList([target.dataset.assetId]);
+    persist();
+    render();
+  }
   if (action === "scan-list") openScanner((text) => {
     state.listSearch = extractAssetNumber(text);
     navigate("assets");
@@ -776,18 +980,135 @@ function handleChange(event) {
   render();
 }
 
+function toggleNameLock() {
+  if (!state.operator.trim()) {
+    showNotice(t("operatorRequired"), true);
+    return;
+  }
+  state.operatorLocked = !state.operatorLocked;
+  persist();
+  render();
+}
+
+function editLocation() {
+  state.locationLocked = false;
+  state.selectedLocation = "";
+  persist();
+  render();
+}
+
+function findLocations() {
+  const query = normalize(state.locationQuery);
+  state.homeMode = "locations";
+  state.homeResults = getLocationEntries().filter((location) => !query || normalize(location.name).includes(query));
+  render();
+}
+
+function createLocation() {
+  const name = state.locationQuery.trim();
+  if (!name) return;
+  const entry = upsertLocation({ name, photo: "", source: "custom" });
+  state.homeMode = "locations";
+  state.homeResults = [entry];
+  persist();
+  render();
+}
+
+function selectLocation(name) {
+  state.selectedLocation = name || "";
+  state.locationQuery = state.selectedLocation;
+  state.locationLocked = Boolean(state.selectedLocation);
+  persist();
+  render();
+}
+
+function captureLocationPhoto(name) {
+  if (!name) return;
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.capture = "environment";
+  input.addEventListener("change", () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const entry = upsertLocation({ name, photo: String(reader.result || ""), source: "custom" });
+      state.homeMode = "locations";
+      state.homeResults = [entry];
+      persist();
+      render();
+    });
+    reader.readAsDataURL(file);
+  });
+  input.click();
+}
+
+function findHomeAssets() {
+  const query = normalize(extractAssetNumber(state.assetQuery));
+  state.homeMode = "assets";
+  state.homeResults = query ? sortedAssets().filter((asset) => [asset.assetId, asset.name, asset.description].some((value) => normalize(value).includes(query))) : [];
+  render();
+}
+
+function getLocationEntries() {
+  const map = new Map();
+  state.assets.forEach((asset) => {
+    const name = String(asset.location || "").trim();
+    if (name && !map.has(name)) map.set(name, { name, photo: "", source: t("assets") });
+  });
+  state.locations.forEach((location) => {
+    const name = String(location.name || "").trim();
+    if (!name) return;
+    map.set(name, { name, photo: location.photo || "", source: location.source || "custom" });
+  });
+  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+}
+
+function upsertLocation(entry) {
+  const name = String(entry.name || "").trim();
+  const existing = state.locations.find((location) => location.name === name);
+  if (existing) {
+    Object.assign(existing, entry, { name, updatedAt: new Date().toISOString() });
+    return existing;
+  }
+  const next = {
+    locationId: makeId("LOC"),
+    name,
+    photo: entry.photo || "",
+    source: entry.source || "custom",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  state.locations.push(next);
+  return next;
+}
+
 document.addEventListener("submit", (event) => {
   const form = event.target.closest("[data-form='asset']");
   if (!form) return;
   event.preventDefault();
-  saveAsset(new FormData(form));
+  saveAsset(new FormData(form), form.dataset.returnHome === "true");
 });
+
+function handleKeydown(event) {
+  if (event.key !== "Enter") return;
+  const action = event.target.dataset.enterAction;
+  if (!action) return;
+  event.preventDefault();
+  if (action === "toggle-name-lock") toggleNameLock();
+  if (action === "location-find") findLocations();
+  if (action === "asset-find") findHomeAssets();
+}
 
 function filteredSortedAssets() {
   const query = normalize(state.listSearch);
-  return [...state.assets]
+  return sortedAssets()
     .filter((asset) => !query || [asset.assetId, asset.name, asset.description, asset.manufacturerProvider, asset.accountHolder].some((value) => normalize(value).includes(query)))
-    .sort((a, b) => String(a[state.listSort] || "").localeCompare(String(b[state.listSort] || ""), undefined, { numeric: true }));
+}
+
+function sortedAssets(sortKey = state.listSort) {
+  return [...state.assets].sort((a, b) => String(a[sortKey] || "").localeCompare(String(b[sortKey] || ""), undefined, { numeric: true }));
 }
 
 function openAssetFromCard(event, target) {
@@ -800,7 +1121,7 @@ function previewPhoto(event, target) {
   openModal(t("photoPreview"), `<img class="preview-image" src="${escapeAttr(target.dataset.src)}" alt="${escapeAttr(t("photoPreview"))}">`);
 }
 
-function saveAsset(formData) {
+function saveAsset(formData, returnHome = false) {
   const now = new Date().toISOString();
   const asset = {
     assetId: String(formData.get("assetId") || "").trim(),
@@ -833,7 +1154,15 @@ function saveAsset(formData) {
   }
   persist();
   showNotice(t("assetSaved"));
-  navigate("assets");
+  if (returnHome) {
+    state.homeMode = "assets";
+    state.assetQuery = asset.assetId;
+    state.homeResults = [asset];
+    navigate("home");
+    render();
+  } else {
+    navigate("assets");
+  }
 }
 
 function runGrabSearch() {
