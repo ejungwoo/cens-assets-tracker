@@ -839,7 +839,8 @@ button {
     display: none;
   }
 
-  .request-print-value {
+  .request-info-panel label::after {
+    content: attr(data-print-value);
     display: inline;
     max-width: 100%;
     min-height: 0;

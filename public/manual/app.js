@@ -963,13 +963,7 @@ function markEmptyRequestFields() {
 
 function updateRequestPrintValues() {
   requestInputs.forEach((input) => {
-    let printValue = input.parentElement.querySelector(".request-print-value");
-    if (!printValue) {
-      printValue = document.createElement("span");
-      printValue.className = "request-print-value";
-      input.insertAdjacentElement("afterend", printValue);
-    }
-    printValue.textContent = input.value.trim();
+    input.closest("label").dataset.printValue = input.value.trim();
   });
 }
 
