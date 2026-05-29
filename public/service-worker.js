@@ -1,4 +1,4 @@
-const CACHE_NAME = "cens-assets-tracker-v5";
+const CACHE_NAME = "cens-assets-tracker-v6";
 const STATIC_ASSETS = [
   "/",
   "/index.html",
@@ -7,7 +7,10 @@ const STATIC_ASSETS = [
   "/app.js",
   "/manifest.webmanifest",
   "/icons/icon-192.svg",
-  "/icons/icon-512.svg"
+  "/icons/icon-512.svg",
+  "/manual/index.html",
+  "/manual/styles.css",
+  "/manual/app.js"
 ];
 
 self.addEventListener("install", (event) => {

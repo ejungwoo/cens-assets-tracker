@@ -153,6 +153,7 @@ label {
 .topbar-actions {
   display: flex;
   gap: 6px;
+  justify-content: flex-end;
 }
 
 .topbar-actions button {

@@ -168,6 +168,7 @@ const I18N = {
     hide: "hide",
     show: "show",
     controlsFolded: "controls folded",
+    manualPage: "manual page",
     find: "find",
     locationShort: "current location",
     assetNumberShort: "asset number",
@@ -315,6 +316,7 @@ const I18N = {
     hide: "hide",
     show: "show",
     controlsFolded: "접힌 메뉴",
+    manualPage: "manual page",
     find: "find",
     locationShort: "current location",
     assetNumberShort: "asset number",
@@ -540,8 +542,8 @@ function renderTopbar() {
   }[state.route] || t("appName");
   const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
   const rightButton = state.route === "home"
-    ? `<div class="topbar-actions"><button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
-    : `<button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button>`;
+    ? `<div class="topbar-actions"><button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
+    : `<div class="topbar-actions"><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></div>`;
   return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
 }
 
@@ -984,6 +986,9 @@ function handleClick(event) {
     state.homeControlsHidden = !state.homeControlsHidden;
     persist();
     render();
+  }
+  if (action === "open-manual-page") {
+    window.open("manual/index.html", "_blank", "noopener");
   }
   if (action === "show-home-settings") {
     state.homeMode = "settings";
