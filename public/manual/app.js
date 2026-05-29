@@ -32,6 +32,7 @@ const imageDialog = document.querySelector("#imageDialog");
 const imageStage = document.querySelector("#imageStage");
 const dialogImage = document.querySelector("#dialogImage");
 const cropBox = document.querySelector("#cropBox");
+const rotate90Btn = document.querySelector("#rotate90Btn");
 const cropToggleBtn = document.querySelector("#cropToggleBtn");
 const applyCropBtn = document.querySelector("#applyCropBtn");
 const cancelCropBtn = document.querySelector("#cancelCropBtn");
@@ -526,6 +527,28 @@ function applyCrop() {
   scheduleAutoSave();
 }
 
+function rotateImage90() {
+  if (!activeImage || !dialogImage.naturalWidth || !dialogImage.naturalHeight) return;
+
+  resetCropMode();
+
+  const canvas = document.createElement("canvas");
+  canvas.width = dialogImage.naturalHeight;
+  canvas.height = dialogImage.naturalWidth;
+
+  const context = canvas.getContext("2d");
+  context.translate(canvas.width / 2, canvas.height / 2);
+  context.rotate(Math.PI / 2);
+  context.drawImage(dialogImage, -dialogImage.naturalWidth / 2, -dialogImage.naturalHeight / 2);
+
+  const rotatedSrc = canvas.toDataURL("image/png");
+  activeImage.src = rotatedSrc;
+  activeImage.dataset.imageSrc = rotatedSrc;
+  dialogImage.src = rotatedSrc;
+  scheduleAutoSave();
+}
+
+rotate90Btn.addEventListener("click", rotateImage90);
 cropToggleBtn.addEventListener("click", enterCropMode);
 cancelCropBtn.addEventListener("click", resetCropMode);
 applyCropBtn.addEventListener("click", applyCrop);
