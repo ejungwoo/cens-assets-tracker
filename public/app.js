@@ -134,6 +134,10 @@ const I18N = {
     photo2Field: "photo2",
     photo3Field: "photo3",
     locationField: "location",
+    acquisitionPriceKrwField: "Unit Price at Acquisition (KRW)",
+    manufacturerProviderField: "Manufacturer/Provider",
+    acquisitionDateField: "Acquisition date",
+    accountHolderField: "Account holder",
     lastInOutDateField: "lastInOutDate",
     lastVerifiedDateField: "lastVerifiedDate",
     lastVerifiedByField: "lastVerifiedBy",
@@ -250,6 +254,10 @@ const I18N = {
     photo2Field: "사진 2 URL (photo2)",
     photo3Field: "사진 3 URL (photo3)",
     locationField: "위치 (location)",
+    acquisitionPriceKrwField: "취득 단가 KRW (Unit Price at Acquisition)",
+    manufacturerProviderField: "제조사/공급자 (Manufacturer/Provider)",
+    acquisitionDateField: "취득일 (Acquisition date)",
+    accountHolderField: "회계 책임자 (Account holder)",
     lastInOutDateField: "최근 반출/반입일 (lastInOutDate)",
     lastVerifiedDateField: "최근 확인일 (lastVerifiedDate)",
     lastVerifiedByField: "최근 확인자 (lastVerifiedBy)",
@@ -294,7 +302,7 @@ class BackendGateway {
 const LocalStore = {
   loadAll() {
     const storedAssets = readJson(STORAGE_KEYS.assets, null);
-    const assets = shouldUseSeedAssets(storedAssets) ? seedAssets() : storedAssets;
+    const assets = shouldUseSeedAssets(storedAssets) || shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets;
     const records = readJson(STORAGE_KEYS.records, []);
     const presets = readJson(STORAGE_KEYS.presets, []);
     const myList = readJson(STORAGE_KEYS.myList, []);
@@ -381,6 +389,16 @@ function shouldUseSeedAssets(storedAssets) {
   if (!Array.isArray(storedAssets) || storedAssets.length === 0) return true;
   const ids = storedAssets.map((asset) => asset && asset.assetId).sort();
   return storedAssets.length === 2 && ids[0] === "1001" && ids[1] === "1002";
+}
+
+function shouldReplaceOldSheetSeed(storedAssets) {
+  if (!Array.isArray(storedAssets) || !Array.isArray(window.CENS_SEED_ASSETS)) return false;
+  if (storedAssets.length !== window.CENS_SEED_ASSETS.length) return false;
+  const ids = new Set(storedAssets.map((asset) => asset && asset.assetId));
+  const hasExpectedRange = ids.has("201800287") && ids.has("202401992");
+  const hasOldDescriptionMetadata = storedAssets.some((asset) => String(asset && asset.description).includes(" — Type:"));
+  const lacksSeparatedFields = storedAssets.every((asset) => !asset || !("acquisitionPriceKrw" in asset));
+  return hasExpectedRange && hasOldDescriptionMetadata && lacksSeparatedFields;
 }
 
 function routeFromHash() {
@@ -505,6 +523,10 @@ function renderAssetCard(asset, controls = "") {
         <span class="badge">${escapeHtml(asset.location || t("noLocation"))}</span>
       </div>
       <div class="fields">
+        ${asset.acquisitionPriceKrw ? `<span>${escapeHtml(t("acquisitionPriceKrwField"))}: ${escapeHtml(asset.acquisitionPriceKrw)}</span>` : ""}
+        ${asset.manufacturerProvider ? `<span>${escapeHtml(t("manufacturerProviderField"))}: ${escapeHtml(asset.manufacturerProvider)}</span>` : ""}
+        ${asset.accountHolder ? `<span>${escapeHtml(t("accountHolderField"))}: ${escapeHtml(asset.accountHolder)}</span>` : ""}
+        ${asset.acquisitionDate ? `<span>${escapeHtml(t("acquisitionDateField"))}: ${escapeHtml(asset.acquisitionDate)}</span>` : ""}
         <span>${escapeHtml(t("lastInOut"))}: ${escapeHtml(asset.lastInOutDate || "-")}</span>
         <span>${escapeHtml(t("verified"))}: ${escapeHtml(asset.lastVerifiedDate || "-")} ${escapeHtml(t("by"))} ${escapeHtml(asset.lastVerifiedBy || "-")}</span>
       </div>
@@ -528,6 +550,10 @@ function renderAssetForm() {
         ${field("photo2", t("photo2Field"), data.photo2, "url")}
         ${field("photo3", t("photo3Field"), data.photo3, "url")}
         ${field("location", t("locationField"), data.location)}
+        ${field("acquisitionPriceKrw", t("acquisitionPriceKrwField"), data.acquisitionPriceKrw)}
+        ${field("manufacturerProvider", t("manufacturerProviderField"), data.manufacturerProvider)}
+        ${field("acquisitionDate", t("acquisitionDateField"), data.acquisitionDate, "date")}
+        ${field("accountHolder", t("accountHolderField"), data.accountHolder)}
         ${field("lastInOutDate", t("lastInOutDateField"), data.lastInOutDate, "date")}
         ${field("lastVerifiedDate", t("lastVerifiedDateField"), data.lastVerifiedDate, "date")}
         ${field("lastVerifiedBy", t("lastVerifiedByField"), data.lastVerifiedBy)}
@@ -760,7 +786,7 @@ document.addEventListener("submit", (event) => {
 function filteredSortedAssets() {
   const query = normalize(state.listSearch);
   return [...state.assets]
-    .filter((asset) => !query || [asset.assetId, asset.name, asset.description].some((value) => normalize(value).includes(query)))
+    .filter((asset) => !query || [asset.assetId, asset.name, asset.description, asset.manufacturerProvider, asset.accountHolder].some((value) => normalize(value).includes(query)))
     .sort((a, b) => String(a[state.listSort] || "").localeCompare(String(b[state.listSort] || ""), undefined, { numeric: true }));
 }
 
@@ -784,6 +810,10 @@ function saveAsset(formData) {
     photo2: String(formData.get("photo2") || "").trim(),
     photo3: String(formData.get("photo3") || "").trim(),
     location: String(formData.get("location") || "").trim(),
+    acquisitionPriceKrw: String(formData.get("acquisitionPriceKrw") || "").trim(),
+    manufacturerProvider: String(formData.get("manufacturerProvider") || "").trim(),
+    acquisitionDate: String(formData.get("acquisitionDate") || "").trim(),
+    accountHolder: String(formData.get("accountHolder") || "").trim(),
     lastInOutDate: String(formData.get("lastInOutDate") || "").trim(),
     lastVerifiedDate: String(formData.get("lastVerifiedDate") || "").trim(),
     lastVerifiedBy: String(formData.get("lastVerifiedBy") || "").trim(),
@@ -1075,6 +1105,10 @@ function emptyAsset() {
     photo2: "",
     photo3: "",
     location: "",
+    acquisitionPriceKrw: "",
+    manufacturerProvider: "",
+    acquisitionDate: "",
+    accountHolder: "",
     lastInOutDate: "",
     lastVerifiedDate: "",
     lastVerifiedBy: ""
