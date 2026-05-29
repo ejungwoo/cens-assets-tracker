@@ -112,6 +112,7 @@ function bindRow(row) {
   const manualNameBtn = row.querySelector(".manual-name-btn");
   const clearTextBtn = row.querySelector(".clear-text-btn");
   const clearRowBtn = row.querySelector(".clear-row-btn");
+  const deleteRowBtn = row.querySelector(".delete-row-btn");
   const saveRowPhotosBtn = row.querySelector(".save-row-photos-btn");
   const swapRowPhotosBtn = row.querySelector(".swap-row-photos-btn");
   const message = row.querySelector(".row-message");
@@ -181,6 +182,7 @@ function bindRow(row) {
 
   clearTextBtn.addEventListener("click", () => clearTextFields(row));
   clearRowBtn.addEventListener("click", () => clearRow(row));
+  deleteRowBtn.addEventListener("click", () => deleteRow(row));
   saveRowPhotosBtn.addEventListener("click", () => saveRowPhotos(row));
   swapRowPhotosBtn.addEventListener("click", () => swapRowPhotos(row));
 
@@ -215,6 +217,12 @@ function clearRow(row) {
     clearPhotoCell(cell);
   });
 
+  scheduleAutoSave();
+}
+
+function deleteRow(row) {
+  row.remove();
+  updateRowNumbers();
   scheduleAutoSave();
 }
 

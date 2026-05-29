@@ -484,6 +484,16 @@ button {
   background: #d8efff;
 }
 
+.danger-button {
+  border-color: #f1b7b2;
+  background: #fff0ef;
+  color: var(--danger);
+}
+
+.danger-button:hover {
+  background: #ffe0dd;
+}
+
 .violet-button {
   border-color: #d8c8f1;
   background: #f1eaff;
