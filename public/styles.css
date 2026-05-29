@@ -222,6 +222,10 @@ label {
   padding: 8px;
 }
 
+.compact-card.open {
+  align-items: start;
+}
+
 .compact-card .mini-media {
   width: 58px;
   min-height: 50px;
@@ -255,6 +259,14 @@ label {
 
 .compact-form {
   box-shadow: none;
+}
+
+.compact-detail {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
 }
 
 .brand {

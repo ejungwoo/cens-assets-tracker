@@ -28,6 +28,7 @@ const state = {
   assetQuery: "",
   homeMode: "empty",
   homeResults: [],
+  openHomeAssetId: "",
   language: "en",
   backendUrl: "",
   listSearch: "",
@@ -178,7 +179,8 @@ const I18N = {
     nameSaved: "Name saved.",
     assetAdded: "Asset added to My List.",
     takePhoto: "Take photo",
-    compactInfo: "info"
+    compactInfo: "info",
+    collapse: "close"
   },
   ko: {
     appName: "CENS 자산 추적기",
@@ -320,7 +322,8 @@ const I18N = {
     nameSaved: "이름이 저장되었습니다.",
     assetAdded: "내 목록에 추가했습니다.",
     takePhoto: "사진 촬영",
-    compactInfo: "정보"
+    compactInfo: "정보",
+    collapse: "닫기"
   }
 };
 
@@ -610,14 +613,16 @@ function renderHomeAssetResults() {
 
 function renderHomeAssetCard(asset) {
   const alreadyAdded = state.myList.includes(asset.assetId);
+  const isOpen = state.openHomeAssetId === asset.assetId;
   return `
-    <article class="compact-card asset-compact" data-asset-id="${escapeAttr(asset.assetId)}" data-action="open-asset">
+    <article class="compact-card asset-compact ${isOpen ? "open" : ""}" data-asset-id="${escapeAttr(asset.assetId)}" data-action="toggle-home-asset">
       <div class="compact-body">
         <strong>${escapeHtml(asset.assetId)} ${escapeHtml(asset.name || t("unnamedAsset"))}</strong>
         <span>${escapeHtml(asset.description || t("noDescription"))}</span>
         <span class="meta">${escapeHtml(asset.location || t("noLocation"))}${asset.accountHolder ? ` | ${escapeHtml(t("accountHolderField"))}: ${escapeHtml(asset.accountHolder)}` : ""}</span>
       </div>
       <button class="small" data-action="home-add-asset" data-asset-id="${escapeAttr(asset.assetId)}" ${alreadyAdded ? "disabled" : ""}>${escapeHtml(t("add"))}</button>
+      ${isOpen ? renderHomeAssetDetails(asset, alreadyAdded) : ""}
     </article>`;
 }
 
@@ -635,15 +640,38 @@ function renderHomeMyList() {
 }
 
 function renderHomeMyListItem(asset) {
+  const isOpen = state.openHomeAssetId === asset.assetId;
   return `
-    <article class="compact-card asset-compact" data-asset-id="${escapeAttr(asset.assetId)}" data-action="open-asset">
+    <article class="compact-card asset-compact ${isOpen ? "open" : ""}" data-asset-id="${escapeAttr(asset.assetId)}" data-action="toggle-home-asset">
       <div class="compact-body">
         <strong>${escapeHtml(asset.assetId)} ${escapeHtml(asset.name || t("unnamedAsset"))}</strong>
         <span>${escapeHtml(asset.description || t("noDescription"))}</span>
         <span class="meta">${escapeHtml(asset.location || t("noLocation"))}</span>
       </div>
       <button class="danger small" data-action="remove-mylist" data-remove-id="${escapeAttr(asset.assetId)}">${escapeHtml(t("remove"))}</button>
+      ${isOpen ? renderHomeAssetDetails(asset, true) : ""}
     </article>`;
+}
+
+function renderHomeAssetDetails(asset, alreadyAdded) {
+  const photos = [asset.photo1, asset.photo2, asset.photo3].filter(Boolean);
+  return `
+    <div class="compact-detail">
+      ${photos.length ? `<div class="thumbs">${photos.map((src) => `<img class="thumb" src="${escapeAttr(src)}" alt="${escapeAttr(t("assetPhoto"))}" data-action="preview-photo" data-src="${escapeAttr(src)}">`).join("")}</div>` : ""}
+      <div class="fields">
+        <span>${escapeHtml(t("locationField"))}: ${escapeHtml(asset.location || "-")}</span>
+        ${asset.acquisitionPriceKrw ? `<span>${escapeHtml(t("acquisitionPriceKrwField"))}: ${escapeHtml(asset.acquisitionPriceKrw)}</span>` : ""}
+        ${asset.manufacturerProvider ? `<span>${escapeHtml(t("manufacturerProviderField"))}: ${escapeHtml(asset.manufacturerProvider)}</span>` : ""}
+        ${asset.acquisitionDate ? `<span>${escapeHtml(t("acquisitionDateField"))}: ${escapeHtml(asset.acquisitionDate)}</span>` : ""}
+        ${asset.accountHolder ? `<span>${escapeHtml(t("accountHolderField"))}: ${escapeHtml(asset.accountHolder)}</span>` : ""}
+        <span>${escapeHtml(t("lastInOut"))}: ${escapeHtml(asset.lastInOutDate || "-")}</span>
+        <span>${escapeHtml(t("verified"))}: ${escapeHtml(asset.lastVerifiedDate || "-")} ${escapeHtml(t("by"))} ${escapeHtml(asset.lastVerifiedBy || "-")}</span>
+      </div>
+      <div class="quick-actions two">
+        <button class="secondary" data-nav="asset/${encodeURIComponent(asset.assetId)}">${escapeHtml(t("edit"))}</button>
+        <button data-action="home-add-asset" data-asset-id="${escapeAttr(asset.assetId)}" ${alreadyAdded ? "disabled" : ""}>${escapeHtml(t("add"))}</button>
+      </div>
+    </div>`;
 }
 
 function renderHomeNewAssetForm() {
@@ -908,6 +936,7 @@ function handleClick(event) {
   const action = target.dataset.action;
   if (action === "back") history.length > 1 ? history.back() : navigate("home");
   if (action === "open-asset") openAssetFromCard(event, target);
+  if (action === "toggle-home-asset") toggleHomeAsset(event, target);
   if (action === "preview-photo") previewPhoto(event, target);
   if (action === "toggle-name-lock") toggleNameLock();
   if (action === "location-find") findLocations();
@@ -922,15 +951,18 @@ function handleClick(event) {
   });
   if (action === "show-new-asset") {
     state.homeMode = "newAsset";
+    state.openHomeAssetId = "";
     render();
   }
   if (action === "show-total-list") {
     state.homeMode = "total";
     state.homeResults = sortedAssets();
+    state.openHomeAssetId = "";
     render();
   }
   if (action === "show-home-my-list") {
     state.homeMode = "my";
+    state.openHomeAssetId = "";
     render();
   }
   if (action === "home-add-asset") {
@@ -1001,6 +1033,7 @@ function findLocations() {
   const query = normalize(state.locationQuery);
   state.homeMode = "locations";
   state.homeResults = getLocationEntries().filter((location) => !query || normalize(location.name).includes(query));
+  state.openHomeAssetId = "";
   render();
 }
 
@@ -1010,6 +1043,7 @@ function createLocation() {
   const entry = upsertLocation({ name, photo: "", source: "custom" });
   state.homeMode = "locations";
   state.homeResults = [entry];
+  state.openHomeAssetId = "";
   persist();
   render();
 }
@@ -1036,6 +1070,7 @@ function captureLocationPhoto(name) {
       const entry = upsertLocation({ name, photo: String(reader.result || ""), source: "custom" });
       state.homeMode = "locations";
       state.homeResults = [entry];
+      state.openHomeAssetId = "";
       persist();
       render();
     });
@@ -1048,6 +1083,7 @@ function findHomeAssets() {
   const query = normalize(extractAssetNumber(state.assetQuery));
   state.homeMode = "assets";
   state.homeResults = query ? sortedAssets().filter((asset) => [asset.assetId, asset.name, asset.description].some((value) => normalize(value).includes(query))) : [];
+  state.openHomeAssetId = "";
   render();
 }
 
@@ -1114,6 +1150,13 @@ function sortedAssets(sortKey = state.listSort) {
 function openAssetFromCard(event, target) {
   if (event.target.closest("button, img, a, input")) return;
   navigate(`asset/${encodeURIComponent(target.dataset.assetId)}`);
+}
+
+function toggleHomeAsset(event, target) {
+  if (event.target.closest("button, img, a, input")) return;
+  const assetId = target.dataset.assetId;
+  state.openHomeAssetId = state.openHomeAssetId === assetId ? "" : assetId;
+  render();
 }
 
 function previewPhoto(event, target) {
