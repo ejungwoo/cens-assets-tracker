@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   operatorLocked: "cens.operatorLocked",
   selectedLocation: "cens.selectedLocation",
   locationLocked: "cens.locationLocked",
+  homeControlsHidden: "cens.homeControlsHidden",
   language: "cens.language",
   backendUrl: "cens.backendUrl"
 };
@@ -30,6 +31,7 @@ const state = {
   homeResults: [],
   openHomeAssetId: "",
   editingHomeAssetId: "",
+  homeControlsHidden: false,
   language: "en",
   backendUrl: "",
   listSearch: "",
@@ -163,6 +165,8 @@ const I18N = {
     save: "save",
     cancel: "cancel",
     edit: "edit",
+    hide: "hide",
+    show: "show",
     find: "find",
     locationShort: "location",
     assetNumberShort: "asset number",
@@ -307,6 +311,8 @@ const I18N = {
     save: "save",
     cancel: "cancel",
     edit: "edit",
+    hide: "hide",
+    show: "show",
     find: "find",
     locationShort: "location",
     assetNumberShort: "asset number",
@@ -373,9 +379,10 @@ const LocalStore = {
     const operatorLocked = localStorage.getItem(STORAGE_KEYS.operatorLocked) === "true";
     const selectedLocation = localStorage.getItem(STORAGE_KEYS.selectedLocation) || "";
     const locationLocked = localStorage.getItem(STORAGE_KEYS.locationLocked) === "true";
+    const homeControlsHidden = localStorage.getItem(STORAGE_KEYS.homeControlsHidden) === "true";
     const language = localStorage.getItem(STORAGE_KEYS.language) || "en";
     const backendUrl = localStorage.getItem(STORAGE_KEYS.backendUrl) || "";
-    return { assets, records, presets, locations, myList, operator, operatorLocked, selectedLocation, locationQuery: selectedLocation, locationLocked, language, backendUrl };
+    return { assets, records, presets, locations, myList, operator, operatorLocked, selectedLocation, locationQuery: selectedLocation, locationLocked, homeControlsHidden, language, backendUrl };
   },
   saveAll(data) {
     localStorage.setItem(STORAGE_KEYS.assets, JSON.stringify(data.assets));
@@ -387,6 +394,7 @@ const LocalStore = {
     localStorage.setItem(STORAGE_KEYS.operatorLocked, data.operatorLocked ? "true" : "false");
     localStorage.setItem(STORAGE_KEYS.selectedLocation, data.selectedLocation || "");
     localStorage.setItem(STORAGE_KEYS.locationLocked, data.locationLocked ? "true" : "false");
+    localStorage.setItem(STORAGE_KEYS.homeControlsHidden, data.homeControlsHidden ? "true" : "false");
     localStorage.setItem(STORAGE_KEYS.language, data.language || "en");
     localStorage.setItem(STORAGE_KEYS.backendUrl, data.backendUrl || "");
   }
@@ -495,6 +503,7 @@ function persist() {
     operatorLocked: state.operatorLocked,
     selectedLocation: state.selectedLocation,
     locationLocked: state.locationLocked,
+    homeControlsHidden: state.homeControlsHidden,
     language: state.language,
     backendUrl: state.backendUrl
   });
@@ -528,7 +537,10 @@ function renderTopbar() {
     settings: t("settingsTitle")
   }[state.route] || t("appName");
   const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
-  return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></header>`;
+  const rightButton = state.route === "home"
+    ? `<button class="ghost small" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button>`
+    : `<button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button>`;
+  return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
 }
 
 function renderPage() {
@@ -544,8 +556,8 @@ function renderPage() {
 
 function renderHomePage() {
   return `
-    <main class="page home-console">
-      <section class="quick-panel">
+    <main class="page home-console ${state.homeControlsHidden ? "controls-hidden" : ""}">
+      <section class="quick-panel optional-controls">
         <div class="compact-row">
           <label for="home-name">${escapeHtml(t("nameShort"))}:</label>
           <input id="home-name" data-bind="operator" data-enter-action="toggle-name-lock" value="${escapeAttr(state.operator)}" ${state.operatorLocked ? "disabled" : ""} autocomplete="name">
@@ -557,18 +569,18 @@ function renderHomePage() {
           <button class="small" data-action="${state.locationLocked ? "edit-location" : "location-find"}">${escapeHtml(state.locationLocked ? t("edit") : t("find"))}</button>
         </div>
       </section>
-      <div class="rule"></div>
+      <div class="rule optional-controls"></div>
       <section class="quick-panel">
         <div class="compact-row">
           <label for="home-asset">${escapeHtml(t("assetNumberShort"))}:</label>
           <input id="home-asset" data-bind="assetQuery" data-enter-action="asset-find" value="${escapeAttr(state.assetQuery)}" inputmode="numeric">
           <button class="small" data-action="asset-find">${escapeHtml(t("find"))}</button>
         </div>
-        <div class="quick-actions two">
+        <div class="quick-actions two optional-controls">
           <button data-action="show-new-asset">${escapeHtml(t("new"))}</button>
           <button class="warning" data-action="scan-home-asset">${escapeHtml(t("camera"))}</button>
         </div>
-        <div class="quick-actions two">
+        <div class="quick-actions two optional-controls">
           <button class="secondary" data-action="show-total-list">${escapeHtml(t("totalList"))}</button>
           <button class="secondary" data-action="show-home-my-list">${escapeHtml(t("myListTitle"))} (${state.myList.length})</button>
         </div>
@@ -962,6 +974,11 @@ function handleClick(event) {
   if (action === "back") history.length > 1 ? history.back() : navigate("home");
   if (action === "open-asset") openAssetFromCard(event, target);
   if (action === "toggle-home-asset") toggleHomeAsset(event, target);
+  if (action === "toggle-home-controls") {
+    state.homeControlsHidden = !state.homeControlsHidden;
+    persist();
+    render();
+  }
   if (action === "edit-home-asset") {
     state.openHomeAssetId = target.dataset.assetId;
     state.editingHomeAssetId = target.dataset.assetId;

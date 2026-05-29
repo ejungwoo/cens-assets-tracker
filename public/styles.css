@@ -152,6 +152,14 @@ label {
   padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
 }
 
+.home-console.controls-hidden {
+  grid-template-rows: auto auto 1fr;
+}
+
+.home-console.controls-hidden .optional-controls {
+  display: none;
+}
+
 .quick-panel {
   display: grid;
   gap: 8px;
