@@ -768,7 +768,9 @@ button {
   #zoomToggleBtn,
   .clear-text-btn,
   .clear-row-btn,
+  .delete-row-btn,
   .save-row-photos-btn,
+  .swap-row-photos-btn,
   .button-row,
   .photo-actions,
   .row-message,
@@ -810,7 +812,7 @@ button {
   .request-grid,
   .request-fields {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 3px 10px;
   }
 
