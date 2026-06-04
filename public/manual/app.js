@@ -11,6 +11,7 @@ const addRowBtn = document.querySelector("#addRowBtn");
 const addRowCountInput = document.querySelector("#addRowCount");
 const clearAllBtn = document.querySelector("#clearAllBtn");
 const exportPdfBtn = document.querySelector("#exportPdfBtn");
+const exportHwpxBtn = document.querySelector("#exportHwpxBtn");
 const zoomToggleBtn = document.querySelector("#zoomToggleBtn");
 const saveListBtn = document.querySelector("#saveListBtn");
 const saveAllPhotosBtn = document.querySelector("#saveAllPhotosBtn");
@@ -661,6 +662,26 @@ function saveList() {
   URL.revokeObjectURL(url);
 }
 
+function exportHwpx() {
+  if (!validateBeforePrint()) return;
+  if (!window.CensHwpx) {
+    alert("HWPX 내보내기 모듈을 불러오지 못했습니다. 페이지를 새로고침하세요.");
+    return;
+  }
+
+  const title = documentTitleInput.value.trim() || "자산 목록";
+  const payload = buildListPayload();
+  const blob = window.CensHwpx.build(payload, getRequestTypeLabel());
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${sanitizeFileName(title)}.hwpx`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 function sanitizeFileName(value) {
   return value.replace(/[\\/:*?"<>|]/g, "_").replace(/\s+/g, " ").trim() || "asset-list";
 }
@@ -888,6 +909,7 @@ addRowCountInput.addEventListener("keydown", (event) => {
   }
 });
 saveListBtn.addEventListener("click", saveList);
+exportHwpxBtn.addEventListener("click", exportHwpx);
 saveAllPhotosBtn.addEventListener("click", saveAllPhotos);
 loadListBtn.addEventListener("click", () => loadListInput.click());
 loadListInput.addEventListener("change", () => {

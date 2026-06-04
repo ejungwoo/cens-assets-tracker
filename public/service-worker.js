@@ -1,4 +1,4 @@
-const CACHE_NAME = "cens-assets-tracker-v10";
+const CACHE_NAME = "cens-assets-tracker-v11";
 const STATIC_ASSETS = [
   "/",
   "/index.html",
@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   "/icons/icon-512.svg",
   "/manual/index.html",
   "/manual/styles.css",
+  "/manual/hwpx-export.js",
   "/manual/app.js"
 ];
 
