@@ -226,7 +226,91 @@
     return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
-  function makeSectionXml(templateSection, lines) {
+  function picPara(image) {
+    const width = 18000;
+    const height = 12000;
+    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:pic id="${image.picId}" zOrder="0" numberingType="PICTURE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None"><hp:sz width="${width}" height="${height}" widthRelTo="ABSOLUTE" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment><hp:imgRect><hp:pt0 x="0" y="0"/><hp:pt1 x="${width}" y="0"/><hp:pt2 x="${width}" y="${height}"/><hp:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:img dimwidth="${width}" dimheight="${height}" bright="0" contrast="0" effect="REAL_PIC" binaryItemIDRef="${image.binId}"/></hp:pic></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${height}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
+  }
+
+  function dataUrlToBytes(src) {
+    const [metadata, data] = String(src || "").split(",");
+    if (!metadata || !data) return null;
+    const mimeMatch = /^data:([^;]+)/.exec(metadata);
+    const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
+    const binary = atob(data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return { bytes, mimeType };
+  }
+
+  function imageExtension(mimeType) {
+    if (mimeType === "image/jpeg") return "jpg";
+    if (mimeType === "image/png") return "png";
+    if (mimeType === "image/gif") return "gif";
+    if (mimeType === "image/bmp") return "bmp";
+    return "png";
+  }
+
+  function collectImages(payload) {
+    const images = [];
+    if (payload.printSettings?.photos === "hide") return images;
+
+    payload.rows.forEach((row, rowIndex) => {
+      [
+        ["numberPhoto", "자산번호 확대 사진"],
+        ["wholePhoto", "자산 전체 사진"],
+      ].forEach(([key, label]) => {
+        const data = dataUrlToBytes(row[key]);
+        if (!data) return;
+        const index = images.length + 1;
+        const ext = imageExtension(data.mimeType);
+        images.push({
+          row,
+          rowIndex,
+          label,
+          bytes: data.bytes,
+          ext,
+          path: `BinData/image${index}.${ext}`,
+          binId: `bin${String(index).padStart(4, "0")}`,
+          picId: index,
+        });
+      });
+    });
+
+    return images;
+  }
+
+  function makePhotoBlocks(images) {
+    if (!images.length) return "";
+    const blocks = [paragraphXml(" "), paragraphXml("사진")];
+    let lastRowIndex = -1;
+
+    images.forEach((image) => {
+      if (image.rowIndex !== lastRowIndex) {
+        const rowTitle = `${image.rowIndex + 1}. ${image.row.assetNumber || ""} ${image.row.assetName || ""}`.trim();
+        blocks.push(paragraphXml(rowTitle));
+        lastRowIndex = image.rowIndex;
+      }
+      blocks.push(paragraphXml(image.label), picPara(image));
+    });
+
+    return blocks.join("");
+  }
+
+  function injectBinDataList(headerXml, images) {
+    const withoutExisting = headerXml.replace(/<hh:binDataList\b[\s\S]*?<\/hh:binDataList>/, "");
+    if (!images.length) return withoutExisting;
+
+    const binItems = images
+      .map((image) => `<hh:binItem type="EMBEDDING" id="${image.binId}" binData="${image.path}" format="${image.ext}"/>`)
+      .join("");
+    const binDataList = `<hh:binDataList count="${images.length}">${binItems}</hh:binDataList>`;
+    return withoutExisting.replace("<hh:refList>", `<hh:refList>${binDataList}`);
+  }
+
+  function makeSectionXml(templateSection, lines, images) {
     const rootMatch = templateSection.match(/^([\s\S]*?<hs:sec\b[^>]*>)/);
     const firstParagraphMatch = templateSection.match(/<hp:p\b[\s\S]*?<\/hp:p>/);
     if (!rootMatch || !firstParagraphMatch) {
@@ -236,13 +320,16 @@
     const sectionStart = rootMatch[1];
     const firstParagraph = firstParagraphMatch[0].replace(/<hp:t>[\s\S]*?<\/hp:t>/, "<hp:t> </hp:t>");
     const body = lines.map((line, index) => paragraphXml(line, index === 0 ? "12" : "0", index === 0 ? "5" : "0")).join("");
-    return `${sectionStart}${firstParagraph}${body}</hs:sec>`;
+    return `${sectionStart}${firstParagraph}${body}${makePhotoBlocks(images)}</hs:sec>`;
   }
 
-  function makeContentHpf(title) {
+  function makeContentHpf(title, images) {
     const safeTitle = xmlEscape(title || "자산 목록");
     const now = new Date().toISOString();
-    return `<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><opf:package xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hp10="http://www.hancom.co.kr/hwpml/2016/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" xmlns:hhs="http://www.hancom.co.kr/hwpml/2011/history" xmlns:hm="http://www.hancom.co.kr/hwpml/2011/master-page" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf/" xmlns:ooxmlchart="http://www.hancom.co.kr/hwpml/2016/ooxmlchart" xmlns:hwpunitchar="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" version="" unique-identifier="" id=""><opf:metadata><opf:title>${safeTitle}</opf:title><opf:language>ko</opf:language><opf:meta name="creator" content="text">CENS Assets Tracker</opf:meta><opf:meta name="subject" content="text"/><opf:meta name="description" content="text"/><opf:meta name="lastsaveby" content="text">CENS Assets Tracker</opf:meta><opf:meta name="CreatedDate" content="text">${now}</opf:meta><opf:meta name="ModifiedDate" content="text">${now}</opf:meta><opf:meta name="date" content="text">${now}</opf:meta><opf:meta name="keyword" content="text"/></opf:metadata><opf:manifest><opf:item id="header" href="Contents/header.xml" media-type="application/xml"/><opf:item id="section0" href="Contents/section0.xml" media-type="application/xml"/><opf:item id="settings" href="settings.xml" media-type="application/xml"/></opf:manifest><opf:spine><opf:itemref idref="header" linear="yes"/><opf:itemref idref="section0" linear="yes"/></opf:spine></opf:package>`;
+    const imageItems = images
+      .map((image) => `<opf:item id="${image.binId}" href="${image.path}" media-type="image/${image.ext === "jpg" ? "jpeg" : image.ext}"/>`)
+      .join("");
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><opf:package xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hp10="http://www.hancom.co.kr/hwpml/2016/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" xmlns:hhs="http://www.hancom.co.kr/hwpml/2011/history" xmlns:hm="http://www.hancom.co.kr/hwpml/2011/master-page" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf/" xmlns:ooxmlchart="http://www.hancom.co.kr/hwpml/2016/ooxmlchart" xmlns:hwpunitchar="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" version="" unique-identifier="" id=""><opf:metadata><opf:title>${safeTitle}</opf:title><opf:language>ko</opf:language><opf:meta name="creator" content="text">CENS Assets Tracker</opf:meta><opf:meta name="subject" content="text"/><opf:meta name="description" content="text"/><opf:meta name="lastsaveby" content="text">CENS Assets Tracker</opf:meta><opf:meta name="CreatedDate" content="text">${now}</opf:meta><opf:meta name="ModifiedDate" content="text">${now}</opf:meta><opf:meta name="date" content="text">${now}</opf:meta><opf:meta name="keyword" content="text"/></opf:metadata><opf:manifest><opf:item id="header" href="Contents/header.xml" media-type="application/xml"/><opf:item id="section0" href="Contents/section0.xml" media-type="application/xml"/><opf:item id="settings" href="settings.xml" media-type="application/xml"/>${imageItems}</opf:manifest><opf:spine><opf:itemref idref="header" linear="yes"/><opf:itemref idref="section0" linear="yes"/></opf:spine></opf:package>`;
   }
 
   async function loadTemplateEntries() {
@@ -268,11 +355,18 @@
     const entries = await loadTemplateEntries();
     const templateSection = decoder.decode(entries.find((entry) => entry.name === "Contents/section0.xml")?.data || new Uint8Array());
     const lines = makeLines(payload, requestTypeLabel);
+    const images = collectImages(payload);
     const title = payload.title || "자산 목록";
+    const headerEntry = entries.find((entry) => entry.name === "Contents/header.xml");
+    if (!headerEntry) throw new Error("HWPX template is missing Contents/header.xml.");
 
-    replaceEntry(entries, "Contents/section0.xml", makeSectionXml(templateSection, lines));
-    replaceEntry(entries, "Contents/content.hpf", makeContentHpf(title));
+    replaceEntry(entries, "Contents/header.xml", injectBinDataList(decoder.decode(headerEntry.data), images));
+    replaceEntry(entries, "Contents/section0.xml", makeSectionXml(templateSection, lines, images));
+    replaceEntry(entries, "Contents/content.hpf", makeContentHpf(title, images));
     replaceEntry(entries, "Preview/PrvText.txt", lines.join("\n"));
+    images.forEach((image) => {
+      entries.push({ name: image.path, data: image.bytes });
+    });
 
     return createStoredZip(entries);
   }
