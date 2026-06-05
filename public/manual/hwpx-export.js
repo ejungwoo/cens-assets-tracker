@@ -119,7 +119,7 @@
     const id = crypto.getRandomValues(new Uint32Array(1))[0];
     const runs = String(text || " ")
       .split(/\r?\n/)
-      .map((line) => `<hp:run><hp:t>${xmlEscape(line || " ")}</hp:t></hp:run>`)
+      .map((line) => `<hp:run charPrIDRef="0"><hp:t>${xmlEscape(line || " ")}</hp:t></hp:run>`)
       .join("");
     return `<hp:p id="${id}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}</hp:p>`;
   }
@@ -128,12 +128,12 @@
     const id = crypto.getRandomValues(new Uint32Array(1))[0];
     const width = 18000;
     const height = 12000;
-    return `<hp:p id="${id}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run><hp:pic id="${image.id}" zOrder="0" numberingType="PICTURE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None"><hp:sz width="${width}" height="${height}" widthRelTo="ABSOLUTE" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment><hp:imgRect><hp:pt0 x="0" y="0"/><hp:pt1 x="${width}" y="0"/><hp:pt2 x="${width}" y="${height}"/><hp:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:img dimwidth="${width}" dimheight="${height}" bright="0" contrast="0" effect="REAL_PIC" binaryItemIDRef="${image.binId}"/></hp:pic></hp:run></hp:p>`;
+    return `<hp:p id="${id}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:pic id="${image.id}" zOrder="0" numberingType="PICTURE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None"><hp:sz width="${width}" height="${height}" widthRelTo="ABSOLUTE" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment><hp:imgRect><hp:pt0 x="0" y="0"/><hp:pt1 x="${width}" y="0"/><hp:pt2 x="${width}" y="${height}"/><hp:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:img dimwidth="${width}" dimheight="${height}" bright="0" contrast="0" effect="REAL_PIC" binaryItemIDRef="${image.binId}"/></hp:pic></hp:run></hp:p>`;
   }
 
   function sectionXml(blocks) {
     const sectionId = crypto.getRandomValues(new Uint32Array(1))[0];
-    const sectionPr = `<hp:p id="${sectionId}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run><hp:secPr id="1" textDirection="HORIZONTAL" spaceColumns="1134" tabStop="8000" tabStopVal="LEFT" tabStopUnit="MILLI"><hp:pagePr landscape="0" width="59528" height="84188" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="5669" right="5669" top="5669" bottom="4252"/></hp:pagePr><hp:footNotePr/><hp:endNotePr/><hp:pageBorderFill type="BOTH" borderFillIDRef="0" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"/></hp:secPr></hp:run></hp:p>`;
+    const sectionPr = `<hp:p id="${sectionId}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:secPr id="1" textDirection="HORIZONTAL" spaceColumns="1134" tabStop="8000" tabStopVal="LEFT" tabStopUnit="MILLI"><hp:pagePr landscape="0" width="59528" height="84188" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="5669" right="5669" top="5669" bottom="4252"/></hp:pagePr><hp:footNotePr/><hp:endNotePr/><hp:pageBorderFill type="BOTH" borderFillIDRef="0" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"/></hp:secPr><hp:ctrl><hp:colPr id="1" type="NEWSPAPER" layout="LEFT" colCount="1" sameSz="1" sameGap="0"/></hp:ctrl></hp:run><hp:run charPrIDRef="0"><hp:t> </hp:t></hp:run></hp:p>`;
     return `<?xml version="1.0" encoding="UTF-8"?>
 <hs:sec xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section">
 ${sectionPr}
@@ -146,10 +146,19 @@ ${blocks.join("\n")}
       .map((image) => `<hh:binItem type="EMBEDDING" id="${image.binId}" binData="${image.path}" format="${image.ext}"/>`)
       .join("");
     return `<?xml version="1.0" encoding="UTF-8"?>
-<hh:head xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" version="1.1" secCnt="1">
+<hh:head xmlns:ha="http://www.hancom.co.kr/hwpml/2011/app" xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hp10="http://www.hancom.co.kr/hwpml/2016/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section" xmlns:hc="http://www.hancom.co.kr/hwpml/2011/core" xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" xmlns:hhs="http://www.hancom.co.kr/hwpml/2011/history" xmlns:hm="http://www.hancom.co.kr/hwpml/2011/master-page" xmlns:hpf="http://www.hancom.co.kr/schema/2011/hpf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf/" xmlns:ooxmlchart="http://www.hancom.co.kr/hwpml/2016/ooxmlchart" xmlns:hwpunitchar="http://www.hancom.co.kr/hwpml/2016/HwpUnitChar" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" version="1.5" secCnt="1">
+  <hh:beginNum page="1" footnote="1" endnote="1" pic="1" tbl="1" equation="1"/>
   <hh:refList>
     <hh:binDataList count="${images.length}">${binItems}</hh:binDataList>
-    <hh:fontfaces itemCnt="1"><hh:fontface lang="Hangul" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF"/></hh:fontface></hh:fontfaces>
+    <hh:fontfaces itemCnt="7">
+      <hh:fontface lang="HANGUL" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+      <hh:fontface lang="LATIN" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+      <hh:fontface lang="HANJA" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+      <hh:fontface lang="JAPANESE" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+      <hh:fontface lang="OTHER" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+      <hh:fontface lang="SYMBOL" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+      <hh:fontface lang="USER" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF" isEmbedded="0"/></hh:fontface>
+    </hh:fontfaces>
     <hh:borderFills itemCnt="1"><hh:borderFill id="0" threeD="0" shadow="0"><hh:leftBorder type="NONE" width="0.1 mm" color="#000000"/><hh:rightBorder type="NONE" width="0.1 mm" color="#000000"/><hh:topBorder type="NONE" width="0.1 mm" color="#000000"/><hh:bottomBorder type="NONE" width="0.1 mm" color="#000000"/></hh:borderFill></hh:borderFills>
     <hh:charProperties itemCnt="1"><hh:charPr id="0" height="1000" textColor="#000000"><hh:fontRef hangul="0" latin="0" hanja="0" japanese="0" other="0" symbol="0" user="0"/></hh:charPr></hh:charProperties>
     <hh:paraProperties itemCnt="2">
@@ -159,6 +168,42 @@ ${blocks.join("\n")}
     <hh:styles itemCnt="1"><hh:style id="0" type="PARA" name="바탕글" engName="Normal" paraPrIDRef="0" charPrIDRef="0" nextStyleIDRef="0" langID="1042" lockForm="0"/></hh:styles>
   </hh:refList>
 </hh:head>`;
+  }
+
+  function manifestXml(entries) {
+    const fileEntries = entries
+      .map((entry) => {
+        const mediaType =
+          entry.name === "mimetype"
+            ? "application/hwp+zip"
+            : entry.name.endsWith(".xml") || entry.name.endsWith(".hpf") || entry.name.endsWith(".rdf")
+              ? "text/xml"
+              : entry.name.endsWith(".txt")
+                ? "text/plain"
+                : entry.name.endsWith(".jpg")
+                  ? "image/jpeg"
+                  : entry.name.endsWith(".png")
+                    ? "image/png"
+                    : entry.name.endsWith(".bmp")
+                      ? "image/bmp"
+                      : "";
+        return `<odf:file-entry odf:media-type="${mediaType}" odf:full-path="${xmlEscape(entry.name)}"/>`;
+      })
+      .join("");
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<odf:manifest xmlns:odf="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
+  <odf:file-entry odf:media-type="application/hwp+zip" odf:full-path="/"/>
+  ${fileEntries}
+</odf:manifest>`;
+  }
+
+  function containerRdfXml(title) {
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:pkg="http://www.idpf.org/2007/opf">
+  <rdf:Description rdf:about="Contents/content.hpf">
+    <pkg:hasDocumentTitle>${xmlEscape(title || "자산 목록")}</pkg:hasDocumentTitle>
+  </rdf:Description>
+</rdf:RDF>`;
   }
 
   function makeLines(payload, requestTypeLabel) {
@@ -270,7 +315,7 @@ ${blocks.join("\n")}
       .map((image) => `<opf:item id="${image.binId}" href="../${image.path}" media-type="image/${image.ext === "jpg" ? "jpeg" : image.ext}"/>`)
       .join("");
     const content = `<?xml version="1.0" encoding="UTF-8"?><opf:package xmlns:opf="http://www.idpf.org/2007/opf" version="3.0"><opf:metadata><opf:title>${title}</opf:title><opf:creator>CENS Assets Tracker</opf:creator><opf:language>ko-KR</opf:language></opf:metadata><opf:manifest><opf:item id="header" href="header.xml" media-type="application/xml"/><opf:item id="section0" href="section0.xml" media-type="application/xml"/>${imageManifest}</opf:manifest><opf:spine><opf:itemref idref="section0"/></opf:spine></opf:package>`;
-    const entries = [
+    const contentEntries = [
       { name: "mimetype", data: "application/hwp+zip" },
       { name: "META-INF/container.xml", data: `<?xml version="1.0" encoding="UTF-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="Contents/content.hpf" media-type="application/hwp+zip"/></rootfiles></container>` },
       { name: "Contents/content.hpf", data: content },
@@ -280,6 +325,13 @@ ${blocks.join("\n")}
       { name: "settings.xml", data: `<?xml version="1.0" encoding="UTF-8"?><settings/>` },
       { name: "Preview/PrvText.txt", data: previewLines.join("\n") },
       ...images.map((image) => ({ name: image.path, data: image.bytes })),
+    ];
+    const entries = [
+      contentEntries[0],
+      contentEntries[1],
+      { name: "META-INF/manifest.xml", data: manifestXml(contentEntries) },
+      { name: "META-INF/container.rdf", data: containerRdfXml(payload.title) },
+      ...contentEntries.slice(2),
     ];
     return createStoredZip(entries);
   }
