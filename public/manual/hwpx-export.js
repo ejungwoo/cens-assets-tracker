@@ -211,6 +211,35 @@
     return lines;
   }
 
+  function makeIntroLines(payload, requestTypeLabel) {
+    const labels = {
+      applicantName: "신청자 이름",
+      applicantOrg: "소속",
+      takeoutPeriod: "반출 기간",
+      takeoutReason: "반출 사유",
+      takeoutPlace: "반출 장소",
+      assetSharing: "자산공동활용여부",
+      domesticOrInternational: "국외/국내 반출 여부",
+      securityManagedItem: "보안관리대상물품 여부",
+      customsExemptionNumber: "관세감면사후관리 대상물품 면세번호",
+      extensionPeriod: "연장 기간",
+      extensionReason: "연장 사유",
+      returnDate: "반입 일자",
+      returnReason: "반입 사유",
+      returnPlace: "반입 장소",
+    };
+    const fields = payload.request?.fields || {};
+    const title = requestTypeLabel ? `[${requestTypeLabel}] ${payload.title}` : payload.title;
+    const lines = [title || "자산 목록", ""];
+
+    Object.entries(labels).forEach(([key, label]) => {
+      if (fields[key]) lines.push(`${label}: ${fields[key]}`);
+    });
+
+    lines.push("");
+    return lines;
+  }
+
   function randomId() {
     if (globalThis.crypto?.getRandomValues) {
       return crypto.getRandomValues(new Uint32Array(1))[0];
@@ -226,10 +255,9 @@
     return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
-  function picPara(image) {
-    const width = 18000;
-    const height = 12000;
-    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:pic id="${randomId()}" zOrder="${image.picId + 3}" numberingType="PICTURE" textWrap="SQUARE" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" href="" groupLevel="0" instid="${randomId()}" reverse="0"><hp:offset x="0" y="0"/><hp:orgSz width="${width}" height="${height}"/><hp:curSz width="${width}" height="${height}"/><hp:flip horizontal="0" vertical="0"/><hp:rotationInfo angle="0" centerX="${Math.floor(width / 2)}" centerY="${Math.floor(height / 2)}" rotateimage="1"/><hp:renderingInfo><hc:transMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:scaMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:rotMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/></hp:renderingInfo><hc:img binaryItemIDRef="${image.binId}" bright="0" contrast="0" effect="REAL_PIC" alpha="0"/><hp:imgRect><hc:pt0 x="0" y="0"/><hc:pt1 x="${width}" y="0"/><hc:pt2 x="${width}" y="${height}"/><hc:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="${width}" top="0" bottom="${height}"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:imgDim dimwidth="${width}" dimheight="${height}"/><hp:effects/><hp:sz width="${width}" widthRelTo="ABSOLUTE" height="${height}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment></hp:pic><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${height}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
+  function pictureParagraphXml(image, width = 7200, height = 5200) {
+    if (!image) return paragraphXml(" ");
+    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:pic id="${randomId()}" zOrder="${image.picId + 3}" numberingType="PICTURE" textWrap="SQUARE" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" href="" groupLevel="0" instid="${randomId()}" reverse="0"><hp:offset x="0" y="0"/><hp:orgSz width="${width}" height="${height}"/><hp:curSz width="${width}" height="${height}"/><hp:flip horizontal="0" vertical="0"/><hp:rotationInfo angle="0" centerX="${Math.floor(width / 2)}" centerY="${Math.floor(height / 2)}" rotateimage="1"/><hp:renderingInfo><hc:transMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:scaMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:rotMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/></hp:renderingInfo><hc:img binaryItemIDRef="${image.binId}" bright="0" contrast="0" effect="REAL_PIC" alpha="0"/><hp:imgRect><hc:pt0 x="0" y="0"/><hc:pt1 x="${width}" y="0"/><hc:pt2 x="${width}" y="${height}"/><hc:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="${width}" top="0" bottom="${height}"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:imgDim dimwidth="${width}" dimheight="${height}"/><hp:effects/><hp:sz width="${width}" widthRelTo="ABSOLUTE" height="${height}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment></hp:pic><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${height}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${width}" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
   function dataUrlToBytes(src) {
@@ -269,6 +297,7 @@
         images.push({
           row,
           rowIndex,
+          photoType: key,
           label,
           bytes: data.bytes,
           ext,
@@ -283,24 +312,94 @@
     return images;
   }
 
-  function makePhotoBlocks(images) {
-    if (!images.length) return "";
-    const blocks = [paragraphXml(" "), paragraphXml("사진")];
-    let lastRowIndex = -1;
-
-    images.forEach((image) => {
-      if (image.rowIndex !== lastRowIndex) {
-        const rowTitle = `${image.rowIndex + 1}. ${image.row.assetNumber || ""} ${image.row.assetName || ""}`.trim();
-        blocks.push(paragraphXml(rowTitle));
-        lastRowIndex = image.rowIndex;
-      }
-      blocks.push(paragraphXml(image.label), picPara(image));
-    });
-
-    return blocks.join("");
+  function getAssetRows(payload) {
+    return (payload.rows || []).filter((row) => row.assetNumber || row.assetName || row.assetDescription || row.numberPhoto || row.wholePhoto);
   }
 
-  function makeSectionXml(templateSection, lines, images) {
+  function getRowImage(images, rowIndex, photoType) {
+    return images.find((image) => image.rowIndex === rowIndex && image.photoType === photoType) || null;
+  }
+
+  function getTableColumns(payload) {
+    const showPhotos = payload.printSettings?.photos !== "hide";
+    const showDescription = payload.printSettings?.description !== "hide";
+    const columns = [
+      { key: "index", label: "#", width: 1800 },
+      { key: "assetNumber", label: "자산번호", width: 6200 },
+      { key: "assetName", label: "자산명", width: showPhotos ? 9000 : 15500 },
+    ];
+
+    if (showPhotos) {
+      columns.push(
+        { key: "numberPhoto", label: "자산번호가 확대된 사진", width: showDescription ? 8000 : 12760 },
+        { key: "wholePhoto", label: "자산 전체 사진", width: showDescription ? 8000 : 12760 },
+      );
+    }
+
+    if (showDescription) {
+      columns.push({ key: "assetDescription", label: "자산설명", width: showPhotos ? 9520 : 19020 });
+    }
+
+    return columns;
+  }
+
+  function cellParagraph(text, charPrId = "0") {
+    return paragraphXml(text || " ", "0", charPrId);
+  }
+
+  function tableCellXml(contentXml, colAddr, rowAddr, width, height) {
+    return `<hp:tc name="" header="0" hasMargin="0" protect="0" editable="0" dirty="0" borderFillIDRef="3"><hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">${contentXml}</hp:subList><hp:cellAddr colAddr="${colAddr}" rowAddr="${rowAddr}"/><hp:cellSpan colSpan="1" rowSpan="1"/><hp:cellSz width="${width}" height="${height}"/><hp:cellMargin left="180" right="180" top="120" bottom="120"/></hp:tc>`;
+  }
+
+  function makeTableXml(payload, images) {
+    const rows = getAssetRows(payload);
+    const columns = getTableColumns(payload);
+    const tableWidth = columns.reduce((sum, column) => sum + column.width, 0);
+    const showPhotos = payload.printSettings?.photos !== "hide";
+    const headerHeight = 1700;
+    const dataHeight = showPhotos ? 7000 : 2400;
+
+    const headerCells = columns
+      .map((column, colIndex) => tableCellXml(cellParagraph(column.label, "0"), colIndex, 0, column.width, headerHeight))
+      .join("");
+
+    const bodyRows = rows
+      .map((row, rowIndex) => {
+        const originalRowIndex = (payload.rows || []).indexOf(row);
+        const cells = columns
+          .map((column, colIndex) => {
+            let content = "";
+            if (column.key === "index") content = cellParagraph(String(rowIndex + 1));
+            if (column.key === "assetNumber") content = cellParagraph(row.assetNumber);
+            if (column.key === "assetName") content = cellParagraph(row.assetName);
+            if (column.key === "assetDescription") content = cellParagraph(row.assetDescription);
+            if (column.key === "numberPhoto") {
+              content = pictureParagraphXml(getRowImage(images, originalRowIndex, "numberPhoto"), Math.min(6800, column.width - 600), 4800);
+            }
+            if (column.key === "wholePhoto") {
+              content = pictureParagraphXml(getRowImage(images, originalRowIndex, "wholePhoto"), Math.min(6800, column.width - 600), 4800);
+            }
+            return tableCellXml(content, colIndex, rowIndex + 1, column.width, dataHeight);
+          })
+          .join("");
+        return `<hp:tr>${cells}</hp:tr>`;
+      })
+      .join("");
+
+    const tableHeight = headerHeight + dataHeight * Math.max(rows.length, 1);
+    const rowsXml = `<hp:tr>${headerCells}</hp:tr>${bodyRows}`;
+    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${randomId()}" zOrder="2" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="${rows.length + 1}" colCnt="${columns.length}" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="${tableWidth}" widthRelTo="ABSOLUTE" height="${tableHeight}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="283" bottom="283"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>${rowsXml}</hp:tbl><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${tableHeight}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${tableWidth}" flags="393216"/></hp:linesegarray></hp:p>`;
+  }
+
+  function ensureTableBorderFill(headerXml) {
+    if (/<hh:borderFill\b[^>]*\bid="3"/.test(headerXml)) return headerXml;
+    const tableBorder = `<hh:borderFill id="3" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="SOLID" width="0.1 mm" color="#000000"/><hh:rightBorder type="SOLID" width="0.1 mm" color="#000000"/><hh:topBorder type="SOLID" width="0.1 mm" color="#000000"/><hh:bottomBorder type="SOLID" width="0.1 mm" color="#000000"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/><hc:fillBrush><hc:winBrush faceColor="#FFFFFF" hatchColor="#000000" alpha="0"/></hc:fillBrush></hh:borderFill>`;
+    return headerXml
+      .replace(/<hh:borderFills itemCnt="(\d+)">/, (match, count) => `<hh:borderFills itemCnt="${Number(count) + 1}">`)
+      .replace("</hh:borderFills>", `${tableBorder}</hh:borderFills>`);
+  }
+
+  function makeSectionXml(templateSection, lines, payload, images) {
     const rootMatch = templateSection.match(/^([\s\S]*?<hs:sec\b[^>]*>)/);
     const firstParagraphMatch = templateSection.match(/<hp:p\b[\s\S]*?<\/hp:p>/);
     if (!rootMatch || !firstParagraphMatch) {
@@ -310,7 +409,7 @@
     const sectionStart = rootMatch[1];
     const firstParagraph = firstParagraphMatch[0].replace(/<hp:t>[\s\S]*?<\/hp:t>/, "<hp:t> </hp:t>");
     const body = lines.map((line, index) => paragraphXml(line, index === 0 ? "12" : "0", index === 0 ? "5" : "0")).join("");
-    return `${sectionStart}${firstParagraph}${body}${makePhotoBlocks(images)}</hs:sec>`;
+    return `${sectionStart}${firstParagraph}${body}${makeTableXml(payload, images)}</hs:sec>`;
   }
 
   function makeContentHpf(title, images) {
@@ -344,13 +443,15 @@
   async function build(payload, requestTypeLabel) {
     const entries = await loadTemplateEntries();
     const templateSection = decoder.decode(entries.find((entry) => entry.name === "Contents/section0.xml")?.data || new Uint8Array());
-    const lines = makeLines(payload, requestTypeLabel);
+    const lines = makeIntroLines(payload, requestTypeLabel);
+    const previewLines = makeLines(payload, requestTypeLabel);
     const images = collectImages(payload);
     const title = payload.title || "자산 목록";
 
-    replaceEntry(entries, "Contents/section0.xml", makeSectionXml(templateSection, lines, images));
+    replaceEntry(entries, "Contents/section0.xml", makeSectionXml(templateSection, lines, payload, images));
     replaceEntry(entries, "Contents/content.hpf", makeContentHpf(title, images));
-    replaceEntry(entries, "Preview/PrvText.txt", lines.join("\n"));
+    replaceEntry(entries, "Contents/header.xml", ensureTableBorderFill(decoder.decode(entries.find((entry) => entry.name === "Contents/header.xml")?.data || new Uint8Array())));
+    replaceEntry(entries, "Preview/PrvText.txt", previewLines.join("\n"));
     images.forEach((image) => {
       entries.push({ name: image.path, data: image.bytes });
     });
