@@ -28,8 +28,10 @@ class ReusableTCPServer(socketserver.TCPServer):
 
 def ensure_cert():
     CERT_DIR.mkdir(exist_ok=True)
-    if CERT_FILE.exists() and KEY_FILE.exists():
+    if CERT_FILE.exists() and KEY_FILE.exists() and cert_has_subject_alt_name():
         return
+    CERT_FILE.unlink(missing_ok=True)
+    KEY_FILE.unlink(missing_ok=True)
     subprocess.run(
         [
             "openssl",
@@ -47,9 +49,21 @@ def ensure_cert():
             "-nodes",
             "-subj",
             "/CN=localhost",
+            "-addext",
+            "subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1",
         ],
         check=True,
     )
+
+
+def cert_has_subject_alt_name():
+    result = subprocess.run(
+        ["openssl", "x509", "-in", str(CERT_FILE), "-noout", "-ext", "subjectAltName"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0 and "Subject Alternative Name" in result.stdout
 
 
 def main():
