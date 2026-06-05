@@ -40,6 +40,12 @@
     bytes.push(value & 0xff, (value >>> 8) & 0xff, (value >>> 16) & 0xff, (value >>> 24) & 0xff);
   }
 
+  function appendBytes(target, source) {
+    for (let i = 0; i < source.length; i += 1) {
+      target.push(source[i]);
+    }
+  }
+
   function createStoredZip(entries) {
     const fileBytes = [];
     const centralBytes = [];
@@ -62,7 +68,8 @@
       writeUint32(fileBytes, dataBytes.length);
       writeUint16(fileBytes, nameBytes.length);
       writeUint16(fileBytes, 0);
-      fileBytes.push(...nameBytes, ...dataBytes);
+      appendBytes(fileBytes, nameBytes);
+      appendBytes(fileBytes, dataBytes);
       offset = fileBytes.length;
 
       writeUint32(centralBytes, 0x02014b50);
@@ -82,11 +89,11 @@
       writeUint16(centralBytes, 0);
       writeUint32(centralBytes, 0);
       writeUint32(centralBytes, localOffset);
-      centralBytes.push(...nameBytes);
+      appendBytes(centralBytes, nameBytes);
     });
 
     const centralOffset = fileBytes.length;
-    fileBytes.push(...centralBytes);
+    appendBytes(fileBytes, centralBytes);
     writeUint32(fileBytes, 0x06054b50);
     writeUint16(fileBytes, 0);
     writeUint16(fileBytes, 0);
