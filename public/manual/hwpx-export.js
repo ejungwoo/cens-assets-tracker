@@ -1,5 +1,11 @@
 (() => {
   const TEMPLATE_URL = "template.hwpx";
+  const TABLE_CELL_MARGIN_X = 180;
+  const TABLE_CELL_MARGIN_Y = 120;
+  const TABLE_PHOTO_INSET = 80;
+  const TABLE_HEADER_HEIGHT = 1700;
+  const TABLE_PHOTO_ROW_HEIGHT = 10000;
+  const TABLE_TEXT_ROW_HEIGHT = 2400;
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
   let templateBytesPromise = null;
@@ -355,7 +361,13 @@
   }
 
   function tableCellXml(contentXml, colAddr, rowAddr, width, height) {
-    return `<hp:tc name="" header="0" hasMargin="0" protect="0" editable="0" dirty="0" borderFillIDRef="3"><hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">${contentXml}</hp:subList><hp:cellAddr colAddr="${colAddr}" rowAddr="${rowAddr}"/><hp:cellSpan colSpan="1" rowSpan="1"/><hp:cellSz width="${width}" height="${height}"/><hp:cellMargin left="180" right="180" top="120" bottom="120"/></hp:tc>`;
+    return `<hp:tc name="" header="0" hasMargin="0" protect="0" editable="0" dirty="0" borderFillIDRef="3"><hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">${contentXml}</hp:subList><hp:cellAddr colAddr="${colAddr}" rowAddr="${rowAddr}"/><hp:cellSpan colSpan="1" rowSpan="1"/><hp:cellSz width="${width}" height="${height}"/><hp:cellMargin left="${TABLE_CELL_MARGIN_X}" right="${TABLE_CELL_MARGIN_X}" top="${TABLE_CELL_MARGIN_Y}" bottom="${TABLE_CELL_MARGIN_Y}"/></hp:tc>`;
+  }
+
+  function tablePhotoXml(image, cellWidth, cellHeight) {
+    const photoWidth = Math.max(1000, cellWidth - TABLE_CELL_MARGIN_X * 2 - TABLE_PHOTO_INSET * 2);
+    const photoHeight = Math.max(1000, cellHeight - TABLE_CELL_MARGIN_Y * 2 - TABLE_PHOTO_INSET * 2);
+    return pictureParagraphXml(image, photoWidth, photoHeight);
   }
 
   function makeTableXml(payload, images) {
@@ -363,8 +375,8 @@
     const columns = getTableColumns(payload);
     const tableWidth = columns.reduce((sum, column) => sum + column.width, 0);
     const showPhotos = payload.printSettings?.photos !== "hide";
-    const headerHeight = 1700;
-    const dataHeight = showPhotos ? 7000 : 2400;
+    const headerHeight = TABLE_HEADER_HEIGHT;
+    const dataHeight = showPhotos ? TABLE_PHOTO_ROW_HEIGHT : TABLE_TEXT_ROW_HEIGHT;
 
     const headerCells = columns
       .map((column, colIndex) => tableCellXml(cellParagraph(column.label, "0"), colIndex, 0, column.width, headerHeight))
@@ -381,10 +393,10 @@
             if (column.key === "assetName") content = cellParagraph(row.assetName);
             if (column.key === "assetDescription") content = cellParagraph(row.assetDescription);
             if (column.key === "numberPhoto") {
-              content = pictureParagraphXml(getRowImage(images, originalRowIndex, "numberPhoto"), Math.min(6800, column.width - 600), 4800);
+              content = tablePhotoXml(getRowImage(images, originalRowIndex, "numberPhoto"), column.width, dataHeight);
             }
             if (column.key === "wholePhoto") {
-              content = pictureParagraphXml(getRowImage(images, originalRowIndex, "wholePhoto"), Math.min(6800, column.width - 600), 4800);
+              content = tablePhotoXml(getRowImage(images, originalRowIndex, "wholePhoto"), column.width, dataHeight);
             }
             return tableCellXml(content, colIndex, rowIndex + 1, column.width, dataHeight);
           })
