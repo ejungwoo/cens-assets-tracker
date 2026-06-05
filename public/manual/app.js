@@ -663,23 +663,26 @@ function saveList() {
 }
 
 function exportHwpx() {
-  if (!validateBeforePrint()) return;
   if (!window.CensHwpx) {
     alert("HWPX 내보내기 모듈을 불러오지 못했습니다. 페이지를 새로고침하세요.");
     return;
   }
 
-  const title = documentTitleInput.value.trim() || "자산 목록";
-  const payload = buildListPayload();
-  const blob = window.CensHwpx.build(payload, getRequestTypeLabel());
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${sanitizeFileName(title)}.hwpx`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
+  try {
+    const title = documentTitleInput.value.trim() || "자산 목록";
+    const payload = buildListPayload();
+    const blob = window.CensHwpx.build(payload, getRequestTypeLabel());
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${sanitizeFileName(title)}.hwpx`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    alert(`HWPX 파일을 만들 수 없습니다.\n${error.message || error}`);
+  }
 }
 
 function sanitizeFileName(value) {

@@ -108,18 +108,29 @@
     return `<hp:p id="${id}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}</hp:p>`;
   }
 
-  function sectionXml(lines) {
+  function picPara(image) {
+    const id = crypto.getRandomValues(new Uint32Array(1))[0];
+    const width = 18000;
+    const height = 12000;
+    return `<hp:p id="${id}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run><hp:pic id="${image.id}" zOrder="0" numberingType="PICTURE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None"><hp:sz width="${width}" height="${height}" widthRelTo="ABSOLUTE" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment><hp:imgRect><hp:pt0 x="0" y="0"/><hp:pt1 x="${width}" y="0"/><hp:pt2 x="${width}" y="${height}"/><hp:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:img dimwidth="${width}" dimheight="${height}" bright="0" contrast="0" effect="REAL_PIC" binaryItemIDRef="${image.binId}"/></hp:pic></hp:run></hp:p>`;
+  }
+
+  function sectionXml(blocks) {
     return `<?xml version="1.0" encoding="UTF-8"?>
 <hs:sec xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section">
-${lines.map((line, index) => para(line, index === 0 ? "1" : "0")).join("\n")}
+${blocks.join("\n")}
 <hp:p id="1" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run><hp:secPr id="1" textDirection="HORIZONTAL" spaceColumns="1134" tabStop="8000" tabStopVal="LEFT" tabStopUnit="MILLI"><hp:pagePr landscape="0" width="59528" height="84188" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="5669" right="5669" top="5669" bottom="4252"/></hp:pagePr><hp:footNotePr/><hp:endNotePr/><hp:pageBorderFill type="BOTH" borderFillIDRef="0" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"/></hp:secPr></hp:run></hp:p>
 </hs:sec>`;
   }
 
-  function headerXml() {
+  function headerXml(images) {
+    const binItems = images
+      .map((image) => `<hh:binItem type="EMBEDDING" id="${image.binId}" binData="${image.path}" format="${image.ext}"/>`)
+      .join("");
     return `<?xml version="1.0" encoding="UTF-8"?>
 <hh:head xmlns:hh="http://www.hancom.co.kr/hwpml/2011/head" version="1.1" secCnt="1">
   <hh:refList>
+    <hh:binDataList count="${images.length}">${binItems}</hh:binDataList>
     <hh:fontfaces itemCnt="1"><hh:fontface lang="Hangul" fontCnt="1"><hh:font id="0" face="함초롬바탕" type="TTF"/></hh:fontface></hh:fontfaces>
     <hh:borderFills itemCnt="1"><hh:borderFill id="0" threeD="0" shadow="0"><hh:leftBorder type="NONE" width="0.1 mm" color="#000000"/><hh:rightBorder type="NONE" width="0.1 mm" color="#000000"/><hh:topBorder type="NONE" width="0.1 mm" color="#000000"/><hh:bottomBorder type="NONE" width="0.1 mm" color="#000000"/></hh:borderFill></hh:borderFills>
     <hh:charProperties itemCnt="1"><hh:charPr id="0" height="1000" textColor="#000000"><hh:fontRef hangul="0" latin="0" hanja="0" japanese="0" other="0" symbol="0" user="0"/></hh:charPr></hh:charProperties>
@@ -168,20 +179,91 @@ ${lines.map((line, index) => para(line, index === 0 ? "1" : "0")).join("\n")}
     return lines;
   }
 
-  function build(payload, requestTypeLabel) {
+  function dataUrlToBytes(src) {
+    const [metadata, data] = String(src || "").split(",");
+    if (!metadata || !data) return null;
+    const mimeMatch = /^data:([^;]+)/.exec(metadata);
+    const mimeType = mimeMatch ? mimeMatch[1] : "image/png";
+    const binary = atob(data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return { bytes, mimeType };
+  }
+
+  function imageExtension(mimeType) {
+    if (mimeType === "image/jpeg") return "jpg";
+    if (mimeType === "image/png") return "png";
+    if (mimeType === "image/gif") return "gif";
+    if (mimeType === "image/bmp") return "bmp";
+    return "png";
+  }
+
+  function collectImages(payload) {
+    const images = [];
+    payload.rows.forEach((row, rowIndex) => {
+      [
+        ["numberPhoto", "자산번호 확대 사진"],
+        ["wholePhoto", "자산 전체 사진"],
+      ].forEach(([key, label]) => {
+        const data = dataUrlToBytes(row[key]);
+        if (!data) return;
+        const ext = imageExtension(data.mimeType);
+        const index = images.length + 1;
+        images.push({
+          id: index,
+          binId: `bin${String(index).padStart(4, "0")}`,
+          path: `BinData/image${index}.${ext}`,
+          ext,
+          bytes: data.bytes,
+          rowIndex,
+          label,
+        });
+      });
+    });
+    return images;
+  }
+
+  function makeBlocks(payload, requestTypeLabel, images) {
     const lines = makeLines(payload, requestTypeLabel);
+    const blocks = lines.map((line, index) => para(line, index === 0 ? "1" : "0"));
+    const showPhotos = payload.printSettings?.photos !== "hide";
+    if (!showPhotos || !images.length) return blocks;
+
+    blocks.push(para(" "), para("사진"));
+    payload.rows.forEach((row, rowIndex) => {
+      const rowImages = images.filter((image) => image.rowIndex === rowIndex);
+      if (!rowImages.length) return;
+      blocks.push(para(`${rowIndex + 1}. ${row.assetNumber || ""} ${row.assetName || ""}`.trim()));
+      rowImages.forEach((image) => {
+        blocks.push(para(image.label), picPara(image));
+      });
+    });
+    return blocks;
+  }
+
+  function build(payload, requestTypeLabel) {
+    const images = collectImages(payload);
+    const blocks = makeBlocks(payload, requestTypeLabel, images);
+    const previewLines = makeLines(payload, requestTypeLabel);
     const title = xmlEscape(payload.title || "자산 목록");
-    const content = `<?xml version="1.0" encoding="UTF-8"?><opf:package xmlns:opf="http://www.idpf.org/2007/opf" version="3.0"><opf:metadata><opf:title>${title}</opf:title><opf:creator>CENS Assets Tracker</opf:creator><opf:language>ko-KR</opf:language></opf:metadata><opf:manifest><opf:item id="header" href="header.xml" media-type="application/xml"/><opf:item id="section0" href="section0.xml" media-type="application/xml"/></opf:manifest><opf:spine><opf:itemref idref="section0"/></opf:spine></opf:package>`;
-    return createStoredZip([
+    const imageManifest = images
+      .map((image) => `<opf:item id="${image.binId}" href="../${image.path}" media-type="image/${image.ext === "jpg" ? "jpeg" : image.ext}"/>`)
+      .join("");
+    const content = `<?xml version="1.0" encoding="UTF-8"?><opf:package xmlns:opf="http://www.idpf.org/2007/opf" version="3.0"><opf:metadata><opf:title>${title}</opf:title><opf:creator>CENS Assets Tracker</opf:creator><opf:language>ko-KR</opf:language></opf:metadata><opf:manifest><opf:item id="header" href="header.xml" media-type="application/xml"/><opf:item id="section0" href="section0.xml" media-type="application/xml"/>${imageManifest}</opf:manifest><opf:spine><opf:itemref idref="section0"/></opf:spine></opf:package>`;
+    const entries = [
       { name: "mimetype", data: "application/hwp+zip" },
       { name: "META-INF/container.xml", data: `<?xml version="1.0" encoding="UTF-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="Contents/content.hpf" media-type="application/hwp+zip"/></rootfiles></container>` },
       { name: "Contents/content.hpf", data: content },
-      { name: "Contents/header.xml", data: headerXml() },
-      { name: "Contents/section0.xml", data: sectionXml(lines) },
+      { name: "Contents/header.xml", data: headerXml(images) },
+      { name: "Contents/section0.xml", data: sectionXml(blocks) },
       { name: "version.xml", data: `<?xml version="1.0" encoding="UTF-8"?><version app="CENS Assets Tracker" version="1.0"/>` },
       { name: "settings.xml", data: `<?xml version="1.0" encoding="UTF-8"?><settings/>` },
-      { name: "Preview/PrvText.txt", data: lines.join("\n") },
-    ]);
+      { name: "Preview/PrvText.txt", data: previewLines.join("\n") },
+      ...images.map((image) => ({ name: image.path, data: image.bytes })),
+    ];
+    return createStoredZip(entries);
   }
 
   window.CensHwpx = { build };
