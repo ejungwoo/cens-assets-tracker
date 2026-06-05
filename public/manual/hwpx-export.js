@@ -40,6 +40,14 @@
     bytes.push(value & 0xff, (value >>> 8) & 0xff, (value >>> 16) & 0xff, (value >>> 24) & 0xff);
   }
 
+  function getDosDateTime() {
+    const now = new Date();
+    const year = Math.max(1980, now.getFullYear());
+    const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | Math.floor(now.getSeconds() / 2);
+    const dosDate = ((year - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+    return { dosTime, dosDate };
+  }
+
   function appendBytes(target, source) {
     for (let i = 0; i < source.length; i += 1) {
       target.push(source[i]);
@@ -49,6 +57,7 @@
   function createStoredZip(entries) {
     const fileBytes = [];
     const centralBytes = [];
+    const { dosTime, dosDate } = getDosDateTime();
     let offset = 0;
 
     entries.forEach((entry) => {
@@ -61,8 +70,8 @@
       writeUint16(fileBytes, 20);
       writeUint16(fileBytes, 0x0800);
       writeUint16(fileBytes, 0);
-      writeUint16(fileBytes, 0);
-      writeUint16(fileBytes, 0);
+      writeUint16(fileBytes, dosTime);
+      writeUint16(fileBytes, dosDate);
       writeUint32(fileBytes, checksum);
       writeUint32(fileBytes, dataBytes.length);
       writeUint32(fileBytes, dataBytes.length);
@@ -77,8 +86,8 @@
       writeUint16(centralBytes, 20);
       writeUint16(centralBytes, 0x0800);
       writeUint16(centralBytes, 0);
-      writeUint16(centralBytes, 0);
-      writeUint16(centralBytes, 0);
+      writeUint16(centralBytes, dosTime);
+      writeUint16(centralBytes, dosDate);
       writeUint32(centralBytes, checksum);
       writeUint32(centralBytes, dataBytes.length);
       writeUint32(centralBytes, dataBytes.length);
@@ -123,10 +132,12 @@
   }
 
   function sectionXml(blocks) {
+    const sectionId = crypto.getRandomValues(new Uint32Array(1))[0];
+    const sectionPr = `<hp:p id="${sectionId}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run><hp:secPr id="1" textDirection="HORIZONTAL" spaceColumns="1134" tabStop="8000" tabStopVal="LEFT" tabStopUnit="MILLI"><hp:pagePr landscape="0" width="59528" height="84188" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="5669" right="5669" top="5669" bottom="4252"/></hp:pagePr><hp:footNotePr/><hp:endNotePr/><hp:pageBorderFill type="BOTH" borderFillIDRef="0" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"/></hp:secPr></hp:run></hp:p>`;
     return `<?xml version="1.0" encoding="UTF-8"?>
 <hs:sec xmlns:hp="http://www.hancom.co.kr/hwpml/2011/paragraph" xmlns:hs="http://www.hancom.co.kr/hwpml/2011/section">
+${sectionPr}
 ${blocks.join("\n")}
-<hp:p id="1" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run><hp:secPr id="1" textDirection="HORIZONTAL" spaceColumns="1134" tabStop="8000" tabStopVal="LEFT" tabStopUnit="MILLI"><hp:pagePr landscape="0" width="59528" height="84188" gutterType="LEFT_ONLY"><hp:margin header="4252" footer="4252" gutter="0" left="5669" right="5669" top="5669" bottom="4252"/></hp:pagePr><hp:footNotePr/><hp:endNotePr/><hp:pageBorderFill type="BOTH" borderFillIDRef="0" textBorder="PAPER" headerInside="0" footerInside="0" fillArea="PAPER"/></hp:secPr></hp:run></hp:p>
 </hs:sec>`;
   }
 
