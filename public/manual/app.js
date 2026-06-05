@@ -662,7 +662,7 @@ function saveList() {
   URL.revokeObjectURL(url);
 }
 
-function exportHwpx() {
+async function exportHwpx() {
   if (!window.CensHwpx) {
     alert("HWPX 내보내기 모듈을 불러오지 못했습니다. 페이지를 새로고침하세요.");
     return;
@@ -671,7 +671,9 @@ function exportHwpx() {
   try {
     const title = documentTitleInput.value.trim() || "자산 목록";
     const payload = buildListPayload();
-    const blob = window.CensHwpx.build(payload, getRequestTypeLabel());
+    exportHwpxBtn.disabled = true;
+    exportHwpxBtn.textContent = "HWPX 생성 중";
+    const blob = await window.CensHwpx.build(payload, getRequestTypeLabel());
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -682,6 +684,9 @@ function exportHwpx() {
     URL.revokeObjectURL(url);
   } catch (error) {
     alert(`HWPX 파일을 만들 수 없습니다.\n${error.message || error}`);
+  } finally {
+    exportHwpxBtn.disabled = false;
+    exportHwpxBtn.textContent = "HWPX 내보내기";
   }
 }
 
