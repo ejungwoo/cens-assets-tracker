@@ -200,7 +200,14 @@
       if (fields[key]) lines.push(`${label}: ${fields[key]}`);
     });
 
-    lines.push("", "# / 자산번호 / 자산명 / 자산설명");
+    const headers = ["#", "자산번호", "자산명"];
+    if (payload.printSettings?.photos !== "hide") {
+      headers.push("자산번호가 확대된 사진", "자산 전체 사진");
+    }
+    if (payload.printSettings?.description !== "hide") {
+      headers.push("자산설명");
+    }
+    lines.push("", headers.join(" / "));
     payload.rows
       .filter((row) => row.assetNumber || row.assetName || row.assetDescription)
       .forEach((row, index) => {
