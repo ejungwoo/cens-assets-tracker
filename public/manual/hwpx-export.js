@@ -229,7 +229,7 @@
   function picPara(image) {
     const width = 18000;
     const height = 12000;
-    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:pic id="${image.picId}" zOrder="0" numberingType="PICTURE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None"><hp:sz width="${width}" height="${height}" widthRelTo="ABSOLUTE" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment><hp:imgRect><hp:pt0 x="0" y="0"/><hp:pt1 x="${width}" y="0"/><hp:pt2 x="${width}" y="${height}"/><hp:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="0" top="0" bottom="0"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hc:img binaryItemIDRef="${image.binId}" bright="0" contrast="0" effect="REAL_PIC" alpha="0"/></hp:pic><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${height}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
+    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:pic id="${randomId()}" zOrder="${image.picId + 3}" numberingType="PICTURE" textWrap="SQUARE" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" href="" groupLevel="0" instid="${randomId()}" reverse="0"><hp:offset x="0" y="0"/><hp:orgSz width="${width}" height="${height}"/><hp:curSz width="${width}" height="${height}"/><hp:flip horizontal="0" vertical="0"/><hp:rotationInfo angle="0" centerX="${Math.floor(width / 2)}" centerY="${Math.floor(height / 2)}" rotateimage="1"/><hp:renderingInfo><hc:transMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:scaMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/><hc:rotMatrix e1="1" e2="0" e3="0" e4="0" e5="1" e6="0"/></hp:renderingInfo><hc:img binaryItemIDRef="${image.binId}" bright="0" contrast="0" effect="REAL_PIC" alpha="0"/><hp:imgRect><hc:pt0 x="0" y="0"/><hc:pt1 x="${width}" y="0"/><hc:pt2 x="${width}" y="${height}"/><hc:pt3 x="0" y="${height}"/></hp:imgRect><hp:imgClip left="0" right="${width}" top="0" bottom="${height}"/><hp:inMargin left="0" right="0" top="0" bottom="0"/><hp:imgDim dimwidth="${width}" dimheight="${height}"/><hp:effects/><hp:sz width="${width}" widthRelTo="ABSOLUTE" height="${height}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="PARA" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:shapeComment>${xmlEscape(image.label)}</hp:shapeComment></hp:pic><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${height}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
   function dataUrlToBytes(src) {
@@ -300,17 +300,6 @@
     return blocks.join("");
   }
 
-  function injectBinDataList(headerXml, images) {
-    const withoutExisting = headerXml.replace(/<hh:binDataList\b[\s\S]*?<\/hh:binDataList>/, "");
-    if (!images.length) return withoutExisting;
-
-    const binItems = images
-      .map((image) => `<hh:binItem type="EMBEDDING" id="${image.binId}" binData="${image.fileName}" format="${image.ext}"/>`)
-      .join("");
-    const binDataList = `<hh:binDataList count="${images.length}">${binItems}</hh:binDataList>`;
-    return withoutExisting.replace("<hh:refList>", `<hh:refList>${binDataList}`);
-  }
-
   function makeSectionXml(templateSection, lines, images) {
     const rootMatch = templateSection.match(/^([\s\S]*?<hs:sec\b[^>]*>)/);
     const firstParagraphMatch = templateSection.match(/<hp:p\b[\s\S]*?<\/hp:p>/);
@@ -358,10 +347,7 @@
     const lines = makeLines(payload, requestTypeLabel);
     const images = collectImages(payload);
     const title = payload.title || "자산 목록";
-    const headerEntry = entries.find((entry) => entry.name === "Contents/header.xml");
-    if (!headerEntry) throw new Error("HWPX template is missing Contents/header.xml.");
 
-    replaceEntry(entries, "Contents/header.xml", injectBinDataList(decoder.decode(headerEntry.data), images));
     replaceEntry(entries, "Contents/section0.xml", makeSectionXml(templateSection, lines, images));
     replaceEntry(entries, "Contents/content.hpf", makeContentHpf(title, images));
     replaceEntry(entries, "Preview/PrvText.txt", lines.join("\n"));
