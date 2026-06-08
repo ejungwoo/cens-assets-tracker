@@ -424,6 +424,14 @@ function applyPhotoPreviewSrc(src, cell) {
   dropZone.classList.remove("drag-over");
 }
 
+function restorePhotoPreview(src, cell) {
+  try {
+    applyPhotoPreviewSrc(src, cell);
+  } catch (error) {
+    console.warn("Photo restore skipped:", error);
+  }
+}
+
 function swapRowPhotos(row) {
   const numberPhotoCell = row.querySelector('[data-photo-type="number"]');
   const wholePhotoCell = row.querySelector('[data-photo-type="whole"]');
@@ -828,7 +836,7 @@ function loadListFile(file) {
       sheetStatus.textContent = "저장된 목록을 불러왔습니다.";
     } catch (error) {
       console.error("List load failed:", error);
-      alert("목록 파일을 읽을 수 없습니다.");
+      alert(`목록 파일을 읽을 수 없습니다.\n${error.message || error}`);
     } finally {
       loadListInput.value = "";
     }
@@ -909,19 +917,11 @@ function applyListData(data) {
       assetDescriptionInput.disabled = false;
 
       if (rowData.numberPhoto) {
-        setImagePreviewSrc(
-          rowData.numberPhoto,
-          numberPhotoCell.querySelector(".drop-zone"),
-          numberPhotoCell.querySelector(".photo-preview"),
-        );
+        restorePhotoPreview(rowData.numberPhoto, numberPhotoCell);
       }
 
       if (rowData.wholePhoto) {
-        setImagePreviewSrc(
-          rowData.wholePhoto,
-          wholePhotoCell.querySelector(".drop-zone"),
-          wholePhotoCell.querySelector(".photo-preview"),
-        );
+        restorePhotoPreview(rowData.wholePhoto, wholePhotoCell);
       }
     });
   } finally {
