@@ -28,20 +28,6 @@
             <input id="rowStartInput" type="number" min="1" max="9999" value="1" inputmode="numeric">
           </label>
           <label class="print-setting">
-            <span>방향</span>
-            <select id="printOrientationSelect">
-              <option value="portrait" selected>세로</option>
-              <option value="landscape">가로</option>
-            </select>
-          </label>
-          <label class="print-setting">
-            <span>PDF 보기</span>
-            <select id="printViewModeSelect">
-              <option value="wide" selected>확대</option>
-              <option value="narrow">축소</option>
-            </select>
-          </label>
-          <label class="print-setting">
             <span>자산설명</span>
             <select id="printDescriptionSelect">
               <option value="show" selected>보이기</option>
@@ -55,8 +41,8 @@
               <option value="hide">숨기기</option>
             </select>
           </label>
-          <button id="exportHwpxBtn" class="light-button export-hwpx-button" type="button">HWPX 내보내기</button>
-          <button id="exportPdfBtn" class="primary-button export-pdf-button" type="button">PDF 내보내기</button>
+          <button id="exportHwpxBtn" class="light-button export-hwpx-button" type="button">HWPX</button>
+          <button id="exportPdfBtn" class="primary-button export-pdf-button" type="button">PDF</button>
         </div>
         <div class="topbar-divider" aria-hidden="true"></div>
         <div class="request-type-row" role="group" aria-label="신청 유형">
@@ -250,7 +236,7 @@
       </div>
     </dialog>
 
-    <script src="hwpx-export.js?v=20260608-hwpx-line-metrics"></script>
+    <script src="hwpx-export.js?v=20260608-fixed-print-options"></script>
     <script src="app.js"></script>
   </body>
 </html>

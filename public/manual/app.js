@@ -21,8 +21,6 @@ const documentTitleInput = document.querySelector("#documentTitle");
 const printTitle = document.querySelector("#printTitle");
 const printFontSizeInput = document.querySelector("#printFontSizeInput");
 const rowStartInput = document.querySelector("#rowStartInput");
-const printOrientationSelect = document.querySelector("#printOrientationSelect");
-const printViewModeSelect = document.querySelector("#printViewModeSelect");
 const printDescriptionSelect = document.querySelector("#printDescriptionSelect");
 const printPhotoSelect = document.querySelector("#printPhotoSelect");
 const requestTypeButtons = document.querySelectorAll(".request-type-btn");
@@ -645,8 +643,8 @@ function buildListPayload() {
     printSettings: {
       fontSize: clampNumber(printFontSizeInput.value, 8, 18, 15),
       rowStart: getRowStartNumber(),
-      orientation: printOrientationSelect.value === "landscape" ? "landscape" : "portrait",
-      viewMode: printViewModeSelect.value === "narrow" ? "narrow" : "wide",
+      orientation: "portrait",
+      viewMode: "wide",
       description: printDescriptionSelect.value === "hide" ? "hide" : "show",
       photos: printPhotoSelect.value === "hide" ? "hide" : "show",
     },
@@ -671,7 +669,7 @@ function saveList() {
 
 async function exportHwpx() {
   if (!window.CensHwpx) {
-    alert("HWPX 내보내기 모듈을 불러오지 못했습니다. 페이지를 새로고침하세요.");
+    alert("HWPX 모듈을 불러오지 못했습니다. 페이지를 새로고침하세요.");
     return;
   }
 
@@ -693,7 +691,7 @@ async function exportHwpx() {
     alert(`HWPX 파일을 만들 수 없습니다.\n${error.message || error}`);
   } finally {
     exportHwpxBtn.disabled = false;
-    exportHwpxBtn.textContent = "HWPX 내보내기";
+    exportHwpxBtn.textContent = "HWPX";
   }
 }
 
@@ -849,8 +847,6 @@ function applyListData(data) {
     if (data.printSettings) {
       printFontSizeInput.value = data.printSettings.fontSize || 15;
       rowStartInput.value = data.printSettings.rowStart || 1;
-      printOrientationSelect.value = data.printSettings.orientation === "landscape" ? "landscape" : "portrait";
-      printViewModeSelect.value = data.printSettings.viewMode === "narrow" ? "narrow" : "wide";
       printDescriptionSelect.value = data.printSettings.description === "hide" ? "hide" : "show";
       printPhotoSelect.value = data.printSettings.photos === "hide" ? "hide" : "show";
     }
@@ -941,8 +937,8 @@ zoomToggleBtn.addEventListener("click", () => {
 
 function applyPrintSettings() {
   const fontSize = clampNumber(printFontSizeInput.value, 8, 18, 15);
-  const orientation = printOrientationSelect.value === "landscape" ? "landscape" : "portrait";
-  const viewMode = printViewModeSelect.value === "narrow" ? "narrow" : "wide";
+  const orientation = "portrait";
+  const viewMode = "wide";
   const descriptionMode = printDescriptionSelect.value === "hide" ? "hide" : "show";
   const photoMode = printPhotoSelect.value === "hide" ? "hide" : "show";
   let printStyle = document.querySelector(`#${PRINT_STYLE_ID}`);
@@ -1099,8 +1095,6 @@ rowStartInput.addEventListener("input", () => {
   updateRowNumbers();
   scheduleAutoSave();
 });
-printOrientationSelect.addEventListener("change", scheduleAutoSave);
-printViewModeSelect.addEventListener("change", scheduleAutoSave);
 printDescriptionSelect.addEventListener("change", scheduleAutoSave);
 printPhotoSelect.addEventListener("change", scheduleAutoSave);
 requestTypeButtons.forEach((button) => {
