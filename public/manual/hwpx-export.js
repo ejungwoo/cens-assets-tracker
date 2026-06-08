@@ -7,6 +7,7 @@
   const TABLE_TOTAL_WIDTH = 51024;
   const HWPX_SIDE_MARGIN_15MM = 4252;
   const HWPX_VERTICAL_MARGIN_20MM = 5668;
+  const HWPX_HEADER_FOOTER_MARGIN = 0;
   const TABLE_HEADER_HEIGHT = 1700;
   const TABLE_PHOTO_ROW_HEIGHT = 10000;
   const TABLE_TEXT_ROW_HEIGHT = 2400;
@@ -502,8 +503,8 @@
 
   function applyNarrowPageMargins(xml) {
     return xml.replace(
-      /(<hp:margin\b[^>]*\bleft=")\d+("[^>]*\bright=")\d+("[^>]*\btop=")\d+("[^>]*\bbottom=")\d+(")/,
-      `$1${HWPX_SIDE_MARGIN_15MM}$2${HWPX_SIDE_MARGIN_15MM}$3${HWPX_VERTICAL_MARGIN_20MM}$4${HWPX_VERTICAL_MARGIN_20MM}$5`,
+      /(<hp:margin\b[^>]*\bheader=")\d+("[^>]*\bfooter=")\d+("[^>]*\bleft=")\d+("[^>]*\bright=")\d+("[^>]*\btop=")\d+("[^>]*\bbottom=")\d+(")/,
+      `$1${HWPX_HEADER_FOOTER_MARGIN}$2${HWPX_HEADER_FOOTER_MARGIN}$3${HWPX_SIDE_MARGIN_15MM}$4${HWPX_SIDE_MARGIN_15MM}$5${HWPX_VERTICAL_MARGIN_20MM}$6${HWPX_VERTICAL_MARGIN_20MM}$7`,
     );
   }
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cens-assets-tracker-v27";
+const CACHE_NAME = "cens-assets-tracker-v28";
 const STATIC_ASSETS = [
   "/",
   "/index.html",
