@@ -285,7 +285,7 @@
 
   function getHwpFontHeight(payload) {
     const value = Number.parseFloat(payload.printSettings?.fontSize);
-    const fontSize = Number.isFinite(value) ? Math.max(8, Math.min(value, 18)) : 15;
+    const fontSize = Number.isFinite(value) ? Math.max(8, Math.min(value, 18)) : 12;
     return Math.round(fontSize * 100);
   }
 

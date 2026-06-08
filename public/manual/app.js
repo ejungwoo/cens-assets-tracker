@@ -649,7 +649,7 @@ function buildListPayload() {
     title,
     savedAt: new Date().toISOString(),
     printSettings: {
-      fontSize: clampNumber(printFontSizeInput.value, 8, 18, 15),
+      fontSize: clampNumber(printFontSizeInput.value, 8, 18, 12),
       rowStart: getRowStartNumber(),
       orientation: "portrait",
       viewMode: "wide",
@@ -885,7 +885,7 @@ function applyListData(data) {
   try {
     documentTitleInput.value = data.title || "자산 목록 작성";
     if (data.printSettings) {
-      printFontSizeInput.value = data.printSettings.fontSize || 15;
+      printFontSizeInput.value = data.printSettings.fontSize || 12;
       rowStartInput.value = data.printSettings.rowStart || 1;
       printDescriptionSelect.value = data.printSettings.description === "hide" ? "hide" : "show";
       printPhotoSelect.value = data.printSettings.photos === "hide" ? "hide" : "show";
@@ -968,7 +968,7 @@ zoomToggleBtn.addEventListener("click", () => {
 });
 
 function applyPrintSettings() {
-  const fontSize = clampNumber(printFontSizeInput.value, 8, 18, 15);
+  const fontSize = clampNumber(printFontSizeInput.value, 8, 18, 12);
   const orientation = "portrait";
   const viewMode = "wide";
   const descriptionMode = printDescriptionSelect.value === "hide" ? "hide" : "show";
