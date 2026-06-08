@@ -824,15 +824,47 @@ function loadListFile(file) {
   reader.addEventListener("load", () => {
     try {
       const data = JSON.parse(reader.result);
-      applyListData(data);
+      applyListData(normalizeListData(data));
       sheetStatus.textContent = "저장된 목록을 불러왔습니다.";
     } catch (error) {
+      console.error("List load failed:", error);
       alert("목록 파일을 읽을 수 없습니다.");
     } finally {
       loadListInput.value = "";
     }
   });
   reader.readAsText(file);
+}
+
+function getListRows(data) {
+  if (Array.isArray(data?.rows)) return data.rows;
+  if (Array.isArray(data?.assets)) return data.assets;
+  if (Array.isArray(data?.items)) return data.items;
+  return null;
+}
+
+function normalizeRowData(row = {}) {
+  return {
+    assetNumber: row.assetNumber || row.assetId || row.assetID || row.id || "",
+    assetName: row.assetName || row.name || row.asset_name || "",
+    assetDescription: row.assetDescription || row.description || row.asset_description || "",
+    numberPhoto: row.numberPhoto || row.photo1 || row.assetNumberPhoto || row.number_photo || "",
+    wholePhoto: row.wholePhoto || row.photo2 || row.assetPhoto || row.whole_photo || "",
+  };
+}
+
+function normalizeListData(data) {
+  const rows = getListRows(data);
+  if (!data || !rows) {
+    throw new Error("Invalid list data");
+  }
+
+  return {
+    ...data,
+    printSettings: data.printSettings || {},
+    request: data.request || { type: "takeout", fields: {} },
+    rows: rows.map(normalizeRowData),
+  };
 }
 
 function applyListData(data) {
@@ -904,7 +936,7 @@ function restoreAutoSave() {
   if (!saved) return false;
 
   try {
-    applyListData(JSON.parse(saved));
+    applyListData(normalizeListData(JSON.parse(saved)));
     sheetStatus.textContent = "저장된 작성 내용을 복원했습니다.";
     return true;
   } catch (error) {
