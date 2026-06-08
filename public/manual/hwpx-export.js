@@ -3,6 +3,9 @@
   const TABLE_CELL_MARGIN_X = 180;
   const TABLE_CELL_MARGIN_Y = 120;
   const TABLE_PHOTO_INSET = 80;
+  const TABLE_BASE_WIDTH = 42520;
+  const TABLE_TOTAL_WIDTH = 51024;
+  const HWPX_SIDE_MARGIN_15MM = 4252;
   const TABLE_HEADER_HEIGHT = 1700;
   const TABLE_PHOTO_ROW_HEIGHT = 10000;
   const TABLE_TEXT_ROW_HEIGHT = 2400;
@@ -277,7 +280,7 @@
       .split(/\r?\n/)
       .map((line) => `<hp:run charPrIDRef="${charPrId}"><hp:t>${xmlEscape(line || " ")}</hp:t></hp:run>`)
       .join("");
-    return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="42520" flags="393216"/></hp:linesegarray></hp:p>`;
+    return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${TABLE_TOTAL_WIDTH}" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
   function pictureParagraphXml(image, width = 7200, height = 5200) {
@@ -390,6 +393,18 @@
     return images.find((image) => image.rowIndex === rowIndex && image.photoType === photoType) || null;
   }
 
+  function scaleColumnsToPage(columns) {
+    let usedWidth = 0;
+    return columns.map((column, index) => {
+      if (index === columns.length - 1) {
+        return { ...column, width: TABLE_TOTAL_WIDTH - usedWidth };
+      }
+      const width = Math.round((column.width / TABLE_BASE_WIDTH) * TABLE_TOTAL_WIDTH);
+      usedWidth += width;
+      return { ...column, width };
+    });
+  }
+
   function getTableColumns(payload) {
     const showPhotos = payload.printSettings?.photos !== "hide";
     const showDescription = payload.printSettings?.description !== "hide";
@@ -410,7 +425,7 @@
       columns.push({ key: "assetDescription", label: "자산설명", width: showPhotos ? 9520 : 19020 });
     }
 
-    return columns;
+    return scaleColumnsToPage(columns);
   }
 
   function cellParagraph(text, charPrId = "0") {
@@ -480,6 +495,10 @@
       .replace("</hh:borderFills>", `${tableBorder}</hh:borderFills>`);
   }
 
+  function applyNarrowPageMargins(sectionStart) {
+    return sectionStart.replace(/(<hp:margin\b[^>]*\bleft=")\d+("[^>]*\bright=")\d+(")/, `$1${HWPX_SIDE_MARGIN_15MM}$2${HWPX_SIDE_MARGIN_15MM}$3`);
+  }
+
   function makeSectionXml(templateSection, lines, payload, images) {
     const rootMatch = templateSection.match(/^([\s\S]*?<hs:sec\b[^>]*>)/);
     const firstParagraphMatch = templateSection.match(/<hp:p\b[\s\S]*?<\/hp:p>/);
@@ -487,8 +506,8 @@
       throw new Error("HWPX template section is not usable.");
     }
 
-    const sectionStart = rootMatch[1];
-    const firstParagraph = firstParagraphMatch[0].replace(/<hp:t>[\s\S]*?<\/hp:t>/, "<hp:t> </hp:t>");
+    const sectionStart = applyNarrowPageMargins(rootMatch[1]);
+    const firstParagraph = applyNarrowPageMargins(firstParagraphMatch[0].replace(/<hp:t>[\s\S]*?<\/hp:t>/, "<hp:t> </hp:t>"));
     const body = lines.map((line, index) => paragraphXml(line, index === 0 ? "12" : "0", index === 0 ? "5" : "0")).join("");
     return `${sectionStart}${firstParagraph}${body}${makeTableXml(payload, images)}</hs:sec>`;
   }
