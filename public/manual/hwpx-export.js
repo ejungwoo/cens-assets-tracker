@@ -301,9 +301,9 @@
   }
 
   function estimateCharWidth(char, fontHeight) {
-    if (/\s/.test(char)) return fontHeight * 0.3;
-    if (/[\u0000-\u007f]/.test(char)) return fontHeight * 0.45;
-    return fontHeight * 0.65;
+    if (/\s/.test(char)) return fontHeight * 0.4;
+    if (/[\u0000-\u007f]/.test(char)) return fontHeight * 0.55;
+    return fontHeight;
   }
 
   function estimateWrapPositions(text, fontHeight, availableWidth) {
