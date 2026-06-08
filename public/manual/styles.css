@@ -182,12 +182,17 @@ select {
   flex: 0 1 132px;
 }
 
+.pdf-row .export-hwpx-button {
+  flex-basis: 168px;
+  white-space: nowrap;
+}
+
 .export-pdf-button {
   margin-left: 0;
 }
 
 .print-setting {
-  flex: 0 1 116px;
+  flex: 0 1 96px;
   display: grid;
   gap: 4px;
   color: var(--muted);
@@ -653,7 +658,7 @@ button {
   }
 
   .print-setting {
-    flex-basis: calc(33.333% - 6px);
+    flex-basis: calc(25% - 6px);
   }
 
   .actions {
@@ -688,7 +693,7 @@ button {
   }
 
   .print-setting {
-    flex-basis: 100%;
+    flex-basis: calc(50% - 4px);
   }
 
   .asset-table {

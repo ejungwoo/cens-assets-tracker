@@ -20,6 +20,7 @@ const loadListInput = document.querySelector("#loadListInput");
 const documentTitleInput = document.querySelector("#documentTitle");
 const printTitle = document.querySelector("#printTitle");
 const printFontSizeInput = document.querySelector("#printFontSizeInput");
+const rowStartInput = document.querySelector("#rowStartInput");
 const printOrientationSelect = document.querySelector("#printOrientationSelect");
 const printViewModeSelect = document.querySelector("#printViewModeSelect");
 const printDescriptionSelect = document.querySelector("#printDescriptionSelect");
@@ -81,6 +82,11 @@ function addRows(count) {
 function getAddRowCount() {
   const count = Number.parseInt(addRowCountInput.value, 10);
   return Number.isFinite(count) ? Math.max(1, Math.min(count, 100)) : 1;
+}
+
+function getRowStartNumber() {
+  const number = Number.parseInt(rowStartInput.value, 10);
+  return Number.isFinite(number) ? Math.max(1, Math.min(number, 9999)) : 1;
 }
 
 function addRowsFromInput() {
@@ -638,6 +644,7 @@ function buildListPayload() {
     savedAt: new Date().toISOString(),
     printSettings: {
       fontSize: clampNumber(printFontSizeInput.value, 8, 18, 15),
+      rowStart: getRowStartNumber(),
       orientation: printOrientationSelect.value === "landscape" ? "landscape" : "portrait",
       viewMode: printViewModeSelect.value === "narrow" ? "narrow" : "wide",
       description: printDescriptionSelect.value === "hide" ? "hide" : "show",
@@ -841,6 +848,7 @@ function applyListData(data) {
     documentTitleInput.value = data.title || "자산 목록 작성";
     if (data.printSettings) {
       printFontSizeInput.value = data.printSettings.fontSize || 15;
+      rowStartInput.value = data.printSettings.rowStart || 1;
       printOrientationSelect.value = data.printSettings.orientation === "landscape" ? "landscape" : "portrait";
       printViewModeSelect.value = data.printSettings.viewMode === "narrow" ? "narrow" : "wide";
       printDescriptionSelect.value = data.printSettings.description === "hide" ? "hide" : "show";
@@ -1087,6 +1095,10 @@ clearAllBtn.addEventListener("click", () => {
 
 documentTitleInput.addEventListener("input", scheduleAutoSave);
 printFontSizeInput.addEventListener("input", scheduleAutoSave);
+rowStartInput.addEventListener("input", () => {
+  updateRowNumbers();
+  scheduleAutoSave();
+});
 printOrientationSelect.addEventListener("change", scheduleAutoSave);
 printViewModeSelect.addEventListener("change", scheduleAutoSave);
 printDescriptionSelect.addEventListener("change", scheduleAutoSave);
@@ -1105,8 +1117,9 @@ ensureRequestPrintValues();
 updateRequestPrintValues();
 
 function updateRowNumbers() {
+  const startNumber = getRowStartNumber();
   rowsEl.querySelectorAll("tr").forEach((row, index) => {
-    row.querySelector(".row-number").textContent = index + 1;
+    row.querySelector(".row-number").textContent = startNumber + index;
   });
 }
 

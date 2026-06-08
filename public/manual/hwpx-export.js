@@ -231,11 +231,12 @@
       headers.push("자산설명");
     }
     lines.push("", headers.join(" / "));
+    const rowStart = getRowStartNumber(payload);
     payload.rows
       .filter((row) => row.assetNumber || row.assetName || row.assetDescription)
       .forEach((row, index) => {
         const description = payload.printSettings?.description === "hide" ? "" : row.assetDescription;
-        lines.push(`${index + 1}. ${row.assetNumber || ""} / ${row.assetName || ""}${description ? ` / ${description}` : ""}`);
+        lines.push(`${rowStart + index}. ${row.assetNumber || ""} / ${row.assetName || ""}${description ? ` / ${description}` : ""}`);
       });
 
     return lines;
@@ -275,6 +276,17 @@
       return crypto.getRandomValues(new Uint32Array(1))[0];
     }
     return Math.floor(Math.random() * 0xffffffff);
+  }
+
+  function getRowStartNumber(payload) {
+    const value = Number.parseInt(payload.printSettings?.rowStart, 10);
+    return Number.isFinite(value) ? Math.max(1, Math.min(value, 9999)) : 1;
+  }
+
+  function getHwpFontHeight(payload) {
+    const value = Number.parseFloat(payload.printSettings?.fontSize);
+    const fontSize = Number.isFinite(value) ? Math.max(8, Math.min(value, 18)) : 15;
+    return Math.round(fontSize * 100);
   }
 
   function paragraphXml(text, paraPrId = "0", charPrId = "0") {
@@ -456,6 +468,7 @@
   function makeTableXml(payload, images) {
     const rows = getAssetRows(payload);
     const columns = getTableColumns(payload);
+    const rowStart = getRowStartNumber(payload);
     const tableWidth = columns.reduce((sum, column) => sum + column.width, 0);
     const showPhotos = payload.printSettings?.photos !== "hide";
     const headerHeight = TABLE_HEADER_HEIGHT;
@@ -471,7 +484,7 @@
         const cells = columns
           .map((column, colIndex) => {
             let content = "";
-            if (column.key === "index") content = cellParagraph(String(rowIndex + 1));
+            if (column.key === "index") content = cellParagraph(String(rowStart + rowIndex));
             if (column.key === "assetNumber") content = cellParagraph(row.assetNumber);
             if (column.key === "assetName") content = cellParagraph(row.assetName);
             if (column.key === "assetDescription") content = cellParagraph(row.assetDescription);
@@ -499,6 +512,11 @@
     return headerXml
       .replace(/<hh:borderFills itemCnt="(\d+)">/, (match, count) => `<hh:borderFills itemCnt="${Number(count) + 1}">`)
       .replace("</hh:borderFills>", `${tableBorder}</hh:borderFills>`);
+  }
+
+  function applyHwpFontSize(headerXml, payload) {
+    const height = getHwpFontHeight(payload);
+    return headerXml.replace(/(<hh:charPr id="0" height=")\d+(")/, `$1${height}$2`);
   }
 
   function applyNarrowPageMargins(xml) {
@@ -568,7 +586,8 @@
 
     replaceEntry(entries, "Contents/section0.xml", makeSectionXml(templateSection, lines, payload, images));
     replaceEntry(entries, "Contents/content.hpf", makeContentHpf(title, images));
-    replaceEntry(entries, "Contents/header.xml", ensureTableBorderFill(decoder.decode(entries.find((entry) => entry.name === "Contents/header.xml")?.data || new Uint8Array())));
+    const headerXml = decoder.decode(entries.find((entry) => entry.name === "Contents/header.xml")?.data || new Uint8Array());
+    replaceEntry(entries, "Contents/header.xml", applyHwpFontSize(ensureTableBorderFill(headerXml), payload));
     replaceEntry(entries, "Preview/PrvText.txt", previewLines.join("\n"));
     images.forEach((image) => {
       entries.push({ name: image.path, data: image.bytes });

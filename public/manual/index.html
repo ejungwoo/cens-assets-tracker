@@ -20,8 +20,12 @@
         </div>
         <div class="pdf-row">
           <label class="print-setting">
-            <span>PDF 글자 크기</span>
+            <span>글자 크기</span>
             <input id="printFontSizeInput" type="number" min="8" max="18" value="15" inputmode="numeric">
+          </label>
+          <label class="print-setting">
+            <span>시작 번호</span>
+            <input id="rowStartInput" type="number" min="1" max="9999" value="1" inputmode="numeric">
           </label>
           <label class="print-setting">
             <span>방향</span>
@@ -246,7 +250,7 @@
       </div>
     </dialog>
 
-    <script src="hwpx-export.js?v=20260608-title-normal"></script>
+    <script src="hwpx-export.js?v=20260608-row-start-font-size"></script>
     <script src="app.js"></script>
   </body>
 </html>
