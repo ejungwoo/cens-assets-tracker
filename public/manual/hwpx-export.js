@@ -58,6 +58,18 @@
     return (bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16) | (bytes[offset + 3] << 24)) >>> 0;
   }
 
+  function readInt32(bytes, offset) {
+    return bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16) | (bytes[offset + 3] << 24);
+  }
+
+  function readUint16BigEndian(bytes, offset) {
+    return (bytes[offset] << 8) | bytes[offset + 1];
+  }
+
+  function readUint32BigEndian(bytes, offset) {
+    return ((bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3]) >>> 0;
+  }
+
   function appendBytes(target, source) {
     for (let i = 0; i < source.length; i += 1) {
       target.push(source[i]);
@@ -294,6 +306,48 @@
     return "png";
   }
 
+  function getImageDimensions(bytes, mimeType) {
+    if (mimeType === "image/png" && bytes.length >= 24) {
+      return { width: readUint32BigEndian(bytes, 16), height: readUint32BigEndian(bytes, 20) };
+    }
+
+    if (mimeType === "image/gif" && bytes.length >= 10) {
+      return {
+        width: bytes[6] | (bytes[7] << 8),
+        height: bytes[8] | (bytes[9] << 8),
+      };
+    }
+
+    if (mimeType === "image/bmp" && bytes.length >= 26) {
+      return {
+        width: Math.abs(readInt32(bytes, 18)),
+        height: Math.abs(readInt32(bytes, 22)),
+      };
+    }
+
+    if (mimeType === "image/jpeg") {
+      let offset = 2;
+      while (offset + 9 < bytes.length) {
+        if (bytes[offset] !== 0xff) {
+          offset += 1;
+          continue;
+        }
+        const marker = bytes[offset + 1];
+        const length = readUint16BigEndian(bytes, offset + 2);
+        if (length < 2) break;
+        if ((marker >= 0xc0 && marker <= 0xc3) || (marker >= 0xc5 && marker <= 0xc7) || (marker >= 0xc9 && marker <= 0xcb) || (marker >= 0xcd && marker <= 0xcf)) {
+          return {
+            width: readUint16BigEndian(bytes, offset + 7),
+            height: readUint16BigEndian(bytes, offset + 5),
+          };
+        }
+        offset += 2 + length;
+      }
+    }
+
+    return null;
+  }
+
   function collectImages(payload) {
     const images = [];
     if (payload.printSettings?.photos === "hide") return images;
@@ -307,6 +361,7 @@
         if (!data) return;
         const index = images.length + 1;
         const ext = imageExtension(data.mimeType);
+        const dimensions = getImageDimensions(data.bytes, data.mimeType);
         images.push({
           row,
           rowIndex,
@@ -318,6 +373,8 @@
           fileName: `image${index}.${ext}`,
           binId: `image${index}`,
           picId: index,
+          width: dimensions?.width || 0,
+          height: dimensions?.height || 0,
         });
       });
     });
@@ -365,8 +422,13 @@
   }
 
   function tablePhotoXml(image, cellWidth, cellHeight) {
-    const photoWidth = Math.max(1000, cellWidth - TABLE_CELL_MARGIN_X * 2 - TABLE_PHOTO_INSET * 2);
-    const photoHeight = Math.max(1000, cellHeight - TABLE_CELL_MARGIN_Y * 2 - TABLE_PHOTO_INSET * 2);
+    const maxWidth = Math.max(1000, cellWidth - TABLE_CELL_MARGIN_X * 2 - TABLE_PHOTO_INSET * 2);
+    const maxHeight = Math.max(1000, cellHeight - TABLE_CELL_MARGIN_Y * 2 - TABLE_PHOTO_INSET * 2);
+    if (!image?.width || !image?.height) return pictureParagraphXml(image, maxWidth, maxHeight);
+
+    const scale = Math.min(maxWidth / image.width, maxHeight / image.height);
+    const photoWidth = Math.max(1, Math.round(image.width * scale));
+    const photoHeight = Math.max(1, Math.round(image.height * scale));
     return pictureParagraphXml(image, photoWidth, photoHeight);
   }
 
