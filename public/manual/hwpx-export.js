@@ -6,6 +6,7 @@
   const TABLE_BASE_WIDTH = 42520;
   const TABLE_TOTAL_WIDTH = 51024;
   const HWPX_SIDE_MARGIN_15MM = 4252;
+  const HWPX_VERTICAL_MARGIN_20MM = 5668;
   const TABLE_HEADER_HEIGHT = 1700;
   const TABLE_PHOTO_ROW_HEIGHT = 10000;
   const TABLE_TEXT_ROW_HEIGHT = 2400;
@@ -276,11 +277,15 @@
   }
 
   function paragraphXml(text, paraPrId = "0", charPrId = "0") {
+    return paragraphWithPrefixXml(text, "", paraPrId, charPrId);
+  }
+
+  function paragraphWithPrefixXml(text, prefixXml = "", paraPrId = "0", charPrId = "0") {
     const runs = String(text || " ")
       .split(/\r?\n/)
       .map((line) => `<hp:run charPrIDRef="${charPrId}"><hp:t>${xmlEscape(line || " ")}</hp:t></hp:run>`)
       .join("");
-    return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${TABLE_TOTAL_WIDTH}" flags="393216"/></hp:linesegarray></hp:p>`;
+    return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${prefixXml}${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${TABLE_TOTAL_WIDTH}" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
   function pictureParagraphXml(image, width = 7200, height = 5200) {
@@ -495,8 +500,15 @@
       .replace("</hh:borderFills>", `${tableBorder}</hh:borderFills>`);
   }
 
-  function applyNarrowPageMargins(sectionStart) {
-    return sectionStart.replace(/(<hp:margin\b[^>]*\bleft=")\d+("[^>]*\bright=")\d+(")/, `$1${HWPX_SIDE_MARGIN_15MM}$2${HWPX_SIDE_MARGIN_15MM}$3`);
+  function applyNarrowPageMargins(xml) {
+    return xml.replace(
+      /(<hp:margin\b[^>]*\bleft=")\d+("[^>]*\bright=")\d+("[^>]*\btop=")\d+("[^>]*\bbottom=")\d+(")/,
+      `$1${HWPX_SIDE_MARGIN_15MM}$2${HWPX_SIDE_MARGIN_15MM}$3${HWPX_VERTICAL_MARGIN_20MM}$4${HWPX_VERTICAL_MARGIN_20MM}$5`,
+    );
+  }
+
+  function getSectionControlRun(firstParagraph) {
+    return firstParagraph.match(/<hp:run\b[^>]*>[\s\S]*?<hp:secPr\b[\s\S]*?<\/hp:run>/)?.[0] || "";
   }
 
   function makeSectionXml(templateSection, lines, payload, images) {
@@ -507,9 +519,14 @@
     }
 
     const sectionStart = applyNarrowPageMargins(rootMatch[1]);
-    const firstParagraph = applyNarrowPageMargins(firstParagraphMatch[0].replace(/<hp:t>[\s\S]*?<\/hp:t>/, "<hp:t> </hp:t>"));
-    const body = lines.map((line, index) => paragraphXml(line, index === 0 ? "12" : "0", index === 0 ? "5" : "0")).join("");
-    return `${sectionStart}${firstParagraph}${body}${makeTableXml(payload, images)}</hs:sec>`;
+    const sectionControlRun = getSectionControlRun(applyNarrowPageMargins(firstParagraphMatch[0]));
+    const body = lines
+      .map((line, index) => {
+        if (index === 0) return paragraphWithPrefixXml(line, sectionControlRun, "12", "5");
+        return paragraphXml(line, "0", "0");
+      })
+      .join("");
+    return `${sectionStart}${body}${makeTableXml(payload, images)}</hs:sec>`;
   }
 
   function makeContentHpf(title, images) {
