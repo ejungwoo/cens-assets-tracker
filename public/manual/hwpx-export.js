@@ -522,7 +522,7 @@
     const sectionControlRun = getSectionControlRun(applyNarrowPageMargins(firstParagraphMatch[0]));
     const body = lines
       .map((line, index) => {
-        if (index === 0) return paragraphWithPrefixXml(line, sectionControlRun, "12", "5");
+        if (index === 0) return paragraphWithPrefixXml(line, sectionControlRun, "0", "5");
         return paragraphXml(line, "0", "0");
       })
       .join("");
