@@ -289,16 +289,72 @@
     return Math.round(fontSize * 100);
   }
 
-  function paragraphXml(text, paraPrId = "0", charPrId = "0") {
-    return paragraphWithPrefixXml(text, "", paraPrId, charPrId);
+  function getLineMetrics(fontHeight = 1000, compact = false) {
+    const height = Math.max(800, Math.round(fontHeight || 1000));
+    const spacing = Math.round(height * (compact ? 0.3 : 0.6));
+    return {
+      height,
+      baseline: Math.round(height * 0.85),
+      spacing,
+      lineGap: height + spacing,
+    };
   }
 
-  function paragraphWithPrefixXml(text, prefixXml = "", paraPrId = "0", charPrId = "0") {
-    const runs = String(text || " ")
+  function estimateCharWidth(char, fontHeight) {
+    if (/\s/.test(char)) return fontHeight * 0.3;
+    if (/[\u0000-\u007f]/.test(char)) return fontHeight * 0.45;
+    return fontHeight * 0.65;
+  }
+
+  function estimateWrapPositions(text, fontHeight, availableWidth) {
+    const chars = Array.from(String(text || " "));
+    const positions = [0];
+    let currentWidth = 0;
+    let textPosition = 0;
+
+    chars.forEach((char) => {
+      const charWidth = estimateCharWidth(char, fontHeight);
+      if (currentWidth > 0 && currentWidth + charWidth > availableWidth) {
+        positions.push(textPosition);
+        currentWidth = 0;
+      }
+      currentWidth += charWidth;
+      textPosition += char.length;
+    });
+
+    return positions;
+  }
+
+  function estimateLineSegments(text, fontHeight, horzsize, compact = false) {
+    const metrics = getLineMetrics(fontHeight, compact);
+    const availableWidth = Math.max(1000, horzsize || TABLE_TOTAL_WIDTH);
+    let textOffset = 0;
+    const positions = String(text || " ")
+      .split(/\r?\n/)
+      .flatMap((line) => {
+        const linePositions = estimateWrapPositions(line || " ", metrics.height, availableWidth).map((position) => position + textOffset);
+        textOffset += String(line || " ").length;
+        return linePositions;
+      });
+    return positions
+      .map(
+        (textPosition, index) =>
+          `<hp:lineseg textpos="${textPosition}" vertpos="${index * metrics.lineGap}" vertsize="${metrics.height}" textheight="${metrics.height}" baseline="${metrics.baseline}" spacing="${metrics.spacing}" horzpos="0" horzsize="${availableWidth}" flags="393216"/>`,
+      )
+      .join("");
+  }
+
+  function paragraphXml(text, paraPrId = "0", charPrId = "0", fontHeight = 1000, horzsize = TABLE_TOTAL_WIDTH, compact = false) {
+    return paragraphWithPrefixXml(text, "", paraPrId, charPrId, fontHeight, horzsize, compact);
+  }
+
+  function paragraphWithPrefixXml(text, prefixXml = "", paraPrId = "0", charPrId = "0", fontHeight = 1000, horzsize = TABLE_TOTAL_WIDTH, compact = false) {
+    const safeText = String(text || " ");
+    const runs = safeText
       .split(/\r?\n/)
       .map((line) => `<hp:run charPrIDRef="${charPrId}"><hp:t>${xmlEscape(line || " ")}</hp:t></hp:run>`)
       .join("");
-    return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${prefixXml}${runs}<hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="1000" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${TABLE_TOTAL_WIDTH}" flags="393216"/></hp:linesegarray></hp:p>`;
+    return `<hp:p id="${randomId()}" paraPrIDRef="${paraPrId}" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0">${prefixXml}${runs}<hp:linesegarray>${estimateLineSegments(safeText, fontHeight, horzsize, compact)}</hp:linesegarray></hp:p>`;
   }
 
   function pictureParagraphXml(image, width = 7200, height = 5200) {
@@ -446,8 +502,8 @@
     return scaleColumnsToPage(columns);
   }
 
-  function cellParagraph(text, charPrId = "0") {
-    return paragraphXml(text || " ", "11", charPrId);
+  function cellParagraph(text, charPrId = "0", fontHeight = 1000, horzsize = TABLE_TOTAL_WIDTH) {
+    return paragraphXml(text || " ", "11", charPrId, fontHeight, horzsize, true);
   }
 
   function tableCellXml(contentXml, colAddr, rowAddr, width, height) {
@@ -469,13 +525,16 @@
     const rows = getAssetRows(payload);
     const columns = getTableColumns(payload);
     const rowStart = getRowStartNumber(payload);
+    const fontHeight = getHwpFontHeight(payload);
     const tableWidth = columns.reduce((sum, column) => sum + column.width, 0);
     const showPhotos = payload.printSettings?.photos !== "hide";
-    const headerHeight = TABLE_HEADER_HEIGHT;
+    const headerHeight = Math.max(TABLE_HEADER_HEIGHT, Math.round(fontHeight * 2.4));
     const dataHeight = showPhotos ? TABLE_PHOTO_ROW_HEIGHT : TABLE_TEXT_ROW_HEIGHT;
 
     const headerCells = columns
-      .map((column, colIndex) => tableCellXml(cellParagraph(column.label, "0"), colIndex, 0, column.width, headerHeight))
+      .map((column, colIndex) =>
+        tableCellXml(cellParagraph(column.label, "0", fontHeight, column.width - TABLE_CELL_MARGIN_X * 2), colIndex, 0, column.width, headerHeight),
+      )
       .join("");
 
     const bodyRows = rows
@@ -484,10 +543,11 @@
         const cells = columns
           .map((column, colIndex) => {
             let content = "";
-            if (column.key === "index") content = cellParagraph(String(rowStart + rowIndex));
-            if (column.key === "assetNumber") content = cellParagraph(row.assetNumber);
-            if (column.key === "assetName") content = cellParagraph(row.assetName);
-            if (column.key === "assetDescription") content = cellParagraph(row.assetDescription);
+            const textWidth = column.width - TABLE_CELL_MARGIN_X * 2;
+            if (column.key === "index") content = cellParagraph(String(rowStart + rowIndex), "0", fontHeight, textWidth);
+            if (column.key === "assetNumber") content = cellParagraph(row.assetNumber, "0", fontHeight, textWidth);
+            if (column.key === "assetName") content = cellParagraph(row.assetName, "0", fontHeight, textWidth);
+            if (column.key === "assetDescription") content = cellParagraph(row.assetDescription, "0", fontHeight, textWidth);
             if (column.key === "numberPhoto") {
               content = tablePhotoXml(getRowImage(images, originalRowIndex, "numberPhoto"), column.width, dataHeight);
             }
@@ -503,7 +563,8 @@
 
     const tableHeight = headerHeight + dataHeight * Math.max(rows.length, 1);
     const rowsXml = `<hp:tr>${headerCells}</hp:tr>${bodyRows}`;
-    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${randomId()}" zOrder="2" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="${rows.length + 1}" colCnt="${columns.length}" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="${tableWidth}" widthRelTo="ABSOLUTE" height="${tableHeight}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="283" bottom="283"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>${rowsXml}</hp:tbl><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${tableHeight}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${tableWidth}" flags="393216"/></hp:linesegarray></hp:p>`;
+    const metrics = getLineMetrics(fontHeight);
+    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${randomId()}" zOrder="2" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="${rows.length + 1}" colCnt="${columns.length}" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="${tableWidth}" widthRelTo="ABSOLUTE" height="${tableHeight}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="283" bottom="283"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>${rowsXml}</hp:tbl><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${tableHeight}" textheight="${metrics.height}" baseline="${metrics.baseline}" spacing="${metrics.spacing}" horzpos="0" horzsize="${tableWidth}" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
   function ensureTableBorderFill(headerXml) {
@@ -539,10 +600,11 @@
 
     const sectionStart = applyNarrowPageMargins(rootMatch[1]);
     const sectionControlRun = getSectionControlRun(applyNarrowPageMargins(firstParagraphMatch[0]));
+    const fontHeight = getHwpFontHeight(payload);
     const body = lines
       .map((line, index) => {
-        if (index === 0) return paragraphWithPrefixXml(line, sectionControlRun, "0", "0");
-        return paragraphXml(line, "0", "0");
+        if (index === 0) return paragraphWithPrefixXml(line, sectionControlRun, "0", "0", fontHeight);
+        return paragraphXml(line, "0", "0", fontHeight);
       })
       .join("");
     return `${sectionStart}${body}${makeTableXml(payload, images)}</hs:sec>`;
