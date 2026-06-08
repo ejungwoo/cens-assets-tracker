@@ -4,6 +4,7 @@ const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export
 const INITIAL_ROWS = 5;
 const AUTO_SAVE_KEY = "asset-list-helper:auto-save";
 const PRINT_STYLE_ID = "dynamicPrintPageStyle";
+const decoder = new TextDecoder();
 
 const rowsEl = document.querySelector("#assetRows");
 const rowTemplate = document.querySelector("#rowTemplate");
@@ -827,21 +828,258 @@ async function saveAllPhotos() {
   }
 }
 
-function loadListFile(file) {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => {
+async function loadListFile(file) {
+  try {
+    const data = await readListFile(file);
+    applyListData(normalizeListData(data));
+    sheetStatus.textContent = file.name.toLowerCase().endsWith(".hwpx") ? "HWPX 목록을 불러왔습니다." : "저장된 목록을 불러왔습니다.";
+  } catch (error) {
+    console.error("List load failed:", error);
+    alert(`목록 파일을 읽을 수 없습니다.\n${error.message || error}`);
+  } finally {
+    loadListInput.value = "";
+  }
+}
+
+async function readListFile(file) {
+  if (file.name.toLowerCase().endsWith(".hwpx")) {
+    return parseHwpxList(new Uint8Array(await file.arrayBuffer()));
+  }
+  return JSON.parse(await file.text());
+}
+
+function readZipUint16(bytes, offset) {
+  return bytes[offset] | (bytes[offset + 1] << 8);
+}
+
+function readZipUint32(bytes, offset) {
+  return (bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16) | (bytes[offset + 3] << 24)) >>> 0;
+}
+
+function findZipFooter(bytes) {
+  for (let index = bytes.length - 22; index >= 0; index -= 1) {
+    if (readZipUint32(bytes, index) === 0x06054b50) return index;
+  }
+  throw new Error("HWPX ZIP footer was not found.");
+}
+
+async function inflateZipEntry(bytes, name) {
+  if (!("DecompressionStream" in window)) {
+    throw new Error(`압축된 HWPX 항목을 풀 수 없습니다: ${name}`);
+  }
+
+  const formats = ["deflate-raw", "deflate"];
+  for (const format of formats) {
     try {
-      const data = JSON.parse(reader.result);
-      applyListData(normalizeListData(data));
-      sheetStatus.textContent = "저장된 목록을 불러왔습니다.";
+      const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream(format));
+      return new Uint8Array(await new Response(stream).arrayBuffer());
     } catch (error) {
-      console.error("List load failed:", error);
-      alert(`목록 파일을 읽을 수 없습니다.\n${error.message || error}`);
-    } finally {
-      loadListInput.value = "";
+      if (format === formats[formats.length - 1]) throw error;
     }
+  }
+
+  throw new Error(`압축된 HWPX 항목을 풀 수 없습니다: ${name}`);
+}
+
+async function parseZipEntries(bytes) {
+  const footer = findZipFooter(bytes);
+  const entryCount = readZipUint16(bytes, footer + 10);
+  const centralOffset = readZipUint32(bytes, footer + 16);
+  const entries = [];
+  let offset = centralOffset;
+
+  for (let index = 0; index < entryCount; index += 1) {
+    if (readZipUint32(bytes, offset) !== 0x02014b50) {
+      throw new Error("Invalid HWPX central directory.");
+    }
+
+    const method = readZipUint16(bytes, offset + 10);
+    const compressedSize = readZipUint32(bytes, offset + 20);
+    const uncompressedSize = readZipUint32(bytes, offset + 24);
+    const nameLength = readZipUint16(bytes, offset + 28);
+    const extraLength = readZipUint16(bytes, offset + 30);
+    const commentLength = readZipUint16(bytes, offset + 32);
+    const localOffset = readZipUint32(bytes, offset + 42);
+    const name = decoder.decode(bytes.slice(offset + 46, offset + 46 + nameLength));
+
+    if (![0, 8].includes(method)) {
+      throw new Error(`지원하지 않는 HWPX ZIP 압축 방식입니다: ${name}`);
+    }
+    if (readZipUint32(bytes, localOffset) !== 0x04034b50) {
+      throw new Error(`Invalid HWPX ZIP entry: ${name}`);
+    }
+
+    const localNameLength = readZipUint16(bytes, localOffset + 26);
+    const localExtraLength = readZipUint16(bytes, localOffset + 28);
+    const dataStart = localOffset + 30 + localNameLength + localExtraLength;
+    const data = bytes.slice(dataStart, dataStart + compressedSize);
+    entries.push({ name, data: method === 8 ? await inflateZipEntry(data, name) : data });
+    offset += 46 + nameLength + extraLength + commentLength;
+  }
+
+  return entries;
+}
+
+function xmlChildrenByName(node, localName) {
+  return Array.from(node.children || []).filter((child) => child.localName === localName);
+}
+
+function xmlDescendantsByName(node, localName) {
+  return Array.from(node.getElementsByTagName("*")).filter((child) => child.localName === localName);
+}
+
+function xmlText(node) {
+  if (!node) return "";
+  return xmlDescendantsByName(node, "t")
+    .map((item) => item.textContent || "")
+    .join("")
+    .trim();
+}
+
+function bytesToBase64(bytes) {
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(...bytes.slice(offset, offset + chunkSize));
+  }
+  return btoa(binary);
+}
+
+function imageMimeFromPath(path) {
+  const lower = path.toLowerCase();
+  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+  if (lower.endsWith(".gif")) return "image/gif";
+  if (lower.endsWith(".bmp")) return "image/bmp";
+  return "image/png";
+}
+
+function buildHwpxImageMap(entries) {
+  const map = new Map();
+  entries.forEach((entry) => {
+    const match = /^BinData\/([^/.]+)\.[^/]+$/i.exec(entry.name);
+    if (!match) return;
+    map.set(match[1], `data:${imageMimeFromPath(entry.name)};base64,${bytesToBase64(entry.data)}`);
   });
-  reader.readAsText(file);
+  return map;
+}
+
+function getCellImage(cell, imageMap) {
+  if (!cell) return "";
+  const image = xmlDescendantsByName(cell, "img")[0];
+  const id = image?.getAttribute("binaryItemIDRef");
+  return id ? imageMap.get(id) || "" : "";
+}
+
+function parseHwpxIntro(paragraphs) {
+  const fieldLabels = {
+    "신청자 이름": "applicantName",
+    "소속": "applicantOrg",
+    "반출 기간": "takeoutPeriod",
+    "반출 사유": "takeoutReason",
+    "반출 장소": "takeoutPlace",
+    "자산공동활용여부": "assetSharing",
+    "국외/국내 반출 여부": "domesticOrInternational",
+    "보안관리대상물품 여부": "securityManagedItem",
+    "관세감면사후관리 대상물품 면세번호": "customsExemptionNumber",
+    "연장 기간": "extensionPeriod",
+    "연장 사유": "extensionReason",
+    "반입 일자": "returnDate",
+    "반입 사유": "returnReason",
+    "반입 장소": "returnPlace",
+  };
+  const typeLabels = {
+    반출신청: "takeout",
+    연장신청: "extension",
+    반입신청: "return",
+  };
+  const fields = {};
+  let title = "자산 목록";
+  let type = "takeout";
+
+  paragraphs.forEach((line, index) => {
+    if (!line) return;
+    if (index === 0) {
+      const titleMatch = /^\[([^\]]+)\]\s*(.*)$/.exec(line);
+      if (titleMatch) {
+        type = typeLabels[titleMatch[1]] || type;
+        title = titleMatch[2] || title;
+      } else {
+        title = line;
+      }
+      return;
+    }
+
+    const fieldMatch = /^([^:]+):\s*([\s\S]*)$/.exec(line);
+    if (!fieldMatch) return;
+    const key = fieldLabels[fieldMatch[1].trim()];
+    if (key) fields[key] = fieldMatch[2].trim();
+  });
+
+  return { title, request: { type, fields } };
+}
+
+async function parseHwpxList(bytes) {
+  const entries = await parseZipEntries(bytes);
+  const sectionEntry = entries.find((entry) => entry.name === "Contents/section0.xml");
+  if (!sectionEntry) throw new Error("HWPX section0.xml was not found.");
+
+  const xml = decoder.decode(sectionEntry.data);
+  const doc = new DOMParser().parseFromString(xml, "application/xml");
+  if (doc.querySelector("parsererror")) throw new Error("HWPX XML could not be parsed.");
+
+  const imageMap = buildHwpxImageMap(entries);
+  const section = doc.documentElement;
+  const introLines = [];
+  const sectionParagraphs = xmlChildrenByName(section, "p");
+
+  for (const paragraph of sectionParagraphs) {
+    if (xmlDescendantsByName(paragraph, "tbl").length) break;
+    const line = xmlText(paragraph);
+    if (line) introLines.push(line);
+  }
+
+  const table = xmlDescendantsByName(doc, "tbl")[0];
+  if (!table) throw new Error("HWPX 자산 표를 찾을 수 없습니다.");
+
+  const tableRows = xmlChildrenByName(table, "tr");
+  if (tableRows.length < 2) throw new Error("HWPX 자산 표에 행이 없습니다.");
+
+  const headers = xmlChildrenByName(tableRows[0], "tc").map(xmlText);
+  const columnIndex = (label) => headers.indexOf(label);
+  const indexColumn = columnIndex("#");
+  const assetNumberColumn = columnIndex("자산번호");
+  const assetNameColumn = columnIndex("자산명");
+  const numberPhotoColumn = columnIndex("자산번호가 확대된 사진");
+  const wholePhotoColumn = columnIndex("자산 전체 사진");
+  const descriptionColumn = columnIndex("자산설명");
+  const rows = tableRows.slice(1).map((row) => {
+    const cells = xmlChildrenByName(row, "tc");
+    return {
+      assetNumber: assetNumberColumn >= 0 ? xmlText(cells[assetNumberColumn]) : "",
+      assetName: assetNameColumn >= 0 ? xmlText(cells[assetNameColumn]) : "",
+      assetDescription: descriptionColumn >= 0 ? xmlText(cells[descriptionColumn]) : "",
+      numberPhoto: numberPhotoColumn >= 0 ? getCellImage(cells[numberPhotoColumn], imageMap) : "",
+      wholePhoto: wholePhotoColumn >= 0 ? getCellImage(cells[wholePhotoColumn], imageMap) : "",
+    };
+  });
+  const firstRowNumber = indexColumn >= 0 ? Number.parseInt(xmlText(xmlChildrenByName(tableRows[1], "tc")[indexColumn]), 10) : 1;
+  const intro = parseHwpxIntro(introLines);
+
+  return {
+    version: 1,
+    title: intro.title,
+    savedAt: new Date().toISOString(),
+    printSettings: {
+      fontSize: 12,
+      rowStart: Number.isFinite(firstRowNumber) ? firstRowNumber : 1,
+      orientation: "portrait",
+      viewMode: "wide",
+      description: descriptionColumn >= 0 ? "show" : "hide",
+      photos: numberPhotoColumn >= 0 || wholePhotoColumn >= 0 ? "show" : "hide",
+    },
+    request: intro.request,
+    rows,
+  };
 }
 
 function getListRows(data) {
