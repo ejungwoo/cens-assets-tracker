@@ -414,7 +414,7 @@
   }
 
   function cellParagraph(text, charPrId = "0") {
-    return paragraphXml(text || " ", "0", charPrId);
+    return paragraphXml(text || " ", "11", charPrId);
   }
 
   function tableCellXml(contentXml, colAddr, rowAddr, width, height) {
@@ -469,7 +469,7 @@
 
     const tableHeight = headerHeight + dataHeight * Math.max(rows.length, 1);
     const rowsXml = `<hp:tr>${headerCells}</hp:tr>${bodyRows}`;
-    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${randomId()}" zOrder="2" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="${rows.length + 1}" colCnt="${columns.length}" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="${tableWidth}" widthRelTo="ABSOLUTE" height="${tableHeight}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="283" bottom="283"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>${rowsXml}</hp:tbl><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${tableHeight}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${tableWidth}" flags="393216"/></hp:linesegarray></hp:p>`;
+    return `<hp:p id="${randomId()}" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="${randomId()}" zOrder="2" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="${rows.length + 1}" colCnt="${columns.length}" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="${tableWidth}" widthRelTo="ABSOLUTE" height="${tableHeight}" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="0" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="283" bottom="283"/><hp:inMargin left="0" right="0" top="0" bottom="0"/>${rowsXml}</hp:tbl><hp:t/></hp:run><hp:linesegarray><hp:lineseg textpos="0" vertpos="0" vertsize="${tableHeight}" textheight="1000" baseline="850" spacing="600" horzpos="0" horzsize="${tableWidth}" flags="393216"/></hp:linesegarray></hp:p>`;
   }
 
   function ensureTableBorderFill(headerXml) {
