@@ -57,6 +57,7 @@ const state = {
   authUser: null,
   authEmail: "",
   authPassword: "",
+  authCreatingAccount: false,
   authMessage: "",
   authError: ""
 };
@@ -92,8 +93,8 @@ const I18N = {
     authEmailRequired: "Enter an IBS ID or {domain} email address.",
     authPasswordRequired: "Enter your password.",
     authSignInFailed: "Sign-in failed: {error}",
-    authSignUpFailed: "Sign-up failed: {error}",
-    authSignedUp: "Account created for {email}.",
+    authSignUpFailed: "Could not start sign-up: {error}",
+    authSignedUp: "Sign-up email sent to {email}. Open it to set your password.",
     authPasswordEmailSent: "Password reset email sent to {email}.",
     authPasswordEmailFailed: "Could not send password reset email: {error}",
     back: "Back",
@@ -267,8 +268,8 @@ const I18N = {
     authEmailRequired: "IBS 아이디 또는 {domain} 이메일 주소를 입력하세요.",
     authPasswordRequired: "비밀번호를 입력하세요.",
     authSignInFailed: "로그인 실패: {error}",
-    authSignUpFailed: "가입 실패: {error}",
-    authSignedUp: "{email} 계정을 만들었습니다.",
+    authSignUpFailed: "가입을 시작할 수 없습니다: {error}",
+    authSignedUp: "{email}로 가입 메일을 보냈습니다. 메일에서 비밀번호를 설정하세요.",
     authPasswordEmailSent: "{email}로 비밀번호 초기화 메일을 보냈습니다.",
     authPasswordEmailFailed: "비밀번호 초기화 메일을 보낼 수 없습니다: {error}",
     back: "뒤로",
@@ -511,6 +512,7 @@ function initAuth() {
       render();
       return;
     }
+    if (state.authCreatingAccount) return;
     finishSignedInUser(user);
   });
 }
@@ -588,18 +590,28 @@ function validateAuthPassword(password) {
 async function signUp() {
   if (!window.firebase || !window.firebase.auth) return;
   const email = normalizeAuthEmailInput(state.authEmail);
-  const password = String(state.authPassword || "");
   if (!validateAuthEmail(email)) return;
-  if (!validateAuthPassword(password)) return;
   state.authStatus = "loading";
+  state.authEmail = email;
   state.authError = "";
   state.authMessage = "";
+  state.authCreatingAccount = true;
   render();
   try {
-    const credential = await window.firebase.auth().createUserWithEmailAndPassword(email, password);
+    await window.firebase.auth().createUserWithEmailAndPassword(email, makeTemporaryPassword());
+    await sendPasswordEmail(email);
+    await window.firebase.auth().signOut();
+    state.authCreatingAccount = false;
+    state.authUser = null;
+    state.authStatus = "signedOut";
     state.authMessage = t("authSignedUp", { email });
-    await finishSignedInUser(credential.user);
+    render();
   } catch (error) {
+    state.authCreatingAccount = false;
+    if (error && error.code === "auth/email-already-in-use") {
+      await sendPasswordResetEmail();
+      return;
+    }
     state.authStatus = "signedOut";
     state.authError = t("authSignUpFailed", { error: authErrorMessage(error) });
     render();
@@ -616,9 +628,7 @@ async function sendPasswordResetEmail() {
   state.authMessage = "";
   render();
   try {
-    await window.firebase.auth().sendPasswordResetEmail(email, {
-      url: `${window.location.origin}${window.location.pathname}`
-    });
+    await sendPasswordEmail(email);
     state.authStatus = "signedOut";
     state.authMessage = t("authPasswordEmailSent", { email });
     render();
@@ -627,6 +637,18 @@ async function sendPasswordResetEmail() {
     state.authError = t("authPasswordEmailFailed", { error: authErrorMessage(error) });
     render();
   }
+}
+
+function sendPasswordEmail(email) {
+  return window.firebase.auth().sendPasswordResetEmail(email, {
+    url: `${window.location.origin}${window.location.pathname}`
+  });
+}
+
+function makeTemporaryPassword() {
+  const values = new Uint32Array(4);
+  crypto.getRandomValues(values);
+  return `Temp-${Array.from(values, (value) => value.toString(36)).join("-")}!A1`;
 }
 
 function authErrorMessage(error) {
