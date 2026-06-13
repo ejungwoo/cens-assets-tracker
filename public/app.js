@@ -15,6 +15,16 @@ const STORAGE_KEYS = {
   backendUrl: "cens.backendUrl"
 };
 
+const AUTH_ALLOWED_DOMAIN = "ibs.re.kr";
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCzqVQWrkKsYRWZO3cZylOUyNI31Odc_fk",
+  authDomain: "cens-assets-tracker.firebaseapp.com",
+  projectId: "cens-assets-tracker",
+  storageBucket: "cens-assets-tracker.firebasestorage.app",
+  messagingSenderId: "493140318257",
+  appId: "1:493140318257:web:ad8e3c879d40765645dd10"
+};
+
 const state = {
   route: "home",
   routeParam: null,
@@ -42,7 +52,10 @@ const state = {
   listSort: "assetId",
   grabQuery: "",
   grabResults: [],
-  recordFilter: "all"
+  recordFilter: "all",
+  authStatus: "loading",
+  authUser: null,
+  authError: ""
 };
 
 const I18N = {
@@ -59,6 +72,15 @@ const I18N = {
     recordsTitle: "Records",
     presetsTitle: "Preset Lists",
     settingsTitle: "Settings",
+    signInTitle: "Sign in",
+    signInLead: "Use your IBS account to access project asset lists.",
+    signInGoogle: "Sign in with Google",
+    signOut: "Sign out",
+    signedInAs: "Signed in as",
+    authLoading: "Checking sign-in status.",
+    authUnavailable: "Firebase Auth is not available. Refresh the page and try again.",
+    authDomainDenied: "Only {domain} email accounts can use this app.",
+    authPopupFailed: "Sign-in failed: {error}",
     back: "Back",
     search: "Search",
     searchPlaceholder: "assetId, name, or description",
@@ -213,6 +235,15 @@ const I18N = {
     recordsTitle: "반출 / 반입 / 확인 기록",
     presetsTitle: "프리셋 목록",
     settingsTitle: "설정",
+    signInTitle: "로그인",
+    signInLead: "프로젝트 자산 목록에 접근하려면 IBS 계정으로 로그인하세요.",
+    signInGoogle: "Google로 로그인",
+    signOut: "로그아웃",
+    signedInAs: "로그인 계정",
+    authLoading: "로그인 상태를 확인하고 있습니다.",
+    authUnavailable: "Firebase Auth를 사용할 수 없습니다. 새로고침 후 다시 시도하세요.",
+    authDomainDenied: "{domain} 이메일 계정만 이 앱을 사용할 수 있습니다.",
+    authPopupFailed: "로그인 실패: {error}",
     back: "뒤로",
     search: "검색",
     searchPlaceholder: "assetId, 이름, 설명",
@@ -419,14 +450,14 @@ const modalRoot = document.getElementById("modal-root");
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
-  Object.assign(state, await backend.loadAll());
   window.addEventListener("hashchange", routeFromHash);
   document.addEventListener("click", handleClick);
   document.addEventListener("input", handleInput);
   document.addEventListener("change", handleChange);
   document.addEventListener("keydown", handleKeydown);
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/service-worker.js").catch(() => {});
-  routeFromHash();
+  initAuth();
+  render();
 }
 
 function readJson(key, fallback) {
@@ -436,6 +467,66 @@ function readJson(key, fallback) {
   } catch {
     return fallback;
   }
+}
+
+function initAuth() {
+  if (!window.firebase || !window.firebase.auth) {
+    state.authStatus = "unavailable";
+    state.authError = t("authUnavailable");
+    render();
+    return;
+  }
+  if (!window.firebase.apps.length) window.firebase.initializeApp(FIREBASE_CONFIG);
+  window.firebase.auth().onAuthStateChanged(async (user) => {
+    if (!user) {
+      state.authUser = null;
+      state.authStatus = "signedOut";
+      render();
+      return;
+    }
+    const email = String(user.email || "").toLowerCase();
+    if (!isAllowedEmail(email)) {
+      state.authUser = null;
+      state.authStatus = "denied";
+      state.authError = t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+      await window.firebase.auth().signOut().catch(() => {});
+      render();
+      return;
+    }
+    state.authUser = {
+      email,
+      name: user.displayName || email
+    };
+    state.authStatus = "ready";
+    state.authError = "";
+    Object.assign(state, await backend.loadAll());
+    routeFromHash();
+  });
+}
+
+function isAllowedEmail(email) {
+  return email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`);
+}
+
+async function signIn() {
+  if (!window.firebase || !window.firebase.auth) return;
+  state.authStatus = "loading";
+  state.authError = "";
+  render();
+  const provider = new window.firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ hd: AUTH_ALLOWED_DOMAIN });
+  try {
+    await window.firebase.auth().signInWithPopup(provider);
+  } catch (error) {
+    state.authStatus = "signedOut";
+    state.authError = t("authPopupFailed", { error: error && error.message ? error.message : String(error) });
+    render();
+  }
+}
+
+async function signOut() {
+  if (!window.firebase || !window.firebase.auth) return;
+  await window.firebase.auth().signOut();
 }
 
 function defaultProjectId() {
@@ -603,7 +694,29 @@ function persist() {
 function render() {
   document.documentElement.lang = state.language === "ko" ? "ko" : "en";
   document.title = t("appName");
+  if (state.authStatus !== "ready") {
+    app.innerHTML = renderAuthPage();
+    return;
+  }
   app.innerHTML = `${renderTopbar()}${renderPage()}`;
+}
+
+function renderAuthPage() {
+  const loading = state.authStatus === "loading";
+  const unavailable = state.authStatus === "unavailable";
+  const denied = state.authStatus === "denied";
+  const message = state.authError || (loading ? t("authLoading") : unavailable ? t("authUnavailable") : denied ? t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` }) : t("signInLead"));
+  return `
+    <main class="auth-page">
+      <section class="auth-panel">
+        <div>
+          <p class="eyebrow">${escapeHtml(t("appName"))}</p>
+          <h1>${escapeHtml(t("signInTitle"))}</h1>
+          <p>${escapeHtml(message)}</p>
+        </div>
+        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInGoogle"))}</button>
+      </section>
+    </main>`;
 }
 
 function t(key, vars = {}) {
@@ -628,9 +741,10 @@ function renderTopbar() {
     settings: t("settingsTitle")
   }[state.route] || t("appName");
   const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
+  const authInfo = state.authUser ? `<span class="auth-chip" title="${escapeAttr(t("signedInAs"))}">${escapeHtml(state.authUser.email)}</span><button class="ghost small" data-action="sign-out">${escapeHtml(t("signOut"))}</button>` : "";
   const rightButton = state.route === "home"
-    ? `<div class="topbar-actions"><button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
-    : `<div class="topbar-actions"><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></div>`;
+    ? `<div class="topbar-actions">${authInfo}<button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
+    : `<div class="topbar-actions">${authInfo}<button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></div>`;
   return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
 }
 
@@ -1077,11 +1191,19 @@ function empty(message) {
 function handleClick(event) {
   const target = event.target.closest("[data-action], [data-nav]");
   if (!target) return;
+  const action = target.dataset.action;
+  if (action === "sign-in") {
+    signIn();
+    return;
+  }
+  if (action === "sign-out") {
+    signOut();
+    return;
+  }
   if (target.dataset.nav) {
     navigate(target.dataset.nav);
     return;
   }
-  const action = target.dataset.action;
   if (action === "back") history.length > 1 ? history.back() : navigate("home");
   if (action === "open-asset") openAssetFromCard(event, target);
   if (action === "toggle-home-asset") toggleHomeAsset(event, target);
