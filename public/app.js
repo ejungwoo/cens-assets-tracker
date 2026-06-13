@@ -1491,8 +1491,7 @@ function handleClick(event) {
   if (action === "capture-location-photo") captureLocationPhoto(target.dataset.locationName);
   if (action === "asset-find") findHomeAssets();
   if (action === "scan-home-asset") openScanner((text) => {
-    state.assetQuery = extractAssetNumber(text);
-    findHomeAssets();
+    addScannedHomeAsset(text);
   });
   if (action === "show-new-asset") {
     state.homeMode = "newAsset";
@@ -1673,6 +1672,23 @@ function findHomeAssets() {
   state.openHomeAssetId = "";
   state.editingHomeAssetId = "";
   render();
+}
+
+function addScannedHomeAsset(text) {
+  const assetId = extractAssetNumber(text);
+  state.assetQuery = assetId;
+  const asset = state.assets.find((item) => item.assetId === assetId);
+  if (asset) {
+    addToMyList([asset.assetId]);
+    state.homeMode = "my";
+    state.homeResults = [];
+    state.openHomeAssetId = asset.assetId;
+    state.editingHomeAssetId = "";
+    persist();
+    render();
+    return;
+  }
+  findHomeAssets();
 }
 
 function getLocationEntries() {
