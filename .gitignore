@@ -1,17 +1,38 @@
+# OS / editor
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local environment
 .env
-.env.local
+.env.*
+!.env.example
+.devcert/
+.dev-server.pid
+
+# Python
 .venv/
 venv/
 __pycache__/
 *.pyc
+
+# Node / build output
 node_modules/
 dist/
 build/
+coverage/
+
+# Firebase local state
 .firebase/
 .firebaserc
-.devcert/
-.dev-server.pid
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Logs / local data
 logs/
 *.log
 *.sqlite
