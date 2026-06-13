@@ -491,7 +491,9 @@ function projectKey(projectId, key) {
 
 function loadProjectData(projectId) {
   const storedAssets = readJson(projectKey(projectId, "assets"), null);
-  const assets = shouldUseSeedAssets(storedAssets) || shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets;
+  const assets = Array.isArray(storedAssets)
+    ? (shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets)
+    : [];
   return {
     assets,
     records: readJson(projectKey(projectId, "records"), []),
@@ -1196,7 +1198,7 @@ function createProject() {
   state.projects.push(project);
   state.currentProjectId = project.projectId;
   Object.assign(state, {
-    ...loadProjectData(project.projectId),
+    assets: [],
     myList: [],
     records: [],
     presets: [],
