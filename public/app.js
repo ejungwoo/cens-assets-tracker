@@ -76,16 +76,16 @@ const I18N = {
     presetsTitle: "Preset Lists",
     settingsTitle: "Settings",
     signInTitle: "Sign in",
-    signInLead: "Enter your IBS email address. A sign-in link will be sent to that mailbox.",
-    signInEmail: "IBS email address",
-    signInEmailPlaceholder: "name@ibs.re.kr",
+    signInLead: "Enter your IBS ID. A sign-in link will be sent to your @ibs.re.kr mailbox.",
+    signInEmail: "IBS ID",
+    signInEmailPlaceholder: "name",
     sendSignInLink: "Send sign-in link",
     signOut: "Sign out",
     signedInAs: "Signed in as",
     authLoading: "Checking sign-in status.",
     authUnavailable: "Firebase Auth is not available. Refresh the page and try again.",
     authDomainDenied: "Only {domain} email accounts can use this app.",
-    authEmailRequired: "Enter an {domain} email address.",
+    authEmailRequired: "Enter an IBS ID or {domain} email address.",
     authLinkSent: "Sign-in link sent. Open the email on this device to continue.",
     authLinkFailed: "Could not send sign-in link: {error}",
     authCompleteFailed: "Could not complete sign-in: {error}",
@@ -244,16 +244,16 @@ const I18N = {
     presetsTitle: "프리셋 목록",
     settingsTitle: "설정",
     signInTitle: "로그인",
-    signInLead: "IBS 이메일 주소를 입력하세요. 해당 메일함으로 로그인 링크를 보냅니다.",
-    signInEmail: "IBS 이메일 주소",
-    signInEmailPlaceholder: "name@ibs.re.kr",
+    signInLead: "IBS 아이디를 입력하세요. @ibs.re.kr 메일함으로 로그인 링크를 보냅니다.",
+    signInEmail: "IBS 아이디",
+    signInEmailPlaceholder: "name",
     sendSignInLink: "로그인 링크 보내기",
     signOut: "로그아웃",
     signedInAs: "로그인 계정",
     authLoading: "로그인 상태를 확인하고 있습니다.",
     authUnavailable: "Firebase Auth를 사용할 수 없습니다. 새로고침 후 다시 시도하세요.",
     authDomainDenied: "{domain} 이메일 계정만 이 앱을 사용할 수 있습니다.",
-    authEmailRequired: "{domain} 이메일 주소를 입력하세요.",
+    authEmailRequired: "IBS 아이디 또는 {domain} 이메일 주소를 입력하세요.",
     authLinkSent: "로그인 링크를 보냈습니다. 이 기기에서 메일 링크를 열면 계속 진행됩니다.",
     authLinkFailed: "로그인 링크를 보낼 수 없습니다: {error}",
     authCompleteFailed: "로그인을 완료할 수 없습니다: {error}",
@@ -509,6 +509,13 @@ function isAllowedEmail(email) {
   return email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`);
 }
 
+function normalizeAuthEmailInput(value) {
+  const input = String(value || "").trim().toLowerCase();
+  if (!input) return "";
+  if (input.includes("@")) return input;
+  return `${input}@${AUTH_ALLOWED_DOMAIN}`;
+}
+
 async function finishSignedInUser(user) {
   const email = String(user.email || "").toLowerCase();
   if (!isAllowedEmail(email)) {
@@ -534,7 +541,7 @@ async function finishSignedInUser(user) {
 
 async function signIn() {
   if (!window.firebase || !window.firebase.auth) return;
-  const email = String(state.authEmail || "").trim().toLowerCase();
+  const email = normalizeAuthEmailInput(state.authEmail);
   if (!isAllowedEmail(email)) {
     state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
     state.authMessage = "";
@@ -566,7 +573,7 @@ async function signIn() {
 }
 
 async function completeEmailLinkSignIn(email) {
-  const normalizedEmail = String(email || "").trim().toLowerCase();
+  const normalizedEmail = normalizeAuthEmailInput(email);
   if (!isAllowedEmail(normalizedEmail)) {
     state.authStatus = "signedOut";
     state.authEmail = normalizedEmail;
@@ -787,7 +794,7 @@ function renderAuthPage() {
           <p>${escapeHtml(message)}</p>
         </div>
         <label>${escapeHtml(t("signInEmail"))}
-          <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" inputmode="email" autocomplete="email">
+          <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" autocomplete="username">
         </label>
         <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("sendSignInLink"))}</button>
       </section>
