@@ -695,19 +695,15 @@ function ensureProjectState() {
       });
     }
   }
-  projects = ensureBundledLists(projects);
+  projects = normalizeProjectLabels(projects);
   if (!projects.some((project) => project.projectId === currentProjectId)) {
     currentProjectId = projects[0].projectId;
-    localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
-  }
-  if (shouldOpenTestList(currentProjectId)) {
-    currentProjectId = testWebListId();
     localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
   }
   return { projects, currentProjectId };
 }
 
-function ensureBundledLists(projects) {
+function normalizeProjectLabels(projects) {
   let changed = false;
   projects = projects.map((project) => {
     if (project.projectId === defaultProjectId() && project.name === "Default project") {
@@ -716,33 +712,8 @@ function ensureBundledLists(projects) {
     }
     return project;
   });
-  const testListId = testWebListId();
-  ensureTestWebListData();
-  if (projects.some((project) => project.projectId === testListId)) {
-    if (changed) localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
-    return projects;
-  }
-  const now = new Date().toISOString();
-  const nextProjects = [...projects, { projectId: testListId, name: "CENS test web index", createdAt: now, updatedAt: now }];
-  localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(nextProjects));
-  return nextProjects;
-}
-
-function ensureTestWebListData() {
-  const testListId = testWebListId();
-  const assets = readJson(projectKey(testListId, "assets"), []);
-  if (Array.isArray(assets) && assets.length === testWebAssets().length) return;
-  saveProjectData(testListId, testWebListData());
-}
-
-function shouldOpenTestList(currentProjectId) {
-  if (currentProjectId !== defaultProjectId()) return false;
-  const currentAssets = readJson(projectKey(currentProjectId, "assets"), []);
-  return Array.isArray(currentAssets) && currentAssets.length === 0;
-}
-
-function testWebListId() {
-  return "LIST-cens-test-web-index";
+  if (changed) localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
+  return projects;
 }
 
 function migratedAssets() {
@@ -778,73 +749,6 @@ function saveProjectData(projectId, data) {
   localStorage.setItem(projectKey(projectId, "myList"), JSON.stringify(data.myList || []));
   localStorage.setItem(projectKey(projectId, "selectedLocation"), data.selectedLocation || "");
   localStorage.setItem(projectKey(projectId, "locationLocked"), data.locationLocked ? "true" : "false");
-}
-
-function testWebListData() {
-  return {
-    assets: testWebAssets(),
-    records: [],
-    presets: [],
-    locations: testWebLocations(),
-    myList: [],
-    selectedLocation: "",
-    locationLocked: false
-  };
-}
-
-function testWebAssets() {
-  const now = new Date().toISOString();
-  const today = dateOnly();
-  const base = "/cens_assets_test_web";
-  return [
-    ["1", "Oscilloscope", "실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프"],
-    ["2", "Function Generator", "테스트 신호를 발생시키는 함수발생기"],
-    ["3", "Power Supply", "검출기 및 테스트 보드 전원 공급용 DC 파워서플라이"],
-    ["4", "Multimeter", "전압, 저항, 전류 확인용 휴대용 멀티미터"],
-    ["5", "Soldering Station", "케이블 및 커넥터 작업용 납땜 스테이션"],
-    ["6", "Crimp Tool Set", "핀 커넥터 압착 작업용 공구 세트"],
-    ["7", "NIM Crate", "NIM 모듈 장착 및 전원 공급용 크레이트"],
-    ["8", "VME Crate", "DAQ 모듈 장착용 VME 크레이트"],
-    ["9", "Silicon Detector Box", "실리콘 검출기 보관용 보호 박스"],
-    ["10", "MPPC Test Board", "MPPC 신호 테스트용 소형 보드"],
-    ["11", "Scintillator Paddle", "빔 테스트 및 트리거용 플라스틱 섬광체"],
-    ["12", "Faraday Cup", "빔 전류 측정용 페러데이컵"],
-    ["13", "Vacuum Pump", "챔버 배기용 소형 진공 펌프"],
-    ["14", "Gas Regulator", "가스 라인 압력 조절용 레귤레이터"],
-    ["15", "Laptop DAQ", "현장 DAQ 확인 및 테스트용 노트북"],
-    ["16", "Ethernet Switch", "DAQ/서버 네트워크 연결용 스위치"],
-    ["17", "Cable Reel BNC", "BNC 케이블 묶음 보관 릴"],
-    ["18", "Toolbox", "현장 작업용 공구 박스"],
-    ["19", "Sample Holder Set", "타겟 및 샘플 고정용 홀더 세트"],
-    ["20", "QR Label Printer", "자산 라벨 출력 테스트용 QR 라벨 프린터"]
-  ].map(([number, name, description]) => {
-    const padded = number.padStart(2, "0");
-    return {
-      assetId: number,
-      name,
-      description,
-      photo1: `${base}/item_photos/item_${padded}.jpg`,
-      photo2: `${base}/qr/qr_${padded}.png`,
-      photo3: `${base}/location_photos/location_${padded}.jpg`,
-      location: `Test location ${padded}`,
-      lastInOutDate: "",
-      lastVerifiedDate: today,
-      lastVerifiedBy: "index import",
-      createdAt: now,
-      updatedAt: now
-    };
-  });
-}
-
-function testWebLocations() {
-  const base = "/cens_assets_test_web/location_photos";
-  return Array.from({ length: 20 }, (_, index) => {
-    const padded = String(index + 1).padStart(2, "0");
-    return {
-      name: `Test location ${padded}`,
-      photo: `${base}/location_${padded}.jpg`
-    };
-  });
 }
 
 function seedAssets() {

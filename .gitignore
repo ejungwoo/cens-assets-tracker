@@ -40,3 +40,6 @@ logs/
 *.db
 data/
 uploads/
+
+# Local-only imported asset data
+public/cens_assets_test_web/
