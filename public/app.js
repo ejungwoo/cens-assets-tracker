@@ -16,6 +16,7 @@ const STORAGE_KEYS = {
 };
 
 const AUTH_ALLOWED_DOMAIN = "ibs.re.kr";
+const AUTH_PENDING_EMAIL_KEY = "cens.pendingAuthEmail";
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCzqVQWrkKsYRWZO3cZylOUyNI31Odc_fk",
   authDomain: "cens-assets-tracker.firebaseapp.com",
@@ -55,6 +56,8 @@ const state = {
   recordFilter: "all",
   authStatus: "loading",
   authUser: null,
+  authEmail: "",
+  authMessage: "",
   authError: ""
 };
 
@@ -73,14 +76,19 @@ const I18N = {
     presetsTitle: "Preset Lists",
     settingsTitle: "Settings",
     signInTitle: "Sign in",
-    signInLead: "Use your IBS account to access project asset lists.",
-    signInGoogle: "Sign in with Google",
+    signInLead: "Enter your IBS email address. A sign-in link will be sent to that mailbox.",
+    signInEmail: "IBS email address",
+    signInEmailPlaceholder: "name@ibs.re.kr",
+    sendSignInLink: "Send sign-in link",
     signOut: "Sign out",
     signedInAs: "Signed in as",
     authLoading: "Checking sign-in status.",
     authUnavailable: "Firebase Auth is not available. Refresh the page and try again.",
     authDomainDenied: "Only {domain} email accounts can use this app.",
-    authPopupFailed: "Sign-in failed: {error}",
+    authEmailRequired: "Enter an {domain} email address.",
+    authLinkSent: "Sign-in link sent. Open the email on this device to continue.",
+    authLinkFailed: "Could not send sign-in link: {error}",
+    authCompleteFailed: "Could not complete sign-in: {error}",
     back: "Back",
     search: "Search",
     searchPlaceholder: "assetId, name, or description",
@@ -236,14 +244,19 @@ const I18N = {
     presetsTitle: "프리셋 목록",
     settingsTitle: "설정",
     signInTitle: "로그인",
-    signInLead: "프로젝트 자산 목록에 접근하려면 IBS 계정으로 로그인하세요.",
-    signInGoogle: "Google로 로그인",
+    signInLead: "IBS 이메일 주소를 입력하세요. 해당 메일함으로 로그인 링크를 보냅니다.",
+    signInEmail: "IBS 이메일 주소",
+    signInEmailPlaceholder: "name@ibs.re.kr",
+    sendSignInLink: "로그인 링크 보내기",
     signOut: "로그아웃",
     signedInAs: "로그인 계정",
     authLoading: "로그인 상태를 확인하고 있습니다.",
     authUnavailable: "Firebase Auth를 사용할 수 없습니다. 새로고침 후 다시 시도하세요.",
     authDomainDenied: "{domain} 이메일 계정만 이 앱을 사용할 수 있습니다.",
-    authPopupFailed: "로그인 실패: {error}",
+    authEmailRequired: "{domain} 이메일 주소를 입력하세요.",
+    authLinkSent: "로그인 링크를 보냈습니다. 이 기기에서 메일 링크를 열면 계속 진행됩니다.",
+    authLinkFailed: "로그인 링크를 보낼 수 없습니다: {error}",
+    authCompleteFailed: "로그인을 완료할 수 없습니다: {error}",
     back: "뒤로",
     search: "검색",
     searchPlaceholder: "assetId, 이름, 설명",
@@ -477,6 +490,10 @@ function initAuth() {
     return;
   }
   if (!window.firebase.apps.length) window.firebase.initializeApp(FIREBASE_CONFIG);
+  if (window.firebase.auth().isSignInWithEmailLink(window.location.href)) {
+    completeEmailLinkSignIn(localStorage.getItem(AUTH_PENDING_EMAIL_KEY) || state.authEmail);
+    return;
+  }
   window.firebase.auth().onAuthStateChanged(async (user) => {
     if (!user) {
       state.authUser = null;
@@ -484,23 +501,7 @@ function initAuth() {
       render();
       return;
     }
-    const email = String(user.email || "").toLowerCase();
-    if (!isAllowedEmail(email)) {
-      state.authUser = null;
-      state.authStatus = "denied";
-      state.authError = t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
-      await window.firebase.auth().signOut().catch(() => {});
-      render();
-      return;
-    }
-    state.authUser = {
-      email,
-      name: user.displayName || email
-    };
-    state.authStatus = "ready";
-    state.authError = "";
-    Object.assign(state, await backend.loadAll());
-    routeFromHash();
+    finishSignedInUser(user);
   });
 }
 
@@ -508,20 +509,91 @@ function isAllowedEmail(email) {
   return email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`);
 }
 
+async function finishSignedInUser(user) {
+  const email = String(user.email || "").toLowerCase();
+  if (!isAllowedEmail(email)) {
+    state.authUser = null;
+    state.authStatus = "denied";
+    state.authError = t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+    state.authMessage = "";
+    await window.firebase.auth().signOut().catch(() => {});
+    render();
+    return;
+  }
+  state.authUser = {
+    email,
+    name: user.displayName || email
+  };
+  state.authStatus = "ready";
+  state.authEmail = email;
+  state.authError = "";
+  state.authMessage = "";
+  Object.assign(state, await backend.loadAll());
+  routeFromHash();
+}
+
 async function signIn() {
   if (!window.firebase || !window.firebase.auth) return;
+  const email = String(state.authEmail || "").trim().toLowerCase();
+  if (!isAllowedEmail(email)) {
+    state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+    state.authMessage = "";
+    render();
+    return;
+  }
+  if (window.firebase.auth().isSignInWithEmailLink(window.location.href)) {
+    completeEmailLinkSignIn(email);
+    return;
+  }
   state.authStatus = "loading";
   state.authError = "";
+  state.authMessage = "";
   render();
-  const provider = new window.firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({ hd: AUTH_ALLOWED_DOMAIN });
   try {
-    await window.firebase.auth().signInWithPopup(provider);
+    await window.firebase.auth().sendSignInLinkToEmail(email, {
+      url: `${window.location.origin}${window.location.pathname}`,
+      handleCodeInApp: true
+    });
+    localStorage.setItem(AUTH_PENDING_EMAIL_KEY, email);
+    state.authStatus = "linkSent";
+    state.authMessage = t("authLinkSent");
+    render();
   } catch (error) {
     state.authStatus = "signedOut";
-    state.authError = t("authPopupFailed", { error: error && error.message ? error.message : String(error) });
+    state.authError = t("authLinkFailed", { error: authErrorMessage(error) });
     render();
   }
+}
+
+async function completeEmailLinkSignIn(email) {
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  if (!isAllowedEmail(normalizedEmail)) {
+    state.authStatus = "signedOut";
+    state.authEmail = normalizedEmail;
+    state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+    state.authMessage = "";
+    render();
+    return;
+  }
+  state.authStatus = "loading";
+  state.authEmail = normalizedEmail;
+  state.authError = "";
+  state.authMessage = "";
+  render();
+  try {
+    const credential = await window.firebase.auth().signInWithEmailLink(normalizedEmail, window.location.href);
+    localStorage.removeItem(AUTH_PENDING_EMAIL_KEY);
+    window.history.replaceState({}, document.title, `${window.location.origin}${window.location.pathname}`);
+    await finishSignedInUser(credential.user);
+  } catch (error) {
+    state.authStatus = "signedOut";
+    state.authError = t("authCompleteFailed", { error: authErrorMessage(error) });
+    render();
+  }
+}
+
+function authErrorMessage(error) {
+  return error && error.message ? error.message : String(error);
 }
 
 async function signOut() {
@@ -705,7 +777,7 @@ function renderAuthPage() {
   const loading = state.authStatus === "loading";
   const unavailable = state.authStatus === "unavailable";
   const denied = state.authStatus === "denied";
-  const message = state.authError || (loading ? t("authLoading") : unavailable ? t("authUnavailable") : denied ? t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` }) : t("signInLead"));
+  const message = state.authError || state.authMessage || (loading ? t("authLoading") : unavailable ? t("authUnavailable") : denied ? t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` }) : t("signInLead"));
   return `
     <main class="auth-page">
       <section class="auth-panel">
@@ -714,7 +786,10 @@ function renderAuthPage() {
           <h1>${escapeHtml(t("signInTitle"))}</h1>
           <p>${escapeHtml(message)}</p>
         </div>
-        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInGoogle"))}</button>
+        <label>${escapeHtml(t("signInEmail"))}
+          <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" inputmode="email" autocomplete="email">
+        </label>
+        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("sendSignInLink"))}</button>
       </section>
     </main>`;
 }
@@ -1480,6 +1555,7 @@ function handleKeydown(event) {
   if (!action) return;
   event.preventDefault();
   if (action === "toggle-name-lock") toggleNameLock();
+  if (action === "sign-in") signIn();
   if (action === "location-find") findLocations();
   if (action === "asset-find") findHomeAssets();
 }
