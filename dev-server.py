@@ -2,6 +2,7 @@
 import argparse
 import http.server
 import os
+import socket
 import socketserver
 import ssl
 import subprocess
@@ -26,9 +27,36 @@ class ReusableTCPServer(socketserver.TCPServer):
     allow_reuse_address = True
 
 
+def local_ip_addresses():
+    addresses = {"127.0.0.1"}
+    try:
+        hostname = socket.gethostname()
+        for item in socket.getaddrinfo(hostname, None):
+            address = item[4][0]
+            if ":" not in address:
+                addresses.add(address)
+    except OSError:
+        pass
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+            sock.connect(("8.8.8.8", 80))
+            addresses.add(sock.getsockname()[0])
+    except OSError:
+        pass
+
+    return sorted(addresses)
+
+
+def cert_subject_alt_name():
+    ip_entries = ",".join(f"IP:{address}" for address in local_ip_addresses())
+    return f"DNS:localhost,{ip_entries}"
+
+
 def ensure_cert():
     CERT_DIR.mkdir(exist_ok=True)
-    if CERT_FILE.exists() and KEY_FILE.exists() and cert_has_subject_alt_name():
+    subject_alt_name = cert_subject_alt_name()
+    if CERT_FILE.exists() and KEY_FILE.exists() and cert_has_subject_alt_name(subject_alt_name):
         return
     CERT_FILE.unlink(missing_ok=True)
     KEY_FILE.unlink(missing_ok=True)
@@ -50,20 +78,20 @@ def ensure_cert():
             "-subj",
             "/CN=localhost",
             "-addext",
-            "subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1",
+            f"subjectAltName={subject_alt_name}",
         ],
         check=True,
     )
 
 
-def cert_has_subject_alt_name():
+def cert_has_subject_alt_name(subject_alt_name):
     result = subprocess.run(
         ["openssl", "x509", "-in", str(CERT_FILE), "-noout", "-ext", "subjectAltName"],
         check=False,
         capture_output=True,
         text=True,
     )
-    return result.returncode == 0 and "Subject Alternative Name" in result.stdout
+    return result.returncode == 0 and all(entry.replace("IP:", "IP Address:") in result.stdout for entry in subject_alt_name.split(",") if entry.startswith("IP:"))
 
 
 def main():
