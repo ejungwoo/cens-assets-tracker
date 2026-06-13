@@ -700,6 +700,10 @@ function ensureProjectState() {
     currentProjectId = projects[0].projectId;
     localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
   }
+  if (shouldOpenTestList(currentProjectId)) {
+    currentProjectId = testWebListId();
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
+  }
   return { projects, currentProjectId };
 }
 
@@ -713,6 +717,7 @@ function ensureBundledLists(projects) {
     return project;
   });
   const testListId = testWebListId();
+  ensureTestWebListData();
   if (projects.some((project) => project.projectId === testListId)) {
     if (changed) localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
     return projects;
@@ -720,10 +725,20 @@ function ensureBundledLists(projects) {
   const now = new Date().toISOString();
   const nextProjects = [...projects, { projectId: testListId, name: "CENS test web index", createdAt: now, updatedAt: now }];
   localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(nextProjects));
-  if (!localStorage.getItem(projectKey(testListId, "assets"))) {
-    saveProjectData(testListId, testWebListData());
-  }
   return nextProjects;
+}
+
+function ensureTestWebListData() {
+  const testListId = testWebListId();
+  const assets = readJson(projectKey(testListId, "assets"), []);
+  if (Array.isArray(assets) && assets.length === testWebAssets().length) return;
+  saveProjectData(testListId, testWebListData());
+}
+
+function shouldOpenTestList(currentProjectId) {
+  if (currentProjectId !== defaultProjectId()) return false;
+  const currentAssets = readJson(projectKey(currentProjectId, "assets"), []);
+  return Array.isArray(currentAssets) && currentAssets.length === 0;
 }
 
 function testWebListId() {
