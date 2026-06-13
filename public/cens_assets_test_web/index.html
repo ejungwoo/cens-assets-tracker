@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CENS Assets Test List</title>
+<style>
+:root {
+  --bg:#f6f4ef; --panel:#fffdfa; --ink:#202024; --muted:#66645f; --line:#e5ded1; --accent:#6d5dfc;
+  --shadow:0 12px 30px rgba(30,25,20,.09);
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif; background:radial-gradient(circle at top left,#ffffff 0,#f6f4ef 45%,#efe9dd 100%); color:var(--ink); }
+header { position:sticky; top:0; z-index:10; backdrop-filter:blur(14px); background:rgba(246,244,239,.82); border-bottom:1px solid var(--line); }
+.header-inner { max-width:1280px; margin:0 auto; padding:20px 24px; display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+h1 { margin:0; font-size:26px; letter-spacing:-.03em; }
+.subtitle { margin:5px 0 0; color:var(--muted); font-size:14px; }
+.controls { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+input, select, button { border:1px solid var(--line); background:var(--panel); border-radius:14px; padding:11px 13px; font-size:14px; box-shadow:0 2px 10px rgba(0,0,0,.03); }
+input { min-width:240px; }
+button { cursor:pointer; }
+button.active { background:var(--accent); color:white; border-color:var(--accent); }
+main { max-width:1680px; margin:0 auto; padding:22px 20px 60px; }
+.summary { color:var(--muted); margin:0 0 18px; }
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(760px,1fr)); gap:18px; }
+.card { background:rgba(255,253,250,.92); border:1px solid var(--line); border-radius:24px; padding:12px 14px 14px; box-shadow:var(--shadow); }
+.card-head { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+.asset-no { display:inline-flex; align-items:center; justify-content:center; min-width:46px; height:28px; border-radius:999px; background:#ece9ff; color:#3426bb; font-weight:800; font-size:13px; }
+h2 { margin:0; font-size:16px; letter-spacing:-.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.desc { min-height:0; margin:3px 0 9px; color:var(--muted); line-height:1.25; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.photo-grid { display:grid; grid-template-columns: .72fr 1.35fr 1.35fr; gap:12px; }
+figure { margin:0; overflow:hidden; border-radius:16px; border:1px solid var(--line); background:white; }
+figure img { width:100%; height:330px; object-fit:cover; display:block; }
+figure.qr img { object-fit:contain; padding:14px; image-rendering:pixelated; }
+figcaption { font-size:11px; color:var(--muted); padding:5px 8px; border-top:1px solid var(--line); background:#fffaf1; }
+.table-wrap { display:none; overflow:auto; border:1px solid var(--line); border-radius:22px; background:var(--panel); box-shadow:var(--shadow); }
+table { width:100%; border-collapse:collapse; min-width:1420px; }
+th, td { padding:12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:middle; }
+th { position:sticky; top:0; background:#fff8ea; z-index:1; font-size:13px; color:#5c5548; }
+td.num { font-weight:800; color:#3426bb; }
+.thumb { width:240px; height:170px; object-fit:cover; border-radius:12px; border:1px solid var(--line); background:white; }
+.qr-thumb { object-fit:contain; padding:5px; image-rendering:pixelated; }
+body.table-mode .cards { display:none; }
+body.table-mode .table-wrap { display:block; }
+.hidden { display:none !important; }
+@media (max-width:900px) { .header-inner{align-items:flex-start} input{min-width:100%;} .controls{width:100%;} .cards{grid-template-columns:1fr;} .photo-grid{grid-template-columns:1fr;} figure img{height:300px;} figure.qr img{height:260px;} }
+</style>
+</head>
+<body>
+<header><div class="header-inner"><div><h1>CENS Assets Test List</h1><p class="subtitle">테스트용 자산 20개 · QR / 물품사진 / 위치사진 한 번에 보기</p></div><div class="controls"><input id="search" placeholder="번호, 이름, 설명 검색"><select id="sort"><option value="num-asc">번호 오름차순</option><option value="num-desc">번호 내림차순</option><option value="name-asc">이름 A→Z</option><option value="name-desc">이름 Z→A</option></select><button id="cardBtn" class="active">카드</button><button id="tableBtn">표</button></div></div></header>
+<main><p id="summary" class="summary">20개 표시 중</p><section id="cards" class="cards">
+      <article class="card" data-number="1" data-name="oscilloscope" data-location="location_photos/location_01.jpg" data-desc="실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프">
+        <div class="card-head">
+          <span class="asset-no">#01</span>
+          <h2>Oscilloscope</h2>
+        </div>
+        <p class="desc">실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_01.png" alt="QR code for asset 1" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_01.jpg" alt="Item photo for Oscilloscope" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_01.jpg" alt="Location photo for Oscilloscope" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="2" data-name="function generator" data-location="location_photos/location_02.jpg" data-desc="테스트 신호를 발생시키는 함수발생기">
+        <div class="card-head">
+          <span class="asset-no">#02</span>
+          <h2>Function Generator</h2>
+        </div>
+        <p class="desc">테스트 신호를 발생시키는 함수발생기</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_02.png" alt="QR code for asset 2" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_02.jpg" alt="Item photo for Function Generator" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_02.jpg" alt="Location photo for Function Generator" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="3" data-name="power supply" data-location="location_photos/location_03.jpg" data-desc="검출기 및 테스트 보드 전원 공급용 dc 파워서플라이">
+        <div class="card-head">
+          <span class="asset-no">#03</span>
+          <h2>Power Supply</h2>
+        </div>
+        <p class="desc">검출기 및 테스트 보드 전원 공급용 DC 파워서플라이</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_03.png" alt="QR code for asset 3" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_03.jpg" alt="Item photo for Power Supply" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_03.jpg" alt="Location photo for Power Supply" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="4" data-name="multimeter" data-location="location_photos/location_04.jpg" data-desc="전압, 저항, 전류 확인용 휴대용 멀티미터">
+        <div class="card-head">
+          <span class="asset-no">#04</span>
+          <h2>Multimeter</h2>
+        </div>
+        <p class="desc">전압, 저항, 전류 확인용 휴대용 멀티미터</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_04.png" alt="QR code for asset 4" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_04.jpg" alt="Item photo for Multimeter" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_04.jpg" alt="Location photo for Multimeter" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="5" data-name="soldering station" data-location="location_photos/location_05.jpg" data-desc="케이블 및 커넥터 작업용 납땜 스테이션">
+        <div class="card-head">
+          <span class="asset-no">#05</span>
+          <h2>Soldering Station</h2>
+        </div>
+        <p class="desc">케이블 및 커넥터 작업용 납땜 스테이션</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_05.png" alt="QR code for asset 5" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_05.jpg" alt="Item photo for Soldering Station" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_05.jpg" alt="Location photo for Soldering Station" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="6" data-name="crimp tool set" data-location="location_photos/location_06.jpg" data-desc="핀 커넥터 압착 작업용 공구 세트">
+        <div class="card-head">
+          <span class="asset-no">#06</span>
+          <h2>Crimp Tool Set</h2>
+        </div>
+        <p class="desc">핀 커넥터 압착 작업용 공구 세트</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_06.png" alt="QR code for asset 6" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_06.jpg" alt="Item photo for Crimp Tool Set" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_06.jpg" alt="Location photo for Crimp Tool Set" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="7" data-name="nim crate" data-location="location_photos/location_07.jpg" data-desc="nim 모듈 장착 및 전원 공급용 크레이트">
+        <div class="card-head">
+          <span class="asset-no">#07</span>
+          <h2>NIM Crate</h2>
+        </div>
+        <p class="desc">NIM 모듈 장착 및 전원 공급용 크레이트</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_07.png" alt="QR code for asset 7" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_07.jpg" alt="Item photo for NIM Crate" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_07.jpg" alt="Location photo for NIM Crate" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="8" data-name="vme crate" data-location="location_photos/location_08.jpg" data-desc="daq 모듈 장착용 vme 크레이트">
+        <div class="card-head">
+          <span class="asset-no">#08</span>
+          <h2>VME Crate</h2>
+        </div>
+        <p class="desc">DAQ 모듈 장착용 VME 크레이트</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_08.png" alt="QR code for asset 8" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_08.jpg" alt="Item photo for VME Crate" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_08.jpg" alt="Location photo for VME Crate" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="9" data-name="silicon detector box" data-location="location_photos/location_09.jpg" data-desc="실리콘 검출기 보관용 보호 박스">
+        <div class="card-head">
+          <span class="asset-no">#09</span>
+          <h2>Silicon Detector Box</h2>
+        </div>
+        <p class="desc">실리콘 검출기 보관용 보호 박스</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_09.png" alt="QR code for asset 9" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_09.jpg" alt="Item photo for Silicon Detector Box" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_09.jpg" alt="Location photo for Silicon Detector Box" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="10" data-name="mppc test board" data-location="location_photos/location_10.jpg" data-desc="mppc 신호 테스트용 소형 보드">
+        <div class="card-head">
+          <span class="asset-no">#10</span>
+          <h2>MPPC Test Board</h2>
+        </div>
+        <p class="desc">MPPC 신호 테스트용 소형 보드</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_10.png" alt="QR code for asset 10" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_10.jpg" alt="Item photo for MPPC Test Board" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_10.jpg" alt="Location photo for MPPC Test Board" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="11" data-name="scintillator paddle" data-location="location_photos/location_11.jpg" data-desc="빔 테스트 및 트리거용 플라스틱 섬광체">
+        <div class="card-head">
+          <span class="asset-no">#11</span>
+          <h2>Scintillator Paddle</h2>
+        </div>
+        <p class="desc">빔 테스트 및 트리거용 플라스틱 섬광체</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_11.png" alt="QR code for asset 11" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_11.jpg" alt="Item photo for Scintillator Paddle" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_11.jpg" alt="Location photo for Scintillator Paddle" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="12" data-name="faraday cup" data-location="location_photos/location_12.jpg" data-desc="빔 전류 측정용 페러데이컵">
+        <div class="card-head">
+          <span class="asset-no">#12</span>
+          <h2>Faraday Cup</h2>
+        </div>
+        <p class="desc">빔 전류 측정용 페러데이컵</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_12.png" alt="QR code for asset 12" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_12.jpg" alt="Item photo for Faraday Cup" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_12.jpg" alt="Location photo for Faraday Cup" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="13" data-name="vacuum pump" data-location="location_photos/location_13.jpg" data-desc="챔버 배기용 소형 진공 펌프">
+        <div class="card-head">
+          <span class="asset-no">#13</span>
+          <h2>Vacuum Pump</h2>
+        </div>
+        <p class="desc">챔버 배기용 소형 진공 펌프</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_13.png" alt="QR code for asset 13" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_13.jpg" alt="Item photo for Vacuum Pump" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_13.jpg" alt="Location photo for Vacuum Pump" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="14" data-name="gas regulator" data-location="location_photos/location_14.jpg" data-desc="가스 라인 압력 조절용 레귤레이터">
+        <div class="card-head">
+          <span class="asset-no">#14</span>
+          <h2>Gas Regulator</h2>
+        </div>
+        <p class="desc">가스 라인 압력 조절용 레귤레이터</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_14.png" alt="QR code for asset 14" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_14.jpg" alt="Item photo for Gas Regulator" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_14.jpg" alt="Location photo for Gas Regulator" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="15" data-name="laptop daq" data-location="location_photos/location_15.jpg" data-desc="현장 daq 확인 및 테스트용 노트북">
+        <div class="card-head">
+          <span class="asset-no">#15</span>
+          <h2>Laptop DAQ</h2>
+        </div>
+        <p class="desc">현장 DAQ 확인 및 테스트용 노트북</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_15.png" alt="QR code for asset 15" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_15.jpg" alt="Item photo for Laptop DAQ" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_15.jpg" alt="Location photo for Laptop DAQ" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="16" data-name="ethernet switch" data-location="location_photos/location_16.jpg" data-desc="daq/서버 네트워크 연결용 스위치">
+        <div class="card-head">
+          <span class="asset-no">#16</span>
+          <h2>Ethernet Switch</h2>
+        </div>
+        <p class="desc">DAQ/서버 네트워크 연결용 스위치</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_16.png" alt="QR code for asset 16" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_16.jpg" alt="Item photo for Ethernet Switch" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_16.jpg" alt="Location photo for Ethernet Switch" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="17" data-name="cable reel bnc" data-location="location_photos/location_17.jpg" data-desc="bnc 케이블 묶음 보관 릴">
+        <div class="card-head">
+          <span class="asset-no">#17</span>
+          <h2>Cable Reel BNC</h2>
+        </div>
+        <p class="desc">BNC 케이블 묶음 보관 릴</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_17.png" alt="QR code for asset 17" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_17.jpg" alt="Item photo for Cable Reel BNC" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_17.jpg" alt="Location photo for Cable Reel BNC" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="18" data-name="toolbox" data-location="location_photos/location_18.jpg" data-desc="현장 작업용 공구 박스">
+        <div class="card-head">
+          <span class="asset-no">#18</span>
+          <h2>Toolbox</h2>
+        </div>
+        <p class="desc">현장 작업용 공구 박스</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_18.png" alt="QR code for asset 18" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_18.jpg" alt="Item photo for Toolbox" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_18.jpg" alt="Location photo for Toolbox" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="19" data-name="sample holder set" data-location="location_photos/location_19.jpg" data-desc="타겟 및 샘플 고정용 홀더 세트">
+        <div class="card-head">
+          <span class="asset-no">#19</span>
+          <h2>Sample Holder Set</h2>
+        </div>
+        <p class="desc">타겟 및 샘플 고정용 홀더 세트</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_19.png" alt="QR code for asset 19" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_19.jpg" alt="Item photo for Sample Holder Set" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_19.jpg" alt="Location photo for Sample Holder Set" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+      <article class="card" data-number="20" data-name="qr label printer" data-location="location_photos/location_20.jpg" data-desc="자산 라벨 출력 테스트용 qr 라벨 프린터">
+        <div class="card-head">
+          <span class="asset-no">#20</span>
+          <h2>QR Label Printer</h2>
+        </div>
+        <p class="desc">자산 라벨 출력 테스트용 QR 라벨 프린터</p>
+        <div class="photo-grid">
+          <figure class="qr"><img src="qr/qr_20.png" alt="QR code for asset 20" loading="lazy"><figcaption>QR</figcaption></figure>
+          <figure><img src="item_photos/item_20.jpg" alt="Item photo for QR Label Printer" loading="lazy"><figcaption>물품사진</figcaption></figure>
+          <figure><img src="location_photos/location_20.jpg" alt="Location photo for QR Label Printer" loading="lazy"><figcaption>위치사진</figcaption></figure>
+        </div>
+      </article>
+</section><section class="table-wrap"><table><thead><tr><th>번호</th><th>이름</th><th>설명</th><th>QR</th><th>물품사진</th><th>위치사진</th></tr></thead><tbody id="tbody">
+        <tr data-number="1" data-name="oscilloscope" data-desc="실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프">
+          <td class="num">1</td><td>Oscilloscope</td><td>실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_01.png" alt="QR 1"></td>
+          <td><img class="thumb" src="item_photos/item_01.jpg" alt="Item 1"></td>
+          <td><img class="thumb" src="location_photos/location_01.jpg" alt="Location 1"></td>
+        </tr>
+        <tr data-number="2" data-name="function generator" data-desc="테스트 신호를 발생시키는 함수발생기">
+          <td class="num">2</td><td>Function Generator</td><td>테스트 신호를 발생시키는 함수발생기</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_02.png" alt="QR 2"></td>
+          <td><img class="thumb" src="item_photos/item_02.jpg" alt="Item 2"></td>
+          <td><img class="thumb" src="location_photos/location_02.jpg" alt="Location 2"></td>
+        </tr>
+        <tr data-number="3" data-name="power supply" data-desc="검출기 및 테스트 보드 전원 공급용 dc 파워서플라이">
+          <td class="num">3</td><td>Power Supply</td><td>검출기 및 테스트 보드 전원 공급용 DC 파워서플라이</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_03.png" alt="QR 3"></td>
+          <td><img class="thumb" src="item_photos/item_03.jpg" alt="Item 3"></td>
+          <td><img class="thumb" src="location_photos/location_03.jpg" alt="Location 3"></td>
+        </tr>
+        <tr data-number="4" data-name="multimeter" data-desc="전압, 저항, 전류 확인용 휴대용 멀티미터">
+          <td class="num">4</td><td>Multimeter</td><td>전압, 저항, 전류 확인용 휴대용 멀티미터</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_04.png" alt="QR 4"></td>
+          <td><img class="thumb" src="item_photos/item_04.jpg" alt="Item 4"></td>
+          <td><img class="thumb" src="location_photos/location_04.jpg" alt="Location 4"></td>
+        </tr>
+        <tr data-number="5" data-name="soldering station" data-desc="케이블 및 커넥터 작업용 납땜 스테이션">
+          <td class="num">5</td><td>Soldering Station</td><td>케이블 및 커넥터 작업용 납땜 스테이션</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_05.png" alt="QR 5"></td>
+          <td><img class="thumb" src="item_photos/item_05.jpg" alt="Item 5"></td>
+          <td><img class="thumb" src="location_photos/location_05.jpg" alt="Location 5"></td>
+        </tr>
+        <tr data-number="6" data-name="crimp tool set" data-desc="핀 커넥터 압착 작업용 공구 세트">
+          <td class="num">6</td><td>Crimp Tool Set</td><td>핀 커넥터 압착 작업용 공구 세트</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_06.png" alt="QR 6"></td>
+          <td><img class="thumb" src="item_photos/item_06.jpg" alt="Item 6"></td>
+          <td><img class="thumb" src="location_photos/location_06.jpg" alt="Location 6"></td>
+        </tr>
+        <tr data-number="7" data-name="nim crate" data-desc="nim 모듈 장착 및 전원 공급용 크레이트">
+          <td class="num">7</td><td>NIM Crate</td><td>NIM 모듈 장착 및 전원 공급용 크레이트</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_07.png" alt="QR 7"></td>
+          <td><img class="thumb" src="item_photos/item_07.jpg" alt="Item 7"></td>
+          <td><img class="thumb" src="location_photos/location_07.jpg" alt="Location 7"></td>
+        </tr>
+        <tr data-number="8" data-name="vme crate" data-desc="daq 모듈 장착용 vme 크레이트">
+          <td class="num">8</td><td>VME Crate</td><td>DAQ 모듈 장착용 VME 크레이트</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_08.png" alt="QR 8"></td>
+          <td><img class="thumb" src="item_photos/item_08.jpg" alt="Item 8"></td>
+          <td><img class="thumb" src="location_photos/location_08.jpg" alt="Location 8"></td>
+        </tr>
+        <tr data-number="9" data-name="silicon detector box" data-desc="실리콘 검출기 보관용 보호 박스">
+          <td class="num">9</td><td>Silicon Detector Box</td><td>실리콘 검출기 보관용 보호 박스</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_09.png" alt="QR 9"></td>
+          <td><img class="thumb" src="item_photos/item_09.jpg" alt="Item 9"></td>
+          <td><img class="thumb" src="location_photos/location_09.jpg" alt="Location 9"></td>
+        </tr>
+        <tr data-number="10" data-name="mppc test board" data-desc="mppc 신호 테스트용 소형 보드">
+          <td class="num">10</td><td>MPPC Test Board</td><td>MPPC 신호 테스트용 소형 보드</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_10.png" alt="QR 10"></td>
+          <td><img class="thumb" src="item_photos/item_10.jpg" alt="Item 10"></td>
+          <td><img class="thumb" src="location_photos/location_10.jpg" alt="Location 10"></td>
+        </tr>
+        <tr data-number="11" data-name="scintillator paddle" data-desc="빔 테스트 및 트리거용 플라스틱 섬광체">
+          <td class="num">11</td><td>Scintillator Paddle</td><td>빔 테스트 및 트리거용 플라스틱 섬광체</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_11.png" alt="QR 11"></td>
+          <td><img class="thumb" src="item_photos/item_11.jpg" alt="Item 11"></td>
+          <td><img class="thumb" src="location_photos/location_11.jpg" alt="Location 11"></td>
+        </tr>
+        <tr data-number="12" data-name="faraday cup" data-desc="빔 전류 측정용 페러데이컵">
+          <td class="num">12</td><td>Faraday Cup</td><td>빔 전류 측정용 페러데이컵</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_12.png" alt="QR 12"></td>
+          <td><img class="thumb" src="item_photos/item_12.jpg" alt="Item 12"></td>
+          <td><img class="thumb" src="location_photos/location_12.jpg" alt="Location 12"></td>
+        </tr>
+        <tr data-number="13" data-name="vacuum pump" data-desc="챔버 배기용 소형 진공 펌프">
+          <td class="num">13</td><td>Vacuum Pump</td><td>챔버 배기용 소형 진공 펌프</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_13.png" alt="QR 13"></td>
+          <td><img class="thumb" src="item_photos/item_13.jpg" alt="Item 13"></td>
+          <td><img class="thumb" src="location_photos/location_13.jpg" alt="Location 13"></td>
+        </tr>
+        <tr data-number="14" data-name="gas regulator" data-desc="가스 라인 압력 조절용 레귤레이터">
+          <td class="num">14</td><td>Gas Regulator</td><td>가스 라인 압력 조절용 레귤레이터</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_14.png" alt="QR 14"></td>
+          <td><img class="thumb" src="item_photos/item_14.jpg" alt="Item 14"></td>
+          <td><img class="thumb" src="location_photos/location_14.jpg" alt="Location 14"></td>
+        </tr>
+        <tr data-number="15" data-name="laptop daq" data-desc="현장 daq 확인 및 테스트용 노트북">
+          <td class="num">15</td><td>Laptop DAQ</td><td>현장 DAQ 확인 및 테스트용 노트북</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_15.png" alt="QR 15"></td>
+          <td><img class="thumb" src="item_photos/item_15.jpg" alt="Item 15"></td>
+          <td><img class="thumb" src="location_photos/location_15.jpg" alt="Location 15"></td>
+        </tr>
+        <tr data-number="16" data-name="ethernet switch" data-desc="daq/서버 네트워크 연결용 스위치">
+          <td class="num">16</td><td>Ethernet Switch</td><td>DAQ/서버 네트워크 연결용 스위치</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_16.png" alt="QR 16"></td>
+          <td><img class="thumb" src="item_photos/item_16.jpg" alt="Item 16"></td>
+          <td><img class="thumb" src="location_photos/location_16.jpg" alt="Location 16"></td>
+        </tr>
+        <tr data-number="17" data-name="cable reel bnc" data-desc="bnc 케이블 묶음 보관 릴">
+          <td class="num">17</td><td>Cable Reel BNC</td><td>BNC 케이블 묶음 보관 릴</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_17.png" alt="QR 17"></td>
+          <td><img class="thumb" src="item_photos/item_17.jpg" alt="Item 17"></td>
+          <td><img class="thumb" src="location_photos/location_17.jpg" alt="Location 17"></td>
+        </tr>
+        <tr data-number="18" data-name="toolbox" data-desc="현장 작업용 공구 박스">
+          <td class="num">18</td><td>Toolbox</td><td>현장 작업용 공구 박스</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_18.png" alt="QR 18"></td>
+          <td><img class="thumb" src="item_photos/item_18.jpg" alt="Item 18"></td>
+          <td><img class="thumb" src="location_photos/location_18.jpg" alt="Location 18"></td>
+        </tr>
+        <tr data-number="19" data-name="sample holder set" data-desc="타겟 및 샘플 고정용 홀더 세트">
+          <td class="num">19</td><td>Sample Holder Set</td><td>타겟 및 샘플 고정용 홀더 세트</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_19.png" alt="QR 19"></td>
+          <td><img class="thumb" src="item_photos/item_19.jpg" alt="Item 19"></td>
+          <td><img class="thumb" src="location_photos/location_19.jpg" alt="Location 19"></td>
+        </tr>
+        <tr data-number="20" data-name="qr label printer" data-desc="자산 라벨 출력 테스트용 qr 라벨 프린터">
+          <td class="num">20</td><td>QR Label Printer</td><td>자산 라벨 출력 테스트용 QR 라벨 프린터</td>
+          <td><img class="thumb qr-thumb" src="qr/qr_20.png" alt="QR 20"></td>
+          <td><img class="thumb" src="item_photos/item_20.jpg" alt="Item 20"></td>
+          <td><img class="thumb" src="location_photos/location_20.jpg" alt="Location 20"></td>
+        </tr>
+</tbody></table></section></main>
+<script>
+const search = document.getElementById('search');
+const sort = document.getElementById('sort');
+const cards = document.getElementById('cards');
+const tbody = document.getElementById('tbody');
+const summary = document.getElementById('summary');
+const cardBtn = document.getElementById('cardBtn');
+const tableBtn = document.getElementById('tableBtn');
+function apply() {
+  const q = search.value.trim().toLowerCase();
+  const [key, dir] = sort.value.split('-');
+  const cardItems = Array.from(cards.children);
+  const rowItems = Array.from(tbody.children);
+  const cmp = (a,b) => {
+    let av = key === 'num' ? Number(a.dataset.number) : a.dataset.name;
+    let bv = key === 'num' ? Number(b.dataset.number) : b.dataset.name;
+    return (av > bv ? 1 : av < bv ? -1 : 0) * (dir === 'asc' ? 1 : -1);
+  };
+  cardItems.sort(cmp).forEach(el => cards.appendChild(el));
+  rowItems.sort(cmp).forEach(el => tbody.appendChild(el));
+  let count = 0;
+  [...cardItems, ...rowItems].forEach(el => {
+    const text = [el.dataset.number, el.dataset.name, el.dataset.desc, el.dataset.location || ''].join(' ');
+    const show = !q || text.includes(q);
+    el.classList.toggle('hidden', !show);
+    if (show && el.tagName === 'ARTICLE') count++;
+  });
+  summary.textContent = `${count}개 표시 중`;
+}
+search.addEventListener('input', apply); sort.addEventListener('change', apply);
+cardBtn.onclick=()=>{document.body.classList.remove('table-mode'); cardBtn.classList.add('active'); tableBtn.classList.remove('active');};
+tableBtn.onclick=()=>{document.body.classList.add('table-mode'); tableBtn.classList.add('active'); cardBtn.classList.remove('active');};
+apply();
+</script>
+</body></html>

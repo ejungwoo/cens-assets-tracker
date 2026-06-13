@@ -66,7 +66,7 @@ const I18N = {
   en: {
     appName: "CENS Assets Tracker",
     homeLead: "Track laboratory equipment check-out, check-in, and verification records.",
-    currentOperator: "Current operator name",
+    currentOperator: "Current user",
     enterName: "Enter your name",
     assetsTitle: "List of Assets",
     assetDetailTitle: "Asset Detail",
@@ -151,12 +151,12 @@ const I18N = {
     testSync: "Test Sync Extension",
     currentStorage: "Current storage",
     presetLists: "Preset lists",
-    project: "Project",
-    projectList: "Project lists",
-    newProject: "New project",
-    projectName: "Project name",
-    projectCreated: "Project created.",
-    projectSwitched: "Project switched.",
+    project: "List",
+    projectList: "Lists",
+    newProject: "New list",
+    projectName: "List name",
+    projectCreated: "List created.",
+    projectSwitched: "List switched.",
     language: "Language",
     english: "English",
     korean: "Korean",
@@ -187,7 +187,7 @@ const I18N = {
     presetSaved: "Preset saved.",
     presetLoaded: "Preset loaded into My List.",
     deletePresetConfirm: "Delete this preset list?",
-    operatorRequired: "Enter the current operator name on the Home page first.",
+    operatorRequired: "Sign in first.",
     qrLibraryMissing: "QR scanner library is still loading or unavailable.",
     cameraStartFailed: "Camera could not start: {error}",
     locationVerified: "Location verified",
@@ -241,7 +241,7 @@ const I18N = {
   ko: {
     appName: "CENS 자산 추적기",
     homeLead: "실험실 장비의 반출, 반입, 위치 확인 기록을 관리합니다.",
-    currentOperator: "현재 작업자 이름",
+    currentOperator: "현재 사용자",
     enterName: "이름을 입력하세요",
     assetsTitle: "자산 목록",
     assetDetailTitle: "자산 상세/수정",
@@ -326,12 +326,12 @@ const I18N = {
     testSync: "동기화 연결 테스트",
     currentStorage: "현재 저장소",
     presetLists: "프리셋 목록",
-    project: "프로젝트",
-    projectList: "프로젝트 목록",
-    newProject: "새 프로젝트",
-    projectName: "프로젝트 이름",
-    projectCreated: "프로젝트가 생성되었습니다.",
-    projectSwitched: "프로젝트가 전환되었습니다.",
+    project: "List",
+    projectList: "List 목록",
+    newProject: "새 List",
+    projectName: "List 이름",
+    projectCreated: "List가 생성되었습니다.",
+    projectSwitched: "List가 전환되었습니다.",
     language: "언어",
     english: "영어",
     korean: "한국어",
@@ -362,7 +362,7 @@ const I18N = {
     presetSaved: "프리셋이 저장되었습니다.",
     presetLoaded: "프리셋을 내 목록으로 불러왔습니다.",
     deletePresetConfirm: "이 프리셋을 삭제할까요?",
-    operatorRequired: "먼저 홈 화면에서 현재 작업자 이름을 입력하세요.",
+    operatorRequired: "먼저 로그인하세요.",
     qrLibraryMissing: "QR 스캐너 라이브러리를 아직 불러오는 중이거나 사용할 수 없습니다.",
     cameraStartFailed: "카메라를 시작할 수 없습니다: {error}",
     locationVerified: "위치 확인 완료",
@@ -679,7 +679,7 @@ function ensureProjectState() {
   let currentProjectId = localStorage.getItem(STORAGE_KEYS.currentProjectId) || "";
   if (!Array.isArray(projects) || projects.length === 0) {
     const now = new Date().toISOString();
-    projects = [{ projectId: defaultProjectId(), name: "Default project", createdAt: now, updatedAt: now }];
+    projects = [{ projectId: defaultProjectId(), name: "Default list", createdAt: now, updatedAt: now }];
     currentProjectId = defaultProjectId();
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
     localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
@@ -695,11 +695,39 @@ function ensureProjectState() {
       });
     }
   }
+  projects = ensureBundledLists(projects);
   if (!projects.some((project) => project.projectId === currentProjectId)) {
     currentProjectId = projects[0].projectId;
     localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
   }
   return { projects, currentProjectId };
+}
+
+function ensureBundledLists(projects) {
+  let changed = false;
+  projects = projects.map((project) => {
+    if (project.projectId === defaultProjectId() && project.name === "Default project") {
+      changed = true;
+      return { ...project, name: "Default list" };
+    }
+    return project;
+  });
+  const testListId = testWebListId();
+  if (projects.some((project) => project.projectId === testListId)) {
+    if (changed) localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
+    return projects;
+  }
+  const now = new Date().toISOString();
+  const nextProjects = [...projects, { projectId: testListId, name: "CENS test web index", createdAt: now, updatedAt: now }];
+  localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(nextProjects));
+  if (!localStorage.getItem(projectKey(testListId, "assets"))) {
+    saveProjectData(testListId, testWebListData());
+  }
+  return nextProjects;
+}
+
+function testWebListId() {
+  return "LIST-cens-test-web-index";
 }
 
 function migratedAssets() {
@@ -735,6 +763,73 @@ function saveProjectData(projectId, data) {
   localStorage.setItem(projectKey(projectId, "myList"), JSON.stringify(data.myList || []));
   localStorage.setItem(projectKey(projectId, "selectedLocation"), data.selectedLocation || "");
   localStorage.setItem(projectKey(projectId, "locationLocked"), data.locationLocked ? "true" : "false");
+}
+
+function testWebListData() {
+  return {
+    assets: testWebAssets(),
+    records: [],
+    presets: [],
+    locations: testWebLocations(),
+    myList: [],
+    selectedLocation: "",
+    locationLocked: false
+  };
+}
+
+function testWebAssets() {
+  const now = new Date().toISOString();
+  const today = dateOnly();
+  const base = "/cens_assets_test_web";
+  return [
+    ["1", "Oscilloscope", "실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프"],
+    ["2", "Function Generator", "테스트 신호를 발생시키는 함수발생기"],
+    ["3", "Power Supply", "검출기 및 테스트 보드 전원 공급용 DC 파워서플라이"],
+    ["4", "Multimeter", "전압, 저항, 전류 확인용 휴대용 멀티미터"],
+    ["5", "Soldering Station", "케이블 및 커넥터 작업용 납땜 스테이션"],
+    ["6", "Crimp Tool Set", "핀 커넥터 압착 작업용 공구 세트"],
+    ["7", "NIM Crate", "NIM 모듈 장착 및 전원 공급용 크레이트"],
+    ["8", "VME Crate", "DAQ 모듈 장착용 VME 크레이트"],
+    ["9", "Silicon Detector Box", "실리콘 검출기 보관용 보호 박스"],
+    ["10", "MPPC Test Board", "MPPC 신호 테스트용 소형 보드"],
+    ["11", "Scintillator Paddle", "빔 테스트 및 트리거용 플라스틱 섬광체"],
+    ["12", "Faraday Cup", "빔 전류 측정용 페러데이컵"],
+    ["13", "Vacuum Pump", "챔버 배기용 소형 진공 펌프"],
+    ["14", "Gas Regulator", "가스 라인 압력 조절용 레귤레이터"],
+    ["15", "Laptop DAQ", "현장 DAQ 확인 및 테스트용 노트북"],
+    ["16", "Ethernet Switch", "DAQ/서버 네트워크 연결용 스위치"],
+    ["17", "Cable Reel BNC", "BNC 케이블 묶음 보관 릴"],
+    ["18", "Toolbox", "현장 작업용 공구 박스"],
+    ["19", "Sample Holder Set", "타겟 및 샘플 고정용 홀더 세트"],
+    ["20", "QR Label Printer", "자산 라벨 출력 테스트용 QR 라벨 프린터"]
+  ].map(([number, name, description]) => {
+    const padded = number.padStart(2, "0");
+    return {
+      assetId: number,
+      name,
+      description,
+      photo1: `${base}/item_photos/item_${padded}.jpg`,
+      photo2: `${base}/qr/qr_${padded}.png`,
+      photo3: `${base}/location_photos/location_${padded}.jpg`,
+      location: `Test location ${padded}`,
+      lastInOutDate: "",
+      lastVerifiedDate: today,
+      lastVerifiedBy: "index import",
+      createdAt: now,
+      updatedAt: now
+    };
+  });
+}
+
+function testWebLocations() {
+  const base = "/cens_assets_test_web/location_photos";
+  return Array.from({ length: 20 }, (_, index) => {
+    const padded = String(index + 1).padStart(2, "0");
+    return {
+      name: `Test location ${padded}`,
+      photo: `${base}/location_${padded}.jpg`
+    };
+  });
 }
 
 function seedAssets() {
@@ -908,11 +1003,6 @@ function renderHomePage() {
             ${state.projects.map((project) => option(project.projectId, project.name, state.currentProjectId)).join("")}
           </select>
           <button class="small" data-action="create-project">${escapeHtml(t("new"))}</button>
-        </div>
-        <div class="compact-row">
-          <label for="home-name">${escapeHtml(t("nameShort"))}:</label>
-          <input id="home-name" data-bind="operator" data-enter-action="toggle-name-lock" value="${escapeAttr(state.operator)}" ${state.operatorLocked ? "disabled" : ""} autocomplete="name">
-          <button class="small" data-action="toggle-name-lock">${escapeHtml(state.operatorLocked ? t("edit") : t("save"))}</button>
         </div>
         <div class="compact-row">
           <label for="home-location">${escapeHtml(t("locationShort"))}:</label>
@@ -1378,7 +1468,6 @@ function handleClick(event) {
     render();
   }
   if (action === "preview-photo") previewPhoto(event, target);
-  if (action === "toggle-name-lock") toggleNameLock();
   if (action === "create-project") createProject();
   if (action === "location-find") findLocations();
   if (action === "edit-location") editLocation();
@@ -1502,16 +1591,6 @@ function switchProject(projectId) {
   render();
 }
 
-function toggleNameLock() {
-  if (!state.operator.trim()) {
-    showNotice(t("operatorRequired"), true);
-    return;
-  }
-  state.operatorLocked = !state.operatorLocked;
-  persist();
-  render();
-}
-
 function editLocation() {
   state.locationLocked = false;
   state.selectedLocation = "";
@@ -1626,7 +1705,6 @@ function handleKeydown(event) {
   const action = event.target.dataset.enterAction;
   if (!action) return;
   event.preventDefault();
-  if (action === "toggle-name-lock") toggleNameLock();
   if (action === "sign-in") signIn();
   if (action === "sign-up") signUp();
   if (action === "reset-password") sendPasswordResetEmail();
@@ -1779,6 +1857,7 @@ function createMovementRecord(type, formData) {
   const reason = String(formData.get("reason") || "").trim();
   if (!toLocation) return;
   const today = dateOnly();
+  const actor = currentActor();
   const selectedAssets = state.assets.filter((asset) => state.myList.includes(asset.assetId));
   const fromLocation = [...new Set(selectedAssets.map((asset) => asset.location).filter(Boolean))].join(", ");
   state.assets = state.assets.map((asset) => {
@@ -1788,7 +1867,7 @@ function createMovementRecord(type, formData) {
       location: toLocation,
       lastInOutDate: today,
       lastVerifiedDate: today,
-      lastVerifiedBy: state.operator,
+      lastVerifiedBy: actor,
       updatedAt: new Date().toISOString()
     };
   });
@@ -1799,7 +1878,7 @@ function createMovementRecord(type, formData) {
     fromLocation,
     toLocation,
     reason,
-    user: state.operator,
+    user: actor,
     date: today,
     generatedDocUrl: ""
   });
@@ -1812,12 +1891,13 @@ function createMovementRecord(type, formData) {
 function verifyLocation() {
   if (!requireOperator() || !requireMyList()) return;
   const today = dateOnly();
+  const actor = currentActor();
   state.assets = state.assets.map((asset) => {
     if (!state.myList.includes(asset.assetId)) return asset;
     return {
       ...asset,
       lastVerifiedDate: today,
-      lastVerifiedBy: state.operator,
+      lastVerifiedBy: actor,
       updatedAt: new Date().toISOString()
     };
   });
@@ -1830,7 +1910,7 @@ function verifyLocation() {
     fromLocation,
     toLocation: fromLocation,
     reason: t("locationVerified"),
-    user: state.operator,
+    user: actor,
     date: today,
     generatedDocUrl: ""
   });
@@ -1844,11 +1924,12 @@ function savePreset() {
   const listName = prompt(t("presetName"));
   if (!listName) return;
   const now = new Date().toISOString();
+  const actor = currentActor();
   state.presets.unshift({
     listId: makeId("LIST"),
     listName: listName.trim(),
     assetIds: [...state.myList],
-    createdBy: state.operator,
+    createdBy: actor,
     createdAt: now,
     updatedAt: now
   });
@@ -1889,10 +1970,14 @@ function loadSeedAssets() {
 }
 
 function requireOperator() {
-  if (state.operator.trim()) return true;
+  if (currentActor()) return true;
   showNotice(t("operatorRequired"), true);
   navigate("home");
   return false;
+}
+
+function currentActor() {
+  return state.authUser && state.authUser.email ? state.authUser.email : "";
 }
 
 function requireMyList() {
