@@ -82,7 +82,8 @@ const I18N = {
     signInPassword: "Password",
     signInPasswordPlaceholder: "Password",
     signInSubmit: "Sign in",
-    setOrResetPassword: "Set or reset password",
+    signUp: "Sign up",
+    resetPassword: "Reset password",
     signOut: "Sign out",
     signedInAs: "Signed in as",
     authLoading: "Checking sign-in status.",
@@ -91,8 +92,10 @@ const I18N = {
     authEmailRequired: "Enter an IBS ID or {domain} email address.",
     authPasswordRequired: "Enter your password.",
     authSignInFailed: "Sign-in failed: {error}",
-    authPasswordEmailSent: "Password setup/reset email sent to {email}.",
-    authPasswordEmailFailed: "Could not send password email: {error}",
+    authSignUpFailed: "Sign-up failed: {error}",
+    authSignedUp: "Account created for {email}.",
+    authPasswordEmailSent: "Password reset email sent to {email}.",
+    authPasswordEmailFailed: "Could not send password reset email: {error}",
     back: "Back",
     search: "Search",
     searchPlaceholder: "assetId, name, or description",
@@ -254,7 +257,8 @@ const I18N = {
     signInPassword: "비밀번호",
     signInPasswordPlaceholder: "비밀번호",
     signInSubmit: "로그인",
-    setOrResetPassword: "처음 비밀번호 설정 / 초기화",
+    signUp: "가입",
+    resetPassword: "비밀번호 초기화",
     signOut: "로그아웃",
     signedInAs: "로그인 계정",
     authLoading: "로그인 상태를 확인하고 있습니다.",
@@ -263,8 +267,10 @@ const I18N = {
     authEmailRequired: "IBS 아이디 또는 {domain} 이메일 주소를 입력하세요.",
     authPasswordRequired: "비밀번호를 입력하세요.",
     authSignInFailed: "로그인 실패: {error}",
-    authPasswordEmailSent: "{email}로 비밀번호 설정/초기화 메일을 보냈습니다.",
-    authPasswordEmailFailed: "비밀번호 설정/초기화 메일을 보낼 수 없습니다: {error}",
+    authSignUpFailed: "가입 실패: {error}",
+    authSignedUp: "{email} 계정을 만들었습니다.",
+    authPasswordEmailSent: "{email}로 비밀번호 초기화 메일을 보냈습니다.",
+    authPasswordEmailFailed: "비밀번호 초기화 메일을 보낼 수 없습니다: {error}",
     back: "뒤로",
     search: "검색",
     searchPlaceholder: "assetId, 이름, 설명",
@@ -547,18 +553,8 @@ async function signIn() {
   if (!window.firebase || !window.firebase.auth) return;
   const email = normalizeAuthEmailInput(state.authEmail);
   const password = String(state.authPassword || "");
-  if (!isAllowedEmail(email)) {
-    state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
-    state.authMessage = "";
-    render();
-    return;
-  }
-  if (!password) {
-    state.authError = t("authPasswordRequired");
-    state.authMessage = "";
-    render();
-    return;
-  }
+  if (!validateAuthEmail(email)) return;
+  if (!validateAuthPassword(password)) return;
   state.authStatus = "loading";
   state.authError = "";
   state.authMessage = "";
@@ -573,15 +569,47 @@ async function signIn() {
   }
 }
 
-async function sendPasswordSetupEmail() {
+function validateAuthEmail(email) {
+  if (isAllowedEmail(email)) return true;
+  state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+  state.authMessage = "";
+  render();
+  return false;
+}
+
+function validateAuthPassword(password) {
+  if (password) return true;
+  state.authError = t("authPasswordRequired");
+  state.authMessage = "";
+  render();
+  return false;
+}
+
+async function signUp() {
   if (!window.firebase || !window.firebase.auth) return;
   const email = normalizeAuthEmailInput(state.authEmail);
-  if (!isAllowedEmail(email)) {
-    state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
-    state.authMessage = "";
+  const password = String(state.authPassword || "");
+  if (!validateAuthEmail(email)) return;
+  if (!validateAuthPassword(password)) return;
+  state.authStatus = "loading";
+  state.authError = "";
+  state.authMessage = "";
+  render();
+  try {
+    const credential = await window.firebase.auth().createUserWithEmailAndPassword(email, password);
+    state.authMessage = t("authSignedUp", { email });
+    await finishSignedInUser(credential.user);
+  } catch (error) {
+    state.authStatus = "signedOut";
+    state.authError = t("authSignUpFailed", { error: authErrorMessage(error) });
     render();
-    return;
   }
+}
+
+async function sendPasswordResetEmail() {
+  if (!window.firebase || !window.firebase.auth) return;
+  const email = normalizeAuthEmailInput(state.authEmail);
+  if (!validateAuthEmail(email)) return;
   state.authStatus = "loading";
   state.authEmail = email;
   state.authError = "";
@@ -802,7 +830,8 @@ function renderAuthPage() {
           <input data-bind="authPassword" data-enter-action="sign-in" type="password" value="${escapeAttr(state.authPassword)}" placeholder="${escapeAttr(t("signInPasswordPlaceholder"))}" autocomplete="current-password">
         </label>
         <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInSubmit"))}</button>
-        <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("setOrResetPassword"))}</button>
+        <button class="secondary" data-action="sign-up" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signUp"))}</button>
+        <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("resetPassword"))}</button>
       </section>
     </main>`;
 }
@@ -1284,8 +1313,12 @@ function handleClick(event) {
     signIn();
     return;
   }
+  if (action === "sign-up") {
+    signUp();
+    return;
+  }
   if (action === "reset-password") {
-    sendPasswordSetupEmail();
+    sendPasswordResetEmail();
     return;
   }
   if (action === "sign-out") {
@@ -1573,7 +1606,8 @@ function handleKeydown(event) {
   event.preventDefault();
   if (action === "toggle-name-lock") toggleNameLock();
   if (action === "sign-in") signIn();
-  if (action === "reset-password") sendPasswordSetupEmail();
+  if (action === "sign-up") signUp();
+  if (action === "reset-password") sendPasswordResetEmail();
   if (action === "location-find") findLocations();
   if (action === "asset-find") findHomeAssets();
 }
