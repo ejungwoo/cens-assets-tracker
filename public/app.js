@@ -4,6 +4,8 @@ const STORAGE_KEYS = {
   presets: "cens.presets",
   locations: "cens.locations",
   myList: "cens.myList",
+  projects: "cens.projects",
+  currentProjectId: "cens.currentProjectId",
   operator: "cens.operator",
   operatorLocked: "cens.operatorLocked",
   selectedLocation: "cens.selectedLocation",
@@ -21,6 +23,8 @@ const state = {
   presets: [],
   locations: [],
   myList: [],
+  projects: [],
+  currentProjectId: "",
   operator: "",
   operatorLocked: false,
   locationQuery: "",
@@ -109,6 +113,12 @@ const I18N = {
     testSync: "Test Sync Extension",
     currentStorage: "Current storage",
     presetLists: "Preset lists",
+    project: "Project",
+    projectList: "Project lists",
+    newProject: "New project",
+    projectName: "Project name",
+    projectCreated: "Project created.",
+    projectSwitched: "Project switched.",
     language: "Language",
     english: "English",
     korean: "Korean",
@@ -257,6 +267,12 @@ const I18N = {
     testSync: "동기화 연결 테스트",
     currentStorage: "현재 저장소",
     presetLists: "프리셋 목록",
+    project: "프로젝트",
+    projectList: "프로젝트 목록",
+    newProject: "새 프로젝트",
+    projectName: "프로젝트 이름",
+    projectCreated: "프로젝트가 생성되었습니다.",
+    projectSwitched: "프로젝트가 전환되었습니다.",
     language: "언어",
     english: "영어",
     korean: "한국어",
@@ -373,27 +389,19 @@ class BackendGateway {
 
 const LocalStore = {
   loadAll() {
-    const storedAssets = readJson(STORAGE_KEYS.assets, null);
-    const assets = shouldUseSeedAssets(storedAssets) || shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets;
-    const records = readJson(STORAGE_KEYS.records, []);
-    const presets = readJson(STORAGE_KEYS.presets, []);
-    const locations = readJson(STORAGE_KEYS.locations, []);
-    const myList = readJson(STORAGE_KEYS.myList, []);
+    const { projects, currentProjectId } = ensureProjectState();
+    const projectData = loadProjectData(currentProjectId);
     const operator = localStorage.getItem(STORAGE_KEYS.operator) || "";
     const operatorLocked = localStorage.getItem(STORAGE_KEYS.operatorLocked) === "true";
-    const selectedLocation = localStorage.getItem(STORAGE_KEYS.selectedLocation) || "";
-    const locationLocked = localStorage.getItem(STORAGE_KEYS.locationLocked) === "true";
     const homeControlsHidden = localStorage.getItem(STORAGE_KEYS.homeControlsHidden) === "true";
     const language = localStorage.getItem(STORAGE_KEYS.language) || "en";
     const backendUrl = localStorage.getItem(STORAGE_KEYS.backendUrl) || "";
-    return { assets, records, presets, locations, myList, operator, operatorLocked, selectedLocation, locationQuery: selectedLocation, locationLocked, homeControlsHidden, language, backendUrl };
+    return { ...projectData, projects, currentProjectId, operator, operatorLocked, locationQuery: projectData.selectedLocation, homeControlsHidden, language, backendUrl };
   },
   saveAll(data) {
-    localStorage.setItem(STORAGE_KEYS.assets, JSON.stringify(data.assets));
-    localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(data.records));
-    localStorage.setItem(STORAGE_KEYS.presets, JSON.stringify(data.presets));
-    localStorage.setItem(STORAGE_KEYS.locations, JSON.stringify(data.locations));
-    localStorage.setItem(STORAGE_KEYS.myList, JSON.stringify(data.myList));
+    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(data.projects || []));
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, data.currentProjectId || defaultProjectId());
+    saveProjectData(data.currentProjectId || defaultProjectId(), data);
     localStorage.setItem(STORAGE_KEYS.operator, data.operator || "");
     localStorage.setItem(STORAGE_KEYS.operatorLocked, data.operatorLocked ? "true" : "false");
     localStorage.setItem(STORAGE_KEYS.selectedLocation, data.selectedLocation || "");
@@ -428,6 +436,81 @@ function readJson(key, fallback) {
   } catch {
     return fallback;
   }
+}
+
+function defaultProjectId() {
+  return "PRJ-default";
+}
+
+function makeProject(name) {
+  const now = new Date().toISOString();
+  return {
+    projectId: makeId("PRJ"),
+    name: String(name || "").trim() || t("newProject"),
+    createdAt: now,
+    updatedAt: now
+  };
+}
+
+function ensureProjectState() {
+  let projects = readJson(STORAGE_KEYS.projects, null);
+  let currentProjectId = localStorage.getItem(STORAGE_KEYS.currentProjectId) || "";
+  if (!Array.isArray(projects) || projects.length === 0) {
+    const now = new Date().toISOString();
+    projects = [{ projectId: defaultProjectId(), name: "Default project", createdAt: now, updatedAt: now }];
+    currentProjectId = defaultProjectId();
+    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
+    if (!localStorage.getItem(projectKey(currentProjectId, "assets"))) {
+      saveProjectData(currentProjectId, {
+        assets: migratedAssets(),
+        records: readJson(STORAGE_KEYS.records, []),
+        presets: readJson(STORAGE_KEYS.presets, []),
+        locations: readJson(STORAGE_KEYS.locations, []),
+        myList: readJson(STORAGE_KEYS.myList, []),
+        selectedLocation: localStorage.getItem(STORAGE_KEYS.selectedLocation) || "",
+        locationLocked: localStorage.getItem(STORAGE_KEYS.locationLocked) === "true"
+      });
+    }
+  }
+  if (!projects.some((project) => project.projectId === currentProjectId)) {
+    currentProjectId = projects[0].projectId;
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
+  }
+  return { projects, currentProjectId };
+}
+
+function migratedAssets() {
+  const storedAssets = readJson(STORAGE_KEYS.assets, null);
+  return shouldUseSeedAssets(storedAssets) || shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets;
+}
+
+function projectKey(projectId, key) {
+  return `cens.project.${projectId}.${key}`;
+}
+
+function loadProjectData(projectId) {
+  const storedAssets = readJson(projectKey(projectId, "assets"), null);
+  const assets = shouldUseSeedAssets(storedAssets) || shouldReplaceOldSheetSeed(storedAssets) ? seedAssets() : storedAssets;
+  return {
+    assets,
+    records: readJson(projectKey(projectId, "records"), []),
+    presets: readJson(projectKey(projectId, "presets"), []),
+    locations: readJson(projectKey(projectId, "locations"), []),
+    myList: readJson(projectKey(projectId, "myList"), []),
+    selectedLocation: localStorage.getItem(projectKey(projectId, "selectedLocation")) || "",
+    locationLocked: localStorage.getItem(projectKey(projectId, "locationLocked")) === "true"
+  };
+}
+
+function saveProjectData(projectId, data) {
+  localStorage.setItem(projectKey(projectId, "assets"), JSON.stringify(data.assets || []));
+  localStorage.setItem(projectKey(projectId, "records"), JSON.stringify(data.records || []));
+  localStorage.setItem(projectKey(projectId, "presets"), JSON.stringify(data.presets || []));
+  localStorage.setItem(projectKey(projectId, "locations"), JSON.stringify(data.locations || []));
+  localStorage.setItem(projectKey(projectId, "myList"), JSON.stringify(data.myList || []));
+  localStorage.setItem(projectKey(projectId, "selectedLocation"), data.selectedLocation || "");
+  localStorage.setItem(projectKey(projectId, "locationLocked"), data.locationLocked ? "true" : "false");
 }
 
 function seedAssets() {
@@ -504,6 +587,8 @@ function persist() {
     locations: state.locations,
     myList: state.myList,
     operator: state.operator,
+    projects: state.projects,
+    currentProjectId: state.currentProjectId,
     operatorLocked: state.operatorLocked,
     selectedLocation: state.selectedLocation,
     locationLocked: state.locationLocked,
@@ -562,6 +647,13 @@ function renderHomePage() {
   return `
     <main class="page home-console ${state.homeControlsHidden ? "controls-hidden" : ""}">
       <section class="quick-panel optional-controls">
+        <div class="compact-row project-row">
+          <label for="home-project">${escapeHtml(t("project"))}:</label>
+          <select id="home-project" data-bind="currentProjectId">
+            ${state.projects.map((project) => option(project.projectId, project.name, state.currentProjectId)).join("")}
+          </select>
+          <button class="small" data-action="create-project">${escapeHtml(t("new"))}</button>
+        </div>
         <div class="compact-row">
           <label for="home-name">${escapeHtml(t("nameShort"))}:</label>
           <input id="home-name" data-bind="operator" data-enter-action="toggle-name-lock" value="${escapeAttr(state.operator)}" ${state.operatorLocked ? "disabled" : ""} autocomplete="name">
@@ -945,6 +1037,15 @@ function renderSettingsContent() {
         <button data-action="test-sync">${escapeHtml(t("testSync"))}</button>
       </section>
       <section class="panel">
+        <strong>${escapeHtml(t("projectList"))}</strong>
+        <label>${escapeHtml(t("project"))}
+          <select data-bind="currentProjectId">
+            ${state.projects.map((project) => option(project.projectId, project.name, state.currentProjectId)).join("")}
+          </select>
+        </label>
+        <button data-action="create-project">${escapeHtml(t("newProject"))}</button>
+      </section>
+      <section class="panel">
         <strong>${escapeHtml(t("seedAssetsAvailable"))}: ${seedAssets().length}</strong>
         <button data-action="load-seed-assets">${escapeHtml(t("loadSeedAssets"))}</button>
       </section>
@@ -1007,6 +1108,7 @@ function handleClick(event) {
   }
   if (action === "preview-photo") previewPhoto(event, target);
   if (action === "toggle-name-lock") toggleNameLock();
+  if (action === "create-project") createProject();
   if (action === "location-find") findLocations();
   if (action === "edit-location") editLocation();
   if (action === "create-location") createLocation();
@@ -1078,8 +1180,54 @@ function handleInput(event) {
 function handleChange(event) {
   const key = event.target.dataset.bind;
   if (!key) return;
+  if (key === "currentProjectId") {
+    switchProject(event.target.value);
+    return;
+  }
   state[key] = event.target.value;
   persist();
+  render();
+}
+
+function createProject() {
+  const name = prompt(t("projectName"));
+  if (!name || !name.trim()) return;
+  const project = makeProject(name);
+  state.projects.push(project);
+  state.currentProjectId = project.projectId;
+  Object.assign(state, {
+    ...loadProjectData(project.projectId),
+    myList: [],
+    records: [],
+    presets: [],
+    locations: [],
+    selectedLocation: "",
+    locationQuery: "",
+    locationLocked: false,
+    homeMode: "empty",
+    homeResults: [],
+    openHomeAssetId: "",
+    editingHomeAssetId: ""
+  });
+  persist();
+  showNotice(t("projectCreated"));
+  render();
+}
+
+function switchProject(projectId) {
+  if (!state.projects.some((project) => project.projectId === projectId)) return;
+  persist();
+  const projectData = loadProjectData(projectId);
+  state.currentProjectId = projectId;
+  Object.assign(state, projectData, {
+    locationQuery: projectData.selectedLocation,
+    homeMode: "empty",
+    homeResults: [],
+    openHomeAssetId: "",
+    editingHomeAssetId: ""
+  });
+  persist();
+  showNotice(t("projectSwitched"));
   render();
 }
 
