@@ -16,7 +16,6 @@ const STORAGE_KEYS = {
 };
 
 const AUTH_ALLOWED_DOMAIN = "ibs.re.kr";
-const AUTH_PENDING_EMAIL_KEY = "cens.pendingAuthEmail";
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCzqVQWrkKsYRWZO3cZylOUyNI31Odc_fk",
   authDomain: "cens-assets-tracker.firebaseapp.com",
@@ -57,6 +56,7 @@ const state = {
   authStatus: "loading",
   authUser: null,
   authEmail: "",
+  authPassword: "",
   authMessage: "",
   authError: ""
 };
@@ -76,19 +76,23 @@ const I18N = {
     presetsTitle: "Preset Lists",
     settingsTitle: "Settings",
     signInTitle: "Sign in",
-    signInLead: "Enter your IBS ID. A sign-in link will be sent to your @ibs.re.kr mailbox.",
+    signInLead: "Sign in with your IBS ID and password.",
     signInEmail: "IBS ID",
     signInEmailPlaceholder: "name",
-    sendSignInLink: "Send sign-in link",
+    signInPassword: "Password",
+    signInPasswordPlaceholder: "Password",
+    signInSubmit: "Sign in",
+    setOrResetPassword: "Set or reset password",
     signOut: "Sign out",
     signedInAs: "Signed in as",
     authLoading: "Checking sign-in status.",
     authUnavailable: "Firebase Auth is not available. Refresh the page and try again.",
     authDomainDenied: "Only {domain} email accounts can use this app.",
     authEmailRequired: "Enter an IBS ID or {domain} email address.",
-    authLinkSent: "Sign-in link sent. Open the email on this device to continue.",
-    authLinkFailed: "Could not send sign-in link: {error}",
-    authCompleteFailed: "Could not complete sign-in: {error}",
+    authPasswordRequired: "Enter your password.",
+    authSignInFailed: "Sign-in failed: {error}",
+    authPasswordEmailSent: "Password setup/reset email sent to {email}.",
+    authPasswordEmailFailed: "Could not send password email: {error}",
     back: "Back",
     search: "Search",
     searchPlaceholder: "assetId, name, or description",
@@ -244,19 +248,23 @@ const I18N = {
     presetsTitle: "프리셋 목록",
     settingsTitle: "설정",
     signInTitle: "로그인",
-    signInLead: "IBS 아이디를 입력하세요. @ibs.re.kr 메일함으로 로그인 링크를 보냅니다.",
+    signInLead: "IBS 아이디와 비밀번호로 로그인하세요.",
     signInEmail: "IBS 아이디",
     signInEmailPlaceholder: "name",
-    sendSignInLink: "로그인 링크 보내기",
+    signInPassword: "비밀번호",
+    signInPasswordPlaceholder: "비밀번호",
+    signInSubmit: "로그인",
+    setOrResetPassword: "처음 비밀번호 설정 / 초기화",
     signOut: "로그아웃",
     signedInAs: "로그인 계정",
     authLoading: "로그인 상태를 확인하고 있습니다.",
     authUnavailable: "Firebase Auth를 사용할 수 없습니다. 새로고침 후 다시 시도하세요.",
     authDomainDenied: "{domain} 이메일 계정만 이 앱을 사용할 수 있습니다.",
     authEmailRequired: "IBS 아이디 또는 {domain} 이메일 주소를 입력하세요.",
-    authLinkSent: "로그인 링크를 보냈습니다. 이 기기에서 메일 링크를 열면 계속 진행됩니다.",
-    authLinkFailed: "로그인 링크를 보낼 수 없습니다: {error}",
-    authCompleteFailed: "로그인을 완료할 수 없습니다: {error}",
+    authPasswordRequired: "비밀번호를 입력하세요.",
+    authSignInFailed: "로그인 실패: {error}",
+    authPasswordEmailSent: "{email}로 비밀번호 설정/초기화 메일을 보냈습니다.",
+    authPasswordEmailFailed: "비밀번호 설정/초기화 메일을 보낼 수 없습니다: {error}",
     back: "뒤로",
     search: "검색",
     searchPlaceholder: "assetId, 이름, 설명",
@@ -490,10 +498,6 @@ function initAuth() {
     return;
   }
   if (!window.firebase.apps.length) window.firebase.initializeApp(FIREBASE_CONFIG);
-  if (window.firebase.auth().isSignInWithEmailLink(window.location.href)) {
-    completeEmailLinkSignIn(localStorage.getItem(AUTH_PENDING_EMAIL_KEY) || state.authEmail);
-    return;
-  }
   window.firebase.auth().onAuthStateChanged(async (user) => {
     if (!user) {
       state.authUser = null;
@@ -542,14 +546,17 @@ async function finishSignedInUser(user) {
 async function signIn() {
   if (!window.firebase || !window.firebase.auth) return;
   const email = normalizeAuthEmailInput(state.authEmail);
+  const password = String(state.authPassword || "");
   if (!isAllowedEmail(email)) {
     state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
     state.authMessage = "";
     render();
     return;
   }
-  if (window.firebase.auth().isSignInWithEmailLink(window.location.href)) {
-    completeEmailLinkSignIn(email);
+  if (!password) {
+    state.authError = t("authPasswordRequired");
+    state.authMessage = "";
+    render();
     return;
   }
   state.authStatus = "loading";
@@ -557,44 +564,39 @@ async function signIn() {
   state.authMessage = "";
   render();
   try {
-    await window.firebase.auth().sendSignInLinkToEmail(email, {
-      url: `${window.location.origin}${window.location.pathname}`,
-      handleCodeInApp: true
-    });
-    localStorage.setItem(AUTH_PENDING_EMAIL_KEY, email);
-    state.authStatus = "linkSent";
-    state.authMessage = t("authLinkSent");
-    render();
+    const credential = await window.firebase.auth().signInWithEmailAndPassword(email, password);
+    await finishSignedInUser(credential.user);
   } catch (error) {
     state.authStatus = "signedOut";
-    state.authError = t("authLinkFailed", { error: authErrorMessage(error) });
+    state.authError = t("authSignInFailed", { error: authErrorMessage(error) });
     render();
   }
 }
 
-async function completeEmailLinkSignIn(email) {
-  const normalizedEmail = normalizeAuthEmailInput(email);
-  if (!isAllowedEmail(normalizedEmail)) {
-    state.authStatus = "signedOut";
-    state.authEmail = normalizedEmail;
+async function sendPasswordSetupEmail() {
+  if (!window.firebase || !window.firebase.auth) return;
+  const email = normalizeAuthEmailInput(state.authEmail);
+  if (!isAllowedEmail(email)) {
     state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
     state.authMessage = "";
     render();
     return;
   }
   state.authStatus = "loading";
-  state.authEmail = normalizedEmail;
+  state.authEmail = email;
   state.authError = "";
   state.authMessage = "";
   render();
   try {
-    const credential = await window.firebase.auth().signInWithEmailLink(normalizedEmail, window.location.href);
-    localStorage.removeItem(AUTH_PENDING_EMAIL_KEY);
-    window.history.replaceState({}, document.title, `${window.location.origin}${window.location.pathname}`);
-    await finishSignedInUser(credential.user);
+    await window.firebase.auth().sendPasswordResetEmail(email, {
+      url: `${window.location.origin}${window.location.pathname}`
+    });
+    state.authStatus = "signedOut";
+    state.authMessage = t("authPasswordEmailSent", { email });
+    render();
   } catch (error) {
     state.authStatus = "signedOut";
-    state.authError = t("authCompleteFailed", { error: authErrorMessage(error) });
+    state.authError = t("authPasswordEmailFailed", { error: authErrorMessage(error) });
     render();
   }
 }
@@ -796,7 +798,11 @@ function renderAuthPage() {
         <label>${escapeHtml(t("signInEmail"))}
           <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" autocomplete="username">
         </label>
-        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("sendSignInLink"))}</button>
+        <label>${escapeHtml(t("signInPassword"))}
+          <input data-bind="authPassword" data-enter-action="sign-in" type="password" value="${escapeAttr(state.authPassword)}" placeholder="${escapeAttr(t("signInPasswordPlaceholder"))}" autocomplete="current-password">
+        </label>
+        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInSubmit"))}</button>
+        <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("setOrResetPassword"))}</button>
       </section>
     </main>`;
 }
@@ -1278,6 +1284,10 @@ function handleClick(event) {
     signIn();
     return;
   }
+  if (action === "reset-password") {
+    sendPasswordSetupEmail();
+    return;
+  }
   if (action === "sign-out") {
     signOut();
     return;
@@ -1563,6 +1573,7 @@ function handleKeydown(event) {
   event.preventDefault();
   if (action === "toggle-name-lock") toggleNameLock();
   if (action === "sign-in") signIn();
+  if (action === "reset-password") sendPasswordSetupEmail();
   if (action === "location-find") findLocations();
   if (action === "asset-find") findHomeAssets();
 }
