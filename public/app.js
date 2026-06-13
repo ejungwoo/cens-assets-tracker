@@ -640,9 +640,7 @@ async function sendPasswordResetEmail() {
 }
 
 function sendPasswordEmail(email) {
-  return window.firebase.auth().sendPasswordResetEmail(email, {
-    url: `${window.location.origin}${window.location.pathname}`
-  });
+  return window.firebase.auth().sendPasswordResetEmail(email);
 }
 
 function makeTemporaryPassword() {
