@@ -59,7 +59,10 @@ const state = {
   authPassword: "",
   authCreatingAccount: false,
   authMessage: "",
-  authError: ""
+  authError: "",
+  authProjectId: "",
+  statusMessage: "",
+  statusIsError: false
 };
 
 const I18N = {
@@ -235,6 +238,16 @@ const I18N = {
     nameSaved: "Name saved.",
     assetAdded: "Asset added to My List.",
     takePhoto: "Take photo",
+    addPhotos: "Add photos",
+    photoGuideNumber: "Photograph the asset-number sticker for {asset}.",
+    photoGuideWhole: "Photograph the full asset for {asset}.",
+    photoStaged: "Photo staged. Use check in, check out, or verify to save it to DB.",
+    pendingPhoto: "pending",
+    qrPhoto: "QR",
+    assetNumberPhotoLatest: "asset-number latest",
+    assetNumberPhotoPrevious: "asset-number previous",
+    wholeAssetPhotoLatest: "whole asset latest",
+    wholeAssetPhotoPrevious: "whole asset previous",
     compactInfo: "info",
     collapse: "close"
   },
@@ -410,6 +423,16 @@ const I18N = {
     nameSaved: "이름이 저장되었습니다.",
     assetAdded: "내 목록에 추가했습니다.",
     takePhoto: "사진 촬영",
+    addPhotos: "사진 추가하기",
+    photoGuideNumber: "{asset}의 자산번호 스티커가 보이게 촬영하세요.",
+    photoGuideWhole: "{asset}의 전체 모습이 보이게 촬영하세요.",
+    photoStaged: "사진을 임시 저장했습니다. 반출, 반입, 확인을 해야 DB 사진으로 저장됩니다.",
+    pendingPhoto: "임시",
+    qrPhoto: "QR",
+    assetNumberPhotoLatest: "자산번호 최신",
+    assetNumberPhotoPrevious: "자산번호 이전",
+    wholeAssetPhotoLatest: "전체 자산 최신",
+    wholeAssetPhotoPrevious: "전체 자산 이전",
     compactInfo: "정보",
     collapse: "닫기"
   }
@@ -547,7 +570,9 @@ async function finishSignedInUser(user) {
   state.authEmail = email;
   state.authError = "";
   state.authMessage = "";
+  if (state.authProjectId) localStorage.setItem(STORAGE_KEYS.currentProjectId, state.authProjectId);
   Object.assign(state, await backend.loadAll());
+  state.authProjectId = state.currentProjectId;
   routeFromHash();
 }
 
@@ -943,6 +968,8 @@ function render() {
 }
 
 function renderAuthPage() {
+  const { projects, currentProjectId } = ensureProjectState();
+  if (!state.authProjectId) state.authProjectId = currentProjectId;
   const loading = state.authStatus === "loading";
   const unavailable = state.authStatus === "unavailable";
   const denied = state.authStatus === "denied";
@@ -960,6 +987,11 @@ function renderAuthPage() {
         </label>
         <label>${escapeHtml(t("signInPassword"))}
           <input data-bind="authPassword" data-enter-action="sign-in" type="password" value="${escapeAttr(state.authPassword)}" placeholder="${escapeAttr(t("signInPasswordPlaceholder"))}" autocomplete="current-password">
+        </label>
+        <label>${escapeHtml(t("project"))}
+          <select data-bind="authProjectId">
+            ${projects.map((project) => option(project.projectId, project.name, state.authProjectId || currentProjectId)).join("")}
+          </select>
         </label>
         <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInSubmit"))}</button>
         <button class="secondary" data-action="sign-up" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signUp"))}</button>
@@ -979,22 +1011,27 @@ function recordTypeLabel(type) {
 }
 
 function renderTopbar() {
-  const title = {
-    home: t("appName"),
-    assets: t("assetsTitle"),
-    asset: state.routeParam ? t("assetDetailTitle") : t("addAssetTitle"),
-    grab: t("grabTitle"),
-    mylist: t("myListTitle"),
-    records: t("recordsTitle"),
-    presets: t("presetsTitle"),
-    settings: t("settingsTitle")
-  }[state.route] || t("appName");
-  const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
-  const authInfo = state.authUser ? `<span class="auth-chip" title="${escapeAttr(t("signedInAs"))}">${escapeHtml(state.authUser.email)}</span><button class="ghost small" data-action="sign-out">${escapeHtml(t("signOut"))}</button>` : "";
-  const rightButton = state.route === "home"
-    ? `<div class="topbar-actions">${authInfo}<button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
-    : `<div class="topbar-actions">${authInfo}<button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></div>`;
-  return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
+  const back = state.route === "home" ? `<span aria-hidden="true"></span>` : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
+  const title = currentTopbarTitle();
+  const messageClass = state.statusMessage ? ` is-message ${state.statusIsError ? "is-error" : ""}` : "";
+  return `
+    <header class="topbar${messageClass}">
+      <div class="topbar-row topbar-identity">
+        ${back}
+        <h1>${escapeHtml(title)}</h1>
+      </div>
+      <div class="topbar-row topbar-actions">
+        <button class="ghost small" data-action="sign-out">${escapeHtml(t("signOut"))}</button>
+        <button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button>
+        <button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button>
+      </div>
+    </header>`;
+}
+
+function currentTopbarTitle() {
+  if (state.statusMessage) return state.statusMessage;
+  const project = state.projects.find((item) => item.projectId === state.currentProjectId);
+  return `${project ? project.name : t("project")} · ${state.authUser ? state.authUser.email : ""}`;
 }
 
 function renderPage() {
@@ -1011,22 +1048,6 @@ function renderPage() {
 function renderHomePage() {
   return `
     <main class="page home-console ${state.homeControlsHidden ? "controls-hidden" : ""}">
-      <section class="quick-panel optional-controls">
-        <div class="compact-row project-row">
-          <label for="home-project">${escapeHtml(t("project"))}:</label>
-          <select id="home-project" data-bind="currentProjectId">
-            ${state.projects.map((project) => option(project.projectId, project.name, state.currentProjectId)).join("")}
-          </select>
-          <button class="small" data-action="create-project">${escapeHtml(t("new"))}</button>
-        </div>
-        <div class="compact-row">
-          <label for="home-location">${escapeHtml(t("locationShort"))}:</label>
-          <input id="home-location" data-bind="locationQuery" data-enter-action="location-find" value="${escapeAttr(state.locationQuery || state.selectedLocation)}" ${state.locationLocked ? "disabled" : ""}>
-          <button class="small" data-action="${state.locationLocked ? "edit-location" : "location-find"}">${escapeHtml(state.locationLocked ? t("edit") : t("find"))}</button>
-        </div>
-      </section>
-      <div class="rule optional-controls"></div>
-      ${state.homeControlsHidden ? `<button class="folded-strip" data-action="toggle-home-controls" aria-label="${escapeAttr(t("show"))}"><span></span>${escapeHtml(t("controlsFolded"))}<span></span></button>` : ""}
       <section class="quick-panel">
         <div class="quick-actions two optional-controls">
           <button class="small" data-action="show-new-asset">${escapeHtml(t("new"))}</button>
@@ -1103,6 +1124,7 @@ function renderHomeMyList() {
   const assets = state.myList.map((id) => state.assets.find((asset) => asset.assetId === id)).filter(Boolean);
   return `
     <div class="list-stack">
+      <button class="warning small" data-action="add-mylist-photos" ${assets.length ? "" : "disabled"}>${escapeHtml(t("addPhotos"))}</button>
       <div class="quick-actions two">
         <button class="small" data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
         <button class="small" data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
@@ -1128,10 +1150,9 @@ function renderHomeMyListItem(asset) {
 
 function renderHomeAssetDetails(asset, alreadyAdded) {
   if (state.editingHomeAssetId === asset.assetId) return renderHomeInlineAssetForm(asset);
-  const photos = [asset.photo1, asset.photo2, asset.photo3].filter(Boolean);
   return `
     <div class="compact-detail">
-      ${photos.length ? `<div class="thumbs">${photos.map((src) => `<img class="thumb" src="${escapeAttr(src)}" alt="${escapeAttr(t("assetPhoto"))}" data-action="preview-photo" data-src="${escapeAttr(src)}">`).join("")}</div>` : ""}
+      ${renderPhotoSlots(asset)}
       <div class="fields">
         <span>${escapeHtml(t("locationField"))}: ${escapeHtml(asset.location || "-")}</span>
         ${asset.acquisitionPriceKrw ? `<span>${escapeHtml(t("acquisitionPriceKrwField"))}: ${escapeHtml(asset.acquisitionPriceKrw)}</span>` : ""}
@@ -1146,6 +1167,31 @@ function renderHomeAssetDetails(asset, alreadyAdded) {
         <button data-action="home-add-asset" data-asset-id="${escapeAttr(asset.assetId)}" ${alreadyAdded ? "disabled" : ""}>${escapeHtml(t("add"))}</button>
       </div>
     </div>`;
+}
+
+function renderPhotoSlots(asset) {
+  const slots = assetPhotoSlots(asset).filter((slot) => slot.src);
+  if (!slots.length) return "";
+  return `
+    <div class="photo-slots">
+      ${slots.map((slot) => `
+        <button class="photo-slot ${slot.pending ? "pending" : ""}" type="button" data-action="preview-photo" data-src="${escapeAttr(slot.src)}">
+          <img class="thumb" src="${escapeAttr(slot.src)}" alt="${escapeAttr(slot.label)}">
+          <span>${escapeHtml(slot.label)}${slot.pending ? ` · ${escapeHtml(t("pendingPhoto"))}` : ""}</span>
+        </button>`).join("")}
+    </div>`;
+}
+
+function assetPhotoSlots(asset) {
+  return [
+    { key: "qrPhoto", label: t("qrPhoto"), src: asset.qrPhoto || asset.photo2 || "", pending: false },
+    { key: "pendingNumberPhoto", label: t("assetNumberPhotoLatest"), src: asset.pendingNumberPhoto || "", pending: true },
+    { key: "assetNumberPhotoLatest", label: t("assetNumberPhotoLatest"), src: asset.assetNumberPhotoLatest || asset.photo1 || "", pending: false },
+    { key: "assetNumberPhotoPrevious", label: t("assetNumberPhotoPrevious"), src: asset.assetNumberPhotoPrevious || "", pending: false },
+    { key: "pendingWholePhoto", label: t("wholeAssetPhotoLatest"), src: asset.pendingWholePhoto || "", pending: true },
+    { key: "wholeAssetPhotoLatest", label: t("wholeAssetPhotoLatest"), src: asset.wholeAssetPhotoLatest || asset.photo3 || "", pending: false },
+    { key: "wholeAssetPhotoPrevious", label: t("wholeAssetPhotoPrevious"), src: asset.wholeAssetPhotoPrevious || "", pending: false }
+  ];
 }
 
 function renderHomeInlineAssetForm(asset) {
@@ -1210,7 +1256,6 @@ function renderAssetsPage() {
 }
 
 function renderAssetCard(asset, controls = "") {
-  const photos = [asset.photo1, asset.photo2, asset.photo3].filter(Boolean);
   return `
     <article class="asset-card" data-asset-id="${escapeAttr(asset.assetId)}" data-action="open-asset">
       <div class="asset-main">
@@ -1228,7 +1273,7 @@ function renderAssetCard(asset, controls = "") {
         <span>${escapeHtml(t("lastInOut"))}: ${escapeHtml(asset.lastInOutDate || "-")}</span>
         <span>${escapeHtml(t("verified"))}: ${escapeHtml(asset.lastVerifiedDate || "-")} ${escapeHtml(t("by"))} ${escapeHtml(asset.lastVerifiedBy || "-")}</span>
       </div>
-      ${photos.length ? `<div class="thumbs">${photos.map((src) => `<img class="thumb" src="${escapeAttr(src)}" alt="${escapeAttr(t("assetPhoto"))}" data-action="preview-photo" data-src="${escapeAttr(src)}">`).join("")}</div>` : ""}
+      ${renderPhotoSlots(asset)}
       ${controls}
     </article>`;
 }
@@ -1304,6 +1349,7 @@ function renderMyListPage() {
   return `
     <main class="page">
       <section class="panel">
+        <button class="warning small" data-action="add-mylist-photos" ${assets.length ? "" : "disabled"}>${escapeHtml(t("addPhotos"))}</button>
         <div class="split">
           <button class="small" data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
           <button class="small" data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
@@ -1436,6 +1482,7 @@ function handleClick(event) {
   const target = event.target.closest("[data-action], [data-nav]");
   if (!target) return;
   const action = target.dataset.action;
+  clearStatusMessage();
   if (action === "sign-in") {
     signIn();
     return;
@@ -1468,6 +1515,7 @@ function handleClick(event) {
     window.open("manual/index.html", "_blank", "noopener");
   }
   if (action === "show-home-settings") {
+    navigate("home");
     state.homeMode = "settings";
     state.openHomeAssetId = "";
     state.editingHomeAssetId = "";
@@ -1483,6 +1531,7 @@ function handleClick(event) {
     render();
   }
   if (action === "preview-photo") previewPhoto(event, target);
+  if (action === "add-mylist-photos") captureMyListPhotos();
   if (action === "create-project") createProject();
   if (action === "location-find") findLocations();
   if (action === "edit-location") editLocation();
@@ -1547,6 +1596,7 @@ function handleClick(event) {
 function handleInput(event) {
   const key = event.target.dataset.bind;
   if (!key) return;
+  clearStatusMessage();
   state[key] = event.target.value;
   if (key === "operator" || key === "backendUrl" || key === "language") persist();
 }
@@ -1554,6 +1604,13 @@ function handleInput(event) {
 function handleChange(event) {
   const key = event.target.dataset.bind;
   if (!key) return;
+  clearStatusMessage();
+  if (key === "authProjectId") {
+    state.authProjectId = event.target.value;
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, state.authProjectId);
+    render();
+    return;
+  }
   if (key === "currentProjectId") {
     switchProject(event.target.value);
     return;
@@ -1797,10 +1854,30 @@ function saveAsset(formData, returnHome = false) {
   }
   const existingIndex = state.assets.findIndex((item) => item.assetId === asset.assetId);
   if (existingIndex >= 0) {
-    asset.createdAt = state.assets[existingIndex].createdAt || now;
-    state.assets[existingIndex] = asset;
+    const existing = state.assets[existingIndex];
+    asset.createdAt = existing.createdAt || now;
+    state.assets[existingIndex] = {
+      ...existing,
+      ...asset,
+      qrPhoto: existing.qrPhoto || asset.photo2 || "",
+      assetNumberPhotoLatest: existing.assetNumberPhotoLatest || asset.photo1 || "",
+      assetNumberPhotoPrevious: existing.assetNumberPhotoPrevious || "",
+      wholeAssetPhotoLatest: existing.wholeAssetPhotoLatest || asset.photo3 || "",
+      wholeAssetPhotoPrevious: existing.wholeAssetPhotoPrevious || "",
+      pendingNumberPhoto: existing.pendingNumberPhoto || "",
+      pendingWholePhoto: existing.pendingWholePhoto || ""
+    };
   } else {
-    state.assets.push(asset);
+    state.assets.push({
+      ...asset,
+      qrPhoto: asset.photo2 || "",
+      assetNumberPhotoLatest: asset.photo1 || "",
+      assetNumberPhotoPrevious: "",
+      wholeAssetPhotoLatest: asset.photo3 || "",
+      wholeAssetPhotoPrevious: "",
+      pendingNumberPhoto: "",
+      pendingWholePhoto: ""
+    });
   }
   persist();
   showNotice(t("assetSaved"));
@@ -1861,6 +1938,82 @@ function removeFromMyList(assetId) {
   render();
 }
 
+function captureMyListPhotos() {
+  if (!requireMyList()) return;
+  captureMyListPhotoStep([...state.myList], 0, "number");
+}
+
+function captureMyListPhotoStep(assetIds, index, kind) {
+  const assetId = assetIds[index];
+  if (!assetId) {
+    persist();
+    showNotice(t("photoStaged"));
+    state.homeMode = "my";
+    render();
+    return;
+  }
+  const asset = state.assets.find((item) => item.assetId === assetId);
+  if (!asset) {
+    captureMyListPhotoStep(assetIds, index + 1, "number");
+    return;
+  }
+  const assetLabel = `${asset.assetId} ${asset.name || t("unnamedAsset")}`;
+  showNotice(t(kind === "number" ? "photoGuideNumber" : "photoGuideWhole", { asset: assetLabel }));
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.capture = "environment";
+  input.addEventListener("change", () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const current = state.assets.find((item) => item.assetId === assetId);
+      if (current) {
+        if (kind === "number") current.pendingNumberPhoto = String(reader.result || "");
+        if (kind === "whole") current.pendingWholePhoto = String(reader.result || "");
+        current.updatedAt = new Date().toISOString();
+      }
+      persist();
+      const nextKind = kind === "number" ? "whole" : "number";
+      const nextIndex = kind === "number" ? index : index + 1;
+      captureMyListPhotoStep(assetIds, nextIndex, nextKind);
+    });
+    reader.readAsDataURL(file);
+  });
+  input.click();
+}
+
+function promotePendingPhotosForMyList() {
+  const committed = {};
+  state.assets = state.assets.map((asset) => {
+    if (!state.myList.includes(asset.assetId)) return asset;
+    const next = { ...asset };
+    if (next.pendingNumberPhoto) {
+      next.assetNumberPhotoPrevious = next.assetNumberPhotoLatest || next.photo1 || "";
+      next.assetNumberPhotoLatest = next.pendingNumberPhoto;
+      next.photo1 = next.assetNumberPhotoLatest;
+      next.pendingNumberPhoto = "";
+    }
+    if (next.pendingWholePhoto) {
+      next.wholeAssetPhotoPrevious = next.wholeAssetPhotoLatest || next.photo3 || "";
+      next.wholeAssetPhotoLatest = next.pendingWholePhoto;
+      next.photo3 = next.wholeAssetPhotoLatest;
+      next.pendingWholePhoto = "";
+    }
+    next.qrPhoto = next.qrPhoto || next.photo2 || "";
+    committed[next.assetId] = {
+      qrPhoto: next.qrPhoto,
+      assetNumberPhotoLatest: next.assetNumberPhotoLatest || next.photo1 || "",
+      assetNumberPhotoPrevious: next.assetNumberPhotoPrevious || "",
+      wholeAssetPhotoLatest: next.wholeAssetPhotoLatest || next.photo3 || "",
+      wholeAssetPhotoPrevious: next.wholeAssetPhotoPrevious || ""
+    };
+    return next;
+  });
+  return committed;
+}
+
 function openMovementModal(type) {
   if (!requireOperator() || !requireMyList()) return;
   const locationLabel = type === "checkout" ? t("destinationLocation") : t("newCurrentLocation");
@@ -1889,6 +2042,7 @@ function createMovementRecord(type, formData) {
   if (!toLocation) return;
   const today = dateOnly();
   const actor = currentActor();
+  const committedPhotos = promotePendingPhotosForMyList();
   const selectedAssets = state.assets.filter((asset) => state.myList.includes(asset.assetId));
   const fromLocation = [...new Set(selectedAssets.map((asset) => asset.location).filter(Boolean))].join(", ");
   state.assets = state.assets.map((asset) => {
@@ -1911,6 +2065,7 @@ function createMovementRecord(type, formData) {
     reason,
     user: actor,
     date: today,
+    photos: committedPhotos,
     generatedDocUrl: ""
   });
   persist();
@@ -1923,6 +2078,7 @@ function verifyLocation() {
   if (!requireOperator() || !requireMyList()) return;
   const today = dateOnly();
   const actor = currentActor();
+  const committedPhotos = promotePendingPhotosForMyList();
   state.assets = state.assets.map((asset) => {
     if (!state.myList.includes(asset.assetId)) return asset;
     return {
@@ -1943,6 +2099,7 @@ function verifyLocation() {
     reason: t("locationVerified"),
     user: actor,
     date: today,
+    photos: committedPhotos,
     generatedDocUrl: ""
   });
   persist();
@@ -2071,10 +2228,21 @@ async function closeModal() {
 }
 
 function showNotice(message, isError = false) {
-  const el = document.createElement("div");
-  el.className = `status ${isError ? "error" : ""}`;
-  el.textContent = message;
-  openModal(isError ? t("actionNeeded") : t("done"), el.outerHTML);
+  state.statusMessage = message;
+  state.statusIsError = isError;
+  render();
+}
+
+function clearStatusMessage() {
+  const hadMessage = Boolean(state.statusMessage);
+  state.statusMessage = "";
+  state.statusIsError = false;
+  if (!hadMessage) return;
+  const topbar = document.querySelector(".topbar");
+  const title = topbar && topbar.querySelector("h1");
+  if (!topbar || !title) return;
+  topbar.classList.remove("is-message", "is-error");
+  title.textContent = currentTopbarTitle();
 }
 
 function extractAssetNumber(text) {
@@ -2096,6 +2264,13 @@ function emptyAsset() {
     photo1: "",
     photo2: "",
     photo3: "",
+    qrPhoto: "",
+    assetNumberPhotoLatest: "",
+    assetNumberPhotoPrevious: "",
+    wholeAssetPhotoLatest: "",
+    wholeAssetPhotoPrevious: "",
+    pendingNumberPhoto: "",
+    pendingWholePhoto: "",
     location: "",
     acquisitionPriceKrw: "",
     manufacturerProvider: "",
