@@ -968,7 +968,7 @@ function render() {
 }
 
 function renderAuthPage() {
-  const { projects, currentProjectId } = ensureProjectState();
+  const { projects, currentProjectId } = authProjectState();
   if (!state.authProjectId) state.authProjectId = currentProjectId;
   const loading = state.authStatus === "loading";
   const unavailable = state.authStatus === "unavailable";
@@ -998,6 +998,22 @@ function renderAuthPage() {
         <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("resetPassword"))}</button>
       </section>
     </main>`;
+}
+
+function authProjectState() {
+  const storedProjects = readJson(STORAGE_KEYS.projects, []);
+  const projects = Array.isArray(storedProjects) && storedProjects.length
+    ? storedProjects
+    : [{ projectId: defaultProjectId(), name: "Default list" }];
+  const testId = testWebListId();
+  const withTestList = projects.some((project) => project.projectId === testId)
+    ? projects
+    : [...projects, { projectId: testId, name: "CENS test web index" }];
+  const storedProjectId = localStorage.getItem(STORAGE_KEYS.currentProjectId) || "";
+  const currentProjectId = withTestList.some((project) => project.projectId === storedProjectId)
+    ? storedProjectId
+    : withTestList[0].projectId;
+  return { projects: withTestList, currentProjectId };
 }
 
 function t(key, vars = {}) {
