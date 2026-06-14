@@ -15,6 +15,16 @@ const STORAGE_KEYS = {
   backendUrl: "cens.backendUrl"
 };
 
+const AUTH_ALLOWED_DOMAIN = "ibs.re.kr";
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCzqVQWrkKsYRWZO3cZylOUyNI31Odc_fk",
+  authDomain: "cens-assets-tracker.firebaseapp.com",
+  projectId: "cens-assets-tracker",
+  storageBucket: "cens-assets-tracker.firebasestorage.app",
+  messagingSenderId: "493140318257",
+  appId: "1:493140318257:web:ad8e3c879d40765645dd10"
+};
+
 const state = {
   route: "home",
   routeParam: null,
@@ -42,14 +52,24 @@ const state = {
   listSort: "assetId",
   grabQuery: "",
   grabResults: [],
-  recordFilter: "all"
+  recordFilter: "all",
+  authStatus: "loading",
+  authUser: null,
+  authEmail: "",
+  authPassword: "",
+  authCreatingAccount: false,
+  authMessage: "",
+  authError: "",
+  authProjectId: "",
+  statusMessage: "",
+  statusIsError: false
 };
 
 const I18N = {
   en: {
     appName: "CENS Assets Tracker",
     homeLead: "Track laboratory equipment check-out, check-in, and verification records.",
-    currentOperator: "Current operator name",
+    currentOperator: "Current user",
     enterName: "Enter your name",
     assetsTitle: "List of Assets",
     assetDetailTitle: "Asset Detail",
@@ -59,6 +79,27 @@ const I18N = {
     recordsTitle: "Records",
     presetsTitle: "Preset Lists",
     settingsTitle: "Settings",
+    signInTitle: "Sign in",
+    signInLead: "Sign in with your IBS ID and password.",
+    signInEmail: "IBS ID",
+    signInEmailPlaceholder: "name",
+    signInPassword: "Password",
+    signInPasswordPlaceholder: "Password",
+    signInSubmit: "Sign in",
+    signUp: "Sign up",
+    resetPassword: "Reset password",
+    signOut: "Sign out",
+    signedInAs: "Signed in as",
+    authLoading: "Checking sign-in status.",
+    authUnavailable: "Firebase Auth is not available. Refresh the page and try again.",
+    authDomainDenied: "Only {domain} email accounts can use this app.",
+    authEmailRequired: "Enter an IBS ID or {domain} email address.",
+    authPasswordRequired: "Enter your password.",
+    authSignInFailed: "Sign-in failed: {error}",
+    authSignUpFailed: "Could not start sign-up: {error}",
+    authSignedUp: "Sign-up email sent to {email}. Open it to set your password.",
+    authPasswordEmailSent: "Password reset email sent to {email}.",
+    authPasswordEmailFailed: "Could not send password reset email: {error}",
     back: "Back",
     search: "Search",
     searchPlaceholder: "assetId, name, or description",
@@ -113,12 +154,12 @@ const I18N = {
     testSync: "Test Sync Extension",
     currentStorage: "Current storage",
     presetLists: "Preset lists",
-    project: "Project",
-    projectList: "Project lists",
-    newProject: "New project",
-    projectName: "Project name",
-    projectCreated: "Project created.",
-    projectSwitched: "Project switched.",
+    project: "List",
+    projectList: "Lists",
+    newProject: "New list",
+    projectName: "List name",
+    projectCreated: "List created.",
+    projectSwitched: "List switched.",
     language: "Language",
     english: "English",
     korean: "Korean",
@@ -149,7 +190,7 @@ const I18N = {
     presetSaved: "Preset saved.",
     presetLoaded: "Preset loaded into My List.",
     deletePresetConfirm: "Delete this preset list?",
-    operatorRequired: "Enter the current operator name on the Home page first.",
+    operatorRequired: "Sign in first.",
     qrLibraryMissing: "QR scanner library is still loading or unavailable.",
     cameraStartFailed: "Camera could not start: {error}",
     locationVerified: "Location verified",
@@ -197,13 +238,23 @@ const I18N = {
     nameSaved: "Name saved.",
     assetAdded: "Asset added to My List.",
     takePhoto: "Take photo",
+    addPhotos: "Add photos",
+    photoGuideNumber: "Photograph the asset-number sticker for {asset}.",
+    photoGuideWhole: "Photograph the full asset for {asset}.",
+    photoStaged: "Photo staged. Use check in, check out, or verify to save it to DB.",
+    pendingPhoto: "pending",
+    qrPhoto: "QR",
+    assetNumberPhotoLatest: "asset-number latest",
+    assetNumberPhotoPrevious: "asset-number previous",
+    wholeAssetPhotoLatest: "whole asset latest",
+    wholeAssetPhotoPrevious: "whole asset previous",
     compactInfo: "info",
     collapse: "close"
   },
   ko: {
     appName: "CENS 자산 추적기",
     homeLead: "실험실 장비의 반출, 반입, 위치 확인 기록을 관리합니다.",
-    currentOperator: "현재 작업자 이름",
+    currentOperator: "현재 사용자",
     enterName: "이름을 입력하세요",
     assetsTitle: "자산 목록",
     assetDetailTitle: "자산 상세/수정",
@@ -213,6 +264,27 @@ const I18N = {
     recordsTitle: "반출 / 반입 / 확인 기록",
     presetsTitle: "프리셋 목록",
     settingsTitle: "설정",
+    signInTitle: "로그인",
+    signInLead: "IBS 아이디와 비밀번호로 로그인하세요.",
+    signInEmail: "IBS 아이디",
+    signInEmailPlaceholder: "name",
+    signInPassword: "비밀번호",
+    signInPasswordPlaceholder: "비밀번호",
+    signInSubmit: "로그인",
+    signUp: "가입",
+    resetPassword: "비밀번호 초기화",
+    signOut: "로그아웃",
+    signedInAs: "로그인 계정",
+    authLoading: "로그인 상태를 확인하고 있습니다.",
+    authUnavailable: "Firebase Auth를 사용할 수 없습니다. 새로고침 후 다시 시도하세요.",
+    authDomainDenied: "{domain} 이메일 계정만 이 앱을 사용할 수 있습니다.",
+    authEmailRequired: "IBS 아이디 또는 {domain} 이메일 주소를 입력하세요.",
+    authPasswordRequired: "비밀번호를 입력하세요.",
+    authSignInFailed: "로그인 실패: {error}",
+    authSignUpFailed: "가입을 시작할 수 없습니다: {error}",
+    authSignedUp: "{email}로 가입 메일을 보냈습니다. 메일에서 비밀번호를 설정하세요.",
+    authPasswordEmailSent: "{email}로 비밀번호 초기화 메일을 보냈습니다.",
+    authPasswordEmailFailed: "비밀번호 초기화 메일을 보낼 수 없습니다: {error}",
     back: "뒤로",
     search: "검색",
     searchPlaceholder: "assetId, 이름, 설명",
@@ -267,12 +339,12 @@ const I18N = {
     testSync: "동기화 연결 테스트",
     currentStorage: "현재 저장소",
     presetLists: "프리셋 목록",
-    project: "프로젝트",
-    projectList: "프로젝트 목록",
-    newProject: "새 프로젝트",
-    projectName: "프로젝트 이름",
-    projectCreated: "프로젝트가 생성되었습니다.",
-    projectSwitched: "프로젝트가 전환되었습니다.",
+    project: "List",
+    projectList: "List 목록",
+    newProject: "새 List",
+    projectName: "List 이름",
+    projectCreated: "List가 생성되었습니다.",
+    projectSwitched: "List가 전환되었습니다.",
     language: "언어",
     english: "영어",
     korean: "한국어",
@@ -303,7 +375,7 @@ const I18N = {
     presetSaved: "프리셋이 저장되었습니다.",
     presetLoaded: "프리셋을 내 목록으로 불러왔습니다.",
     deletePresetConfirm: "이 프리셋을 삭제할까요?",
-    operatorRequired: "먼저 홈 화면에서 현재 작업자 이름을 입력하세요.",
+    operatorRequired: "먼저 로그인하세요.",
     qrLibraryMissing: "QR 스캐너 라이브러리를 아직 불러오는 중이거나 사용할 수 없습니다.",
     cameraStartFailed: "카메라를 시작할 수 없습니다: {error}",
     locationVerified: "위치 확인 완료",
@@ -351,6 +423,16 @@ const I18N = {
     nameSaved: "이름이 저장되었습니다.",
     assetAdded: "내 목록에 추가했습니다.",
     takePhoto: "사진 촬영",
+    addPhotos: "사진 추가하기",
+    photoGuideNumber: "{asset}의 자산번호 스티커가 보이게 촬영하세요.",
+    photoGuideWhole: "{asset}의 전체 모습이 보이게 촬영하세요.",
+    photoStaged: "사진을 임시 저장했습니다. 반출, 반입, 확인을 해야 DB 사진으로 저장됩니다.",
+    pendingPhoto: "임시",
+    qrPhoto: "QR",
+    assetNumberPhotoLatest: "자산번호 최신",
+    assetNumberPhotoPrevious: "자산번호 이전",
+    wholeAssetPhotoLatest: "전체 자산 최신",
+    wholeAssetPhotoPrevious: "전체 자산 이전",
     compactInfo: "정보",
     collapse: "닫기"
   }
@@ -419,14 +501,14 @@ const modalRoot = document.getElementById("modal-root");
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
-  Object.assign(state, await backend.loadAll());
   window.addEventListener("hashchange", routeFromHash);
   document.addEventListener("click", handleClick);
   document.addEventListener("input", handleInput);
   document.addEventListener("change", handleChange);
   document.addEventListener("keydown", handleKeydown);
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/service-worker.js").catch(() => {});
-  routeFromHash();
+  initAuth();
+  render();
 }
 
 function readJson(key, fallback) {
@@ -436,6 +518,171 @@ function readJson(key, fallback) {
   } catch {
     return fallback;
   }
+}
+
+function initAuth() {
+  if (!window.firebase || !window.firebase.auth) {
+    state.authStatus = "unavailable";
+    state.authError = t("authUnavailable");
+    render();
+    return;
+  }
+  if (!window.firebase.apps.length) window.firebase.initializeApp(FIREBASE_CONFIG);
+  window.firebase.auth().onAuthStateChanged(async (user) => {
+    if (!user) {
+      state.authUser = null;
+      state.authStatus = "signedOut";
+      render();
+      return;
+    }
+    if (state.authCreatingAccount) return;
+    finishSignedInUser(user);
+  });
+}
+
+function isAllowedEmail(email) {
+  return email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`);
+}
+
+function normalizeAuthEmailInput(value) {
+  const input = String(value || "").trim().toLowerCase();
+  if (!input) return "";
+  if (input.includes("@")) return input;
+  return `${input}@${AUTH_ALLOWED_DOMAIN}`;
+}
+
+async function finishSignedInUser(user) {
+  const email = String(user.email || "").toLowerCase();
+  if (!isAllowedEmail(email)) {
+    state.authUser = null;
+    state.authStatus = "denied";
+    state.authError = t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+    state.authMessage = "";
+    await window.firebase.auth().signOut().catch(() => {});
+    render();
+    return;
+  }
+  state.authUser = {
+    email,
+    name: user.displayName || email
+  };
+  state.authStatus = "ready";
+  state.authEmail = email;
+  state.authError = "";
+  state.authMessage = "";
+  if (state.authProjectId) localStorage.setItem(STORAGE_KEYS.currentProjectId, state.authProjectId);
+  Object.assign(state, await backend.loadAll());
+  state.authProjectId = state.currentProjectId;
+  routeFromHash();
+}
+
+async function signIn() {
+  if (!window.firebase || !window.firebase.auth) return;
+  const email = normalizeAuthEmailInput(state.authEmail);
+  const password = String(state.authPassword || "");
+  if (!validateAuthEmail(email)) return;
+  if (!validateAuthPassword(password)) return;
+  state.authStatus = "loading";
+  state.authError = "";
+  state.authMessage = "";
+  render();
+  try {
+    const credential = await window.firebase.auth().signInWithEmailAndPassword(email, password);
+    await finishSignedInUser(credential.user);
+  } catch (error) {
+    state.authStatus = "signedOut";
+    state.authError = t("authSignInFailed", { error: authErrorMessage(error) });
+    render();
+  }
+}
+
+function validateAuthEmail(email) {
+  if (isAllowedEmail(email)) return true;
+  state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+  state.authMessage = "";
+  render();
+  return false;
+}
+
+function validateAuthPassword(password) {
+  if (password) return true;
+  state.authError = t("authPasswordRequired");
+  state.authMessage = "";
+  render();
+  return false;
+}
+
+async function signUp() {
+  if (!window.firebase || !window.firebase.auth) return;
+  const email = normalizeAuthEmailInput(state.authEmail);
+  if (!validateAuthEmail(email)) return;
+  state.authStatus = "loading";
+  state.authEmail = email;
+  state.authError = "";
+  state.authMessage = "";
+  state.authCreatingAccount = true;
+  render();
+  try {
+    await window.firebase.auth().createUserWithEmailAndPassword(email, makeTemporaryPassword());
+    await sendPasswordEmail(email);
+    await window.firebase.auth().signOut();
+    state.authCreatingAccount = false;
+    state.authUser = null;
+    state.authStatus = "signedOut";
+    state.authMessage = t("authSignedUp", { email });
+    render();
+  } catch (error) {
+    state.authCreatingAccount = false;
+    if (error && error.code === "auth/email-already-in-use") {
+      await sendPasswordResetEmail();
+      return;
+    }
+    state.authStatus = "signedOut";
+    state.authError = t("authSignUpFailed", { error: authErrorMessage(error) });
+    render();
+  }
+}
+
+async function sendPasswordResetEmail() {
+  if (!window.firebase || !window.firebase.auth) return;
+  const email = normalizeAuthEmailInput(state.authEmail);
+  if (!validateAuthEmail(email)) return;
+  state.authStatus = "loading";
+  state.authEmail = email;
+  state.authError = "";
+  state.authMessage = "";
+  render();
+  try {
+    await sendPasswordEmail(email);
+    state.authStatus = "signedOut";
+    state.authMessage = t("authPasswordEmailSent", { email });
+    render();
+  } catch (error) {
+    state.authStatus = "signedOut";
+    state.authError = t("authPasswordEmailFailed", { error: authErrorMessage(error) });
+    render();
+  }
+}
+
+function sendPasswordEmail(email) {
+  return window.firebase.auth().sendPasswordResetEmail(email, {
+    url: `${window.location.origin}${window.location.pathname}`
+  });
+}
+
+function makeTemporaryPassword() {
+  const values = new Uint32Array(4);
+  crypto.getRandomValues(values);
+  return `Temp-${Array.from(values, (value) => value.toString(36)).join("-")}!A1`;
+}
+
+function authErrorMessage(error) {
+  return error && error.message ? error.message : String(error);
+}
+
+async function signOut() {
+  if (!window.firebase || !window.firebase.auth) return;
+  await window.firebase.auth().signOut();
 }
 
 function defaultProjectId() {
@@ -457,7 +704,7 @@ function ensureProjectState() {
   let currentProjectId = localStorage.getItem(STORAGE_KEYS.currentProjectId) || "";
   if (!Array.isArray(projects) || projects.length === 0) {
     const now = new Date().toISOString();
-    projects = [{ projectId: defaultProjectId(), name: "Default project", createdAt: now, updatedAt: now }];
+    projects = [{ projectId: defaultProjectId(), name: "Default list", createdAt: now, updatedAt: now }];
     currentProjectId = defaultProjectId();
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
     localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
@@ -473,11 +720,54 @@ function ensureProjectState() {
       });
     }
   }
+  projects = ensureBundledLists(projects);
   if (!projects.some((project) => project.projectId === currentProjectId)) {
     currentProjectId = projects[0].projectId;
     localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
   }
+  if (shouldOpenTestList(currentProjectId)) {
+    currentProjectId = testWebListId();
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, currentProjectId);
+  }
   return { projects, currentProjectId };
+}
+
+function ensureBundledLists(projects) {
+  let changed = false;
+  projects = projects.map((project) => {
+    if (project.projectId === defaultProjectId() && project.name === "Default project") {
+      changed = true;
+      return { ...project, name: "Default list" };
+    }
+    return project;
+  });
+  const testListId = testWebListId();
+  ensureTestWebListData();
+  if (projects.some((project) => project.projectId === testListId)) {
+    if (changed) localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(projects));
+    return projects;
+  }
+  const now = new Date().toISOString();
+  const nextProjects = [...projects, { projectId: testListId, name: "CENS test web index", createdAt: now, updatedAt: now }];
+  localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(nextProjects));
+  return nextProjects;
+}
+
+function ensureTestWebListData() {
+  const testListId = testWebListId();
+  const assets = readJson(projectKey(testListId, "assets"), []);
+  if (Array.isArray(assets) && assets.length === testWebAssets().length) return;
+  saveProjectData(testListId, testWebListData());
+}
+
+function shouldOpenTestList(currentProjectId) {
+  if (currentProjectId !== defaultProjectId()) return false;
+  const currentAssets = readJson(projectKey(currentProjectId, "assets"), []);
+  return Array.isArray(currentAssets) && currentAssets.length === 0;
+}
+
+function testWebListId() {
+  return "LIST-cens-test-web-index";
 }
 
 function migratedAssets() {
@@ -513,6 +803,73 @@ function saveProjectData(projectId, data) {
   localStorage.setItem(projectKey(projectId, "myList"), JSON.stringify(data.myList || []));
   localStorage.setItem(projectKey(projectId, "selectedLocation"), data.selectedLocation || "");
   localStorage.setItem(projectKey(projectId, "locationLocked"), data.locationLocked ? "true" : "false");
+}
+
+function testWebListData() {
+  return {
+    assets: testWebAssets(),
+    records: [],
+    presets: [],
+    locations: testWebLocations(),
+    myList: [],
+    selectedLocation: "",
+    locationLocked: false
+  };
+}
+
+function testWebAssets() {
+  const now = new Date().toISOString();
+  const today = dateOnly();
+  const base = "/cens_assets_test_web";
+  return [
+    ["1", "Oscilloscope", "실험실에서 파형 확인용으로 쓰는 디지털 오실로스코프"],
+    ["2", "Function Generator", "테스트 신호를 발생시키는 함수발생기"],
+    ["3", "Power Supply", "검출기 및 테스트 보드 전원 공급용 DC 파워서플라이"],
+    ["4", "Multimeter", "전압, 저항, 전류 확인용 휴대용 멀티미터"],
+    ["5", "Soldering Station", "케이블 및 커넥터 작업용 납땜 스테이션"],
+    ["6", "Crimp Tool Set", "핀 커넥터 압착 작업용 공구 세트"],
+    ["7", "NIM Crate", "NIM 모듈 장착 및 전원 공급용 크레이트"],
+    ["8", "VME Crate", "DAQ 모듈 장착용 VME 크레이트"],
+    ["9", "Silicon Detector Box", "실리콘 검출기 보관용 보호 박스"],
+    ["10", "MPPC Test Board", "MPPC 신호 테스트용 소형 보드"],
+    ["11", "Scintillator Paddle", "빔 테스트 및 트리거용 플라스틱 섬광체"],
+    ["12", "Faraday Cup", "빔 전류 측정용 페러데이컵"],
+    ["13", "Vacuum Pump", "챔버 배기용 소형 진공 펌프"],
+    ["14", "Gas Regulator", "가스 라인 압력 조절용 레귤레이터"],
+    ["15", "Laptop DAQ", "현장 DAQ 확인 및 테스트용 노트북"],
+    ["16", "Ethernet Switch", "DAQ/서버 네트워크 연결용 스위치"],
+    ["17", "Cable Reel BNC", "BNC 케이블 묶음 보관 릴"],
+    ["18", "Toolbox", "현장 작업용 공구 박스"],
+    ["19", "Sample Holder Set", "타겟 및 샘플 고정용 홀더 세트"],
+    ["20", "QR Label Printer", "자산 라벨 출력 테스트용 QR 라벨 프린터"]
+  ].map(([number, name, description]) => {
+    const padded = number.padStart(2, "0");
+    return {
+      assetId: number,
+      name,
+      description,
+      photo1: `${base}/item_photos/item_${padded}.jpg`,
+      photo2: `${base}/qr/qr_${padded}.png`,
+      photo3: `${base}/location_photos/location_${padded}.jpg`,
+      location: `Test location ${padded}`,
+      lastInOutDate: "",
+      lastVerifiedDate: today,
+      lastVerifiedBy: "index import",
+      createdAt: now,
+      updatedAt: now
+    };
+  });
+}
+
+function testWebLocations() {
+  const base = "/cens_assets_test_web/location_photos";
+  return Array.from({ length: 20 }, (_, index) => {
+    const padded = String(index + 1).padStart(2, "0");
+    return {
+      name: `Test location ${padded}`,
+      photo: `${base}/location_${padded}.jpg`
+    };
+  });
 }
 
 function seedAssets() {
@@ -603,7 +960,44 @@ function persist() {
 function render() {
   document.documentElement.lang = state.language === "ko" ? "ko" : "en";
   document.title = t("appName");
+  if (state.authStatus !== "ready") {
+    app.innerHTML = renderAuthPage();
+    return;
+  }
   app.innerHTML = `${renderTopbar()}${renderPage()}`;
+}
+
+function renderAuthPage() {
+  const { projects, currentProjectId } = ensureProjectState();
+  if (!state.authProjectId) state.authProjectId = currentProjectId;
+  const loading = state.authStatus === "loading";
+  const unavailable = state.authStatus === "unavailable";
+  const denied = state.authStatus === "denied";
+  const message = state.authError || state.authMessage || (loading ? t("authLoading") : unavailable ? t("authUnavailable") : denied ? t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` }) : t("signInLead"));
+  return `
+    <main class="auth-page">
+      <section class="auth-panel">
+        <div>
+          <p class="eyebrow">${escapeHtml(t("appName"))}</p>
+          <h1>${escapeHtml(t("signInTitle"))}</h1>
+          <p>${escapeHtml(message)}</p>
+        </div>
+        <label>${escapeHtml(t("signInEmail"))}
+          <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" autocomplete="username">
+        </label>
+        <label>${escapeHtml(t("signInPassword"))}
+          <input data-bind="authPassword" data-enter-action="sign-in" type="password" value="${escapeAttr(state.authPassword)}" placeholder="${escapeAttr(t("signInPasswordPlaceholder"))}" autocomplete="current-password">
+        </label>
+        <label>${escapeHtml(t("project"))}
+          <select data-bind="authProjectId">
+            ${projects.map((project) => option(project.projectId, project.name, state.authProjectId || currentProjectId)).join("")}
+          </select>
+        </label>
+        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInSubmit"))}</button>
+        <button class="secondary" data-action="sign-up" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signUp"))}</button>
+        <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("resetPassword"))}</button>
+      </section>
+    </main>`;
 }
 
 function t(key, vars = {}) {
@@ -617,21 +1011,27 @@ function recordTypeLabel(type) {
 }
 
 function renderTopbar() {
-  const title = {
-    home: t("appName"),
-    assets: t("assetsTitle"),
-    asset: state.routeParam ? t("assetDetailTitle") : t("addAssetTitle"),
-    grab: t("grabTitle"),
-    mylist: t("myListTitle"),
-    records: t("recordsTitle"),
-    presets: t("presetsTitle"),
-    settings: t("settingsTitle")
-  }[state.route] || t("appName");
-  const back = state.route === "home" ? "" : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
-  const rightButton = state.route === "home"
-    ? `<div class="topbar-actions"><button class="ghost small ${state.homeControlsHidden ? "show-controls" : ""}" data-action="toggle-home-controls">${escapeHtml(state.homeControlsHidden ? t("show") : t("hide"))}</button><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button></div>`
-    : `<div class="topbar-actions"><button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button><button class="ghost small" data-nav="settings">${escapeHtml(t("settingsTitle"))}</button></div>`;
-  return `<header class="topbar">${back}<h1>${escapeHtml(title)}</h1>${rightButton}</header>`;
+  const back = state.route === "home" ? `<span aria-hidden="true"></span>` : `<button class="ghost small" data-action="back">${escapeHtml(t("back"))}</button>`;
+  const title = currentTopbarTitle();
+  const messageClass = state.statusMessage ? ` is-message ${state.statusIsError ? "is-error" : ""}` : "";
+  return `
+    <header class="topbar${messageClass}">
+      <div class="topbar-row topbar-identity">
+        ${back}
+        <h1>${escapeHtml(title)}</h1>
+      </div>
+      <div class="topbar-row topbar-actions">
+        <button class="ghost small" data-action="sign-out">${escapeHtml(t("signOut"))}</button>
+        <button class="ghost small" data-action="open-manual-page">${escapeHtml(t("manualPage"))}</button>
+        <button class="ghost small" data-action="show-home-settings">${escapeHtml(t("settingsTitle"))}</button>
+      </div>
+    </header>`;
+}
+
+function currentTopbarTitle() {
+  if (state.statusMessage) return state.statusMessage;
+  const project = state.projects.find((item) => item.projectId === state.currentProjectId);
+  return `${project ? project.name : t("project")} · ${state.authUser ? state.authUser.email : ""}`;
 }
 
 function renderPage() {
@@ -648,27 +1048,6 @@ function renderPage() {
 function renderHomePage() {
   return `
     <main class="page home-console ${state.homeControlsHidden ? "controls-hidden" : ""}">
-      <section class="quick-panel optional-controls">
-        <div class="compact-row project-row">
-          <label for="home-project">${escapeHtml(t("project"))}:</label>
-          <select id="home-project" data-bind="currentProjectId">
-            ${state.projects.map((project) => option(project.projectId, project.name, state.currentProjectId)).join("")}
-          </select>
-          <button class="small" data-action="create-project">${escapeHtml(t("new"))}</button>
-        </div>
-        <div class="compact-row">
-          <label for="home-name">${escapeHtml(t("nameShort"))}:</label>
-          <input id="home-name" data-bind="operator" data-enter-action="toggle-name-lock" value="${escapeAttr(state.operator)}" ${state.operatorLocked ? "disabled" : ""} autocomplete="name">
-          <button class="small" data-action="toggle-name-lock">${escapeHtml(state.operatorLocked ? t("edit") : t("save"))}</button>
-        </div>
-        <div class="compact-row">
-          <label for="home-location">${escapeHtml(t("locationShort"))}:</label>
-          <input id="home-location" data-bind="locationQuery" data-enter-action="location-find" value="${escapeAttr(state.locationQuery || state.selectedLocation)}" ${state.locationLocked ? "disabled" : ""}>
-          <button class="small" data-action="${state.locationLocked ? "edit-location" : "location-find"}">${escapeHtml(state.locationLocked ? t("edit") : t("find"))}</button>
-        </div>
-      </section>
-      <div class="rule optional-controls"></div>
-      ${state.homeControlsHidden ? `<button class="folded-strip" data-action="toggle-home-controls" aria-label="${escapeAttr(t("show"))}"><span></span>${escapeHtml(t("controlsFolded"))}<span></span></button>` : ""}
       <section class="quick-panel">
         <div class="quick-actions two optional-controls">
           <button class="small" data-action="show-new-asset">${escapeHtml(t("new"))}</button>
@@ -745,6 +1124,7 @@ function renderHomeMyList() {
   const assets = state.myList.map((id) => state.assets.find((asset) => asset.assetId === id)).filter(Boolean);
   return `
     <div class="list-stack">
+      <button class="warning small" data-action="add-mylist-photos" ${assets.length ? "" : "disabled"}>${escapeHtml(t("addPhotos"))}</button>
       <div class="quick-actions two">
         <button class="small" data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
         <button class="small" data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
@@ -770,10 +1150,9 @@ function renderHomeMyListItem(asset) {
 
 function renderHomeAssetDetails(asset, alreadyAdded) {
   if (state.editingHomeAssetId === asset.assetId) return renderHomeInlineAssetForm(asset);
-  const photos = [asset.photo1, asset.photo2, asset.photo3].filter(Boolean);
   return `
     <div class="compact-detail">
-      ${photos.length ? `<div class="thumbs">${photos.map((src) => `<img class="thumb" src="${escapeAttr(src)}" alt="${escapeAttr(t("assetPhoto"))}" data-action="preview-photo" data-src="${escapeAttr(src)}">`).join("")}</div>` : ""}
+      ${renderPhotoSlots(asset)}
       <div class="fields">
         <span>${escapeHtml(t("locationField"))}: ${escapeHtml(asset.location || "-")}</span>
         ${asset.acquisitionPriceKrw ? `<span>${escapeHtml(t("acquisitionPriceKrwField"))}: ${escapeHtml(asset.acquisitionPriceKrw)}</span>` : ""}
@@ -788,6 +1167,31 @@ function renderHomeAssetDetails(asset, alreadyAdded) {
         <button data-action="home-add-asset" data-asset-id="${escapeAttr(asset.assetId)}" ${alreadyAdded ? "disabled" : ""}>${escapeHtml(t("add"))}</button>
       </div>
     </div>`;
+}
+
+function renderPhotoSlots(asset) {
+  const slots = assetPhotoSlots(asset).filter((slot) => slot.src);
+  if (!slots.length) return "";
+  return `
+    <div class="photo-slots">
+      ${slots.map((slot) => `
+        <button class="photo-slot ${slot.pending ? "pending" : ""}" type="button" data-action="preview-photo" data-src="${escapeAttr(slot.src)}">
+          <img class="thumb" src="${escapeAttr(slot.src)}" alt="${escapeAttr(slot.label)}">
+          <span>${escapeHtml(slot.label)}${slot.pending ? ` · ${escapeHtml(t("pendingPhoto"))}` : ""}</span>
+        </button>`).join("")}
+    </div>`;
+}
+
+function assetPhotoSlots(asset) {
+  return [
+    { key: "qrPhoto", label: t("qrPhoto"), src: asset.qrPhoto || asset.photo2 || "", pending: false },
+    { key: "pendingNumberPhoto", label: t("assetNumberPhotoLatest"), src: asset.pendingNumberPhoto || "", pending: true },
+    { key: "assetNumberPhotoLatest", label: t("assetNumberPhotoLatest"), src: asset.assetNumberPhotoLatest || asset.photo1 || "", pending: false },
+    { key: "assetNumberPhotoPrevious", label: t("assetNumberPhotoPrevious"), src: asset.assetNumberPhotoPrevious || "", pending: false },
+    { key: "pendingWholePhoto", label: t("wholeAssetPhotoLatest"), src: asset.pendingWholePhoto || "", pending: true },
+    { key: "wholeAssetPhotoLatest", label: t("wholeAssetPhotoLatest"), src: asset.wholeAssetPhotoLatest || asset.photo3 || "", pending: false },
+    { key: "wholeAssetPhotoPrevious", label: t("wholeAssetPhotoPrevious"), src: asset.wholeAssetPhotoPrevious || "", pending: false }
+  ];
 }
 
 function renderHomeInlineAssetForm(asset) {
@@ -852,7 +1256,6 @@ function renderAssetsPage() {
 }
 
 function renderAssetCard(asset, controls = "") {
-  const photos = [asset.photo1, asset.photo2, asset.photo3].filter(Boolean);
   return `
     <article class="asset-card" data-asset-id="${escapeAttr(asset.assetId)}" data-action="open-asset">
       <div class="asset-main">
@@ -870,7 +1273,7 @@ function renderAssetCard(asset, controls = "") {
         <span>${escapeHtml(t("lastInOut"))}: ${escapeHtml(asset.lastInOutDate || "-")}</span>
         <span>${escapeHtml(t("verified"))}: ${escapeHtml(asset.lastVerifiedDate || "-")} ${escapeHtml(t("by"))} ${escapeHtml(asset.lastVerifiedBy || "-")}</span>
       </div>
-      ${photos.length ? `<div class="thumbs">${photos.map((src) => `<img class="thumb" src="${escapeAttr(src)}" alt="${escapeAttr(t("assetPhoto"))}" data-action="preview-photo" data-src="${escapeAttr(src)}">`).join("")}</div>` : ""}
+      ${renderPhotoSlots(asset)}
       ${controls}
     </article>`;
 }
@@ -946,6 +1349,7 @@ function renderMyListPage() {
   return `
     <main class="page">
       <section class="panel">
+        <button class="warning small" data-action="add-mylist-photos" ${assets.length ? "" : "disabled"}>${escapeHtml(t("addPhotos"))}</button>
         <div class="split">
           <button class="small" data-action="checkout">${escapeHtml(t("checkoutRequest"))}</button>
           <button class="small" data-action="checkin">${escapeHtml(t("checkinRequest"))}</button>
@@ -1077,11 +1481,28 @@ function empty(message) {
 function handleClick(event) {
   const target = event.target.closest("[data-action], [data-nav]");
   if (!target) return;
+  const action = target.dataset.action;
+  clearStatusMessage();
+  if (action === "sign-in") {
+    signIn();
+    return;
+  }
+  if (action === "sign-up") {
+    signUp();
+    return;
+  }
+  if (action === "reset-password") {
+    sendPasswordResetEmail();
+    return;
+  }
+  if (action === "sign-out") {
+    signOut();
+    return;
+  }
   if (target.dataset.nav) {
     navigate(target.dataset.nav);
     return;
   }
-  const action = target.dataset.action;
   if (action === "back") history.length > 1 ? history.back() : navigate("home");
   if (action === "open-asset") openAssetFromCard(event, target);
   if (action === "toggle-home-asset") toggleHomeAsset(event, target);
@@ -1094,6 +1515,7 @@ function handleClick(event) {
     window.open("manual/index.html", "_blank", "noopener");
   }
   if (action === "show-home-settings") {
+    navigate("home");
     state.homeMode = "settings";
     state.openHomeAssetId = "";
     state.editingHomeAssetId = "";
@@ -1109,7 +1531,7 @@ function handleClick(event) {
     render();
   }
   if (action === "preview-photo") previewPhoto(event, target);
-  if (action === "toggle-name-lock") toggleNameLock();
+  if (action === "add-mylist-photos") captureMyListPhotos();
   if (action === "create-project") createProject();
   if (action === "location-find") findLocations();
   if (action === "edit-location") editLocation();
@@ -1118,8 +1540,7 @@ function handleClick(event) {
   if (action === "capture-location-photo") captureLocationPhoto(target.dataset.locationName);
   if (action === "asset-find") findHomeAssets();
   if (action === "scan-home-asset") openScanner((text) => {
-    state.assetQuery = extractAssetNumber(text);
-    findHomeAssets();
+    addScannedHomeAsset(text);
   });
   if (action === "show-new-asset") {
     state.homeMode = "newAsset";
@@ -1175,6 +1596,7 @@ function handleClick(event) {
 function handleInput(event) {
   const key = event.target.dataset.bind;
   if (!key) return;
+  clearStatusMessage();
   state[key] = event.target.value;
   if (key === "operator" || key === "backendUrl" || key === "language") persist();
 }
@@ -1182,6 +1604,13 @@ function handleInput(event) {
 function handleChange(event) {
   const key = event.target.dataset.bind;
   if (!key) return;
+  clearStatusMessage();
+  if (key === "authProjectId") {
+    state.authProjectId = event.target.value;
+    localStorage.setItem(STORAGE_KEYS.currentProjectId, state.authProjectId);
+    render();
+    return;
+  }
   if (key === "currentProjectId") {
     switchProject(event.target.value);
     return;
@@ -1230,16 +1659,6 @@ function switchProject(projectId) {
   });
   persist();
   showNotice(t("projectSwitched"));
-  render();
-}
-
-function toggleNameLock() {
-  if (!state.operator.trim()) {
-    showNotice(t("operatorRequired"), true);
-    return;
-  }
-  state.operatorLocked = !state.operatorLocked;
-  persist();
   render();
 }
 
@@ -1312,6 +1731,23 @@ function findHomeAssets() {
   render();
 }
 
+function addScannedHomeAsset(text) {
+  const assetId = extractAssetNumber(text);
+  state.assetQuery = assetId;
+  const asset = state.assets.find((item) => item.assetId === assetId);
+  if (asset) {
+    addToMyList([asset.assetId]);
+    state.homeMode = "my";
+    state.homeResults = [];
+    state.openHomeAssetId = asset.assetId;
+    state.editingHomeAssetId = "";
+    persist();
+    render();
+    return;
+  }
+  findHomeAssets();
+}
+
 function getLocationEntries() {
   const map = new Map();
   state.assets.forEach((asset) => {
@@ -1357,7 +1793,9 @@ function handleKeydown(event) {
   const action = event.target.dataset.enterAction;
   if (!action) return;
   event.preventDefault();
-  if (action === "toggle-name-lock") toggleNameLock();
+  if (action === "sign-in") signIn();
+  if (action === "sign-up") signUp();
+  if (action === "reset-password") sendPasswordResetEmail();
   if (action === "location-find") findLocations();
   if (action === "asset-find") findHomeAssets();
 }
@@ -1416,10 +1854,30 @@ function saveAsset(formData, returnHome = false) {
   }
   const existingIndex = state.assets.findIndex((item) => item.assetId === asset.assetId);
   if (existingIndex >= 0) {
-    asset.createdAt = state.assets[existingIndex].createdAt || now;
-    state.assets[existingIndex] = asset;
+    const existing = state.assets[existingIndex];
+    asset.createdAt = existing.createdAt || now;
+    state.assets[existingIndex] = {
+      ...existing,
+      ...asset,
+      qrPhoto: existing.qrPhoto || asset.photo2 || "",
+      assetNumberPhotoLatest: existing.assetNumberPhotoLatest || asset.photo1 || "",
+      assetNumberPhotoPrevious: existing.assetNumberPhotoPrevious || "",
+      wholeAssetPhotoLatest: existing.wholeAssetPhotoLatest || asset.photo3 || "",
+      wholeAssetPhotoPrevious: existing.wholeAssetPhotoPrevious || "",
+      pendingNumberPhoto: existing.pendingNumberPhoto || "",
+      pendingWholePhoto: existing.pendingWholePhoto || ""
+    };
   } else {
-    state.assets.push(asset);
+    state.assets.push({
+      ...asset,
+      qrPhoto: asset.photo2 || "",
+      assetNumberPhotoLatest: asset.photo1 || "",
+      assetNumberPhotoPrevious: "",
+      wholeAssetPhotoLatest: asset.photo3 || "",
+      wholeAssetPhotoPrevious: "",
+      pendingNumberPhoto: "",
+      pendingWholePhoto: ""
+    });
   }
   persist();
   showNotice(t("assetSaved"));
@@ -1480,6 +1938,82 @@ function removeFromMyList(assetId) {
   render();
 }
 
+function captureMyListPhotos() {
+  if (!requireMyList()) return;
+  captureMyListPhotoStep([...state.myList], 0, "number");
+}
+
+function captureMyListPhotoStep(assetIds, index, kind) {
+  const assetId = assetIds[index];
+  if (!assetId) {
+    persist();
+    showNotice(t("photoStaged"));
+    state.homeMode = "my";
+    render();
+    return;
+  }
+  const asset = state.assets.find((item) => item.assetId === assetId);
+  if (!asset) {
+    captureMyListPhotoStep(assetIds, index + 1, "number");
+    return;
+  }
+  const assetLabel = `${asset.assetId} ${asset.name || t("unnamedAsset")}`;
+  showNotice(t(kind === "number" ? "photoGuideNumber" : "photoGuideWhole", { asset: assetLabel }));
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.capture = "environment";
+  input.addEventListener("change", () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const current = state.assets.find((item) => item.assetId === assetId);
+      if (current) {
+        if (kind === "number") current.pendingNumberPhoto = String(reader.result || "");
+        if (kind === "whole") current.pendingWholePhoto = String(reader.result || "");
+        current.updatedAt = new Date().toISOString();
+      }
+      persist();
+      const nextKind = kind === "number" ? "whole" : "number";
+      const nextIndex = kind === "number" ? index : index + 1;
+      captureMyListPhotoStep(assetIds, nextIndex, nextKind);
+    });
+    reader.readAsDataURL(file);
+  });
+  input.click();
+}
+
+function promotePendingPhotosForMyList() {
+  const committed = {};
+  state.assets = state.assets.map((asset) => {
+    if (!state.myList.includes(asset.assetId)) return asset;
+    const next = { ...asset };
+    if (next.pendingNumberPhoto) {
+      next.assetNumberPhotoPrevious = next.assetNumberPhotoLatest || next.photo1 || "";
+      next.assetNumberPhotoLatest = next.pendingNumberPhoto;
+      next.photo1 = next.assetNumberPhotoLatest;
+      next.pendingNumberPhoto = "";
+    }
+    if (next.pendingWholePhoto) {
+      next.wholeAssetPhotoPrevious = next.wholeAssetPhotoLatest || next.photo3 || "";
+      next.wholeAssetPhotoLatest = next.pendingWholePhoto;
+      next.photo3 = next.wholeAssetPhotoLatest;
+      next.pendingWholePhoto = "";
+    }
+    next.qrPhoto = next.qrPhoto || next.photo2 || "";
+    committed[next.assetId] = {
+      qrPhoto: next.qrPhoto,
+      assetNumberPhotoLatest: next.assetNumberPhotoLatest || next.photo1 || "",
+      assetNumberPhotoPrevious: next.assetNumberPhotoPrevious || "",
+      wholeAssetPhotoLatest: next.wholeAssetPhotoLatest || next.photo3 || "",
+      wholeAssetPhotoPrevious: next.wholeAssetPhotoPrevious || ""
+    };
+    return next;
+  });
+  return committed;
+}
+
 function openMovementModal(type) {
   if (!requireOperator() || !requireMyList()) return;
   const locationLabel = type === "checkout" ? t("destinationLocation") : t("newCurrentLocation");
@@ -1507,6 +2041,8 @@ function createMovementRecord(type, formData) {
   const reason = String(formData.get("reason") || "").trim();
   if (!toLocation) return;
   const today = dateOnly();
+  const actor = currentActor();
+  const committedPhotos = promotePendingPhotosForMyList();
   const selectedAssets = state.assets.filter((asset) => state.myList.includes(asset.assetId));
   const fromLocation = [...new Set(selectedAssets.map((asset) => asset.location).filter(Boolean))].join(", ");
   state.assets = state.assets.map((asset) => {
@@ -1516,7 +2052,7 @@ function createMovementRecord(type, formData) {
       location: toLocation,
       lastInOutDate: today,
       lastVerifiedDate: today,
-      lastVerifiedBy: state.operator,
+      lastVerifiedBy: actor,
       updatedAt: new Date().toISOString()
     };
   });
@@ -1527,8 +2063,9 @@ function createMovementRecord(type, formData) {
     fromLocation,
     toLocation,
     reason,
-    user: state.operator,
+    user: actor,
     date: today,
+    photos: committedPhotos,
     generatedDocUrl: ""
   });
   persist();
@@ -1540,12 +2077,14 @@ function createMovementRecord(type, formData) {
 function verifyLocation() {
   if (!requireOperator() || !requireMyList()) return;
   const today = dateOnly();
+  const actor = currentActor();
+  const committedPhotos = promotePendingPhotosForMyList();
   state.assets = state.assets.map((asset) => {
     if (!state.myList.includes(asset.assetId)) return asset;
     return {
       ...asset,
       lastVerifiedDate: today,
-      lastVerifiedBy: state.operator,
+      lastVerifiedBy: actor,
       updatedAt: new Date().toISOString()
     };
   });
@@ -1558,8 +2097,9 @@ function verifyLocation() {
     fromLocation,
     toLocation: fromLocation,
     reason: t("locationVerified"),
-    user: state.operator,
+    user: actor,
     date: today,
+    photos: committedPhotos,
     generatedDocUrl: ""
   });
   persist();
@@ -1572,11 +2112,12 @@ function savePreset() {
   const listName = prompt(t("presetName"));
   if (!listName) return;
   const now = new Date().toISOString();
+  const actor = currentActor();
   state.presets.unshift({
     listId: makeId("LIST"),
     listName: listName.trim(),
     assetIds: [...state.myList],
-    createdBy: state.operator,
+    createdBy: actor,
     createdAt: now,
     updatedAt: now
   });
@@ -1617,10 +2158,14 @@ function loadSeedAssets() {
 }
 
 function requireOperator() {
-  if (state.operator.trim()) return true;
+  if (currentActor()) return true;
   showNotice(t("operatorRequired"), true);
   navigate("home");
   return false;
+}
+
+function currentActor() {
+  return state.authUser && state.authUser.email ? state.authUser.email : "";
 }
 
 function requireMyList() {
@@ -1683,10 +2228,21 @@ async function closeModal() {
 }
 
 function showNotice(message, isError = false) {
-  const el = document.createElement("div");
-  el.className = `status ${isError ? "error" : ""}`;
-  el.textContent = message;
-  openModal(isError ? t("actionNeeded") : t("done"), el.outerHTML);
+  state.statusMessage = message;
+  state.statusIsError = isError;
+  render();
+}
+
+function clearStatusMessage() {
+  const hadMessage = Boolean(state.statusMessage);
+  state.statusMessage = "";
+  state.statusIsError = false;
+  if (!hadMessage) return;
+  const topbar = document.querySelector(".topbar");
+  const title = topbar && topbar.querySelector("h1");
+  if (!topbar || !title) return;
+  topbar.classList.remove("is-message", "is-error");
+  title.textContent = currentTopbarTitle();
 }
 
 function extractAssetNumber(text) {
@@ -1708,6 +2264,13 @@ function emptyAsset() {
     photo1: "",
     photo2: "",
     photo3: "",
+    qrPhoto: "",
+    assetNumberPhotoLatest: "",
+    assetNumberPhotoPrevious: "",
+    wholeAssetPhotoLatest: "",
+    wholeAssetPhotoPrevious: "",
+    pendingNumberPhoto: "",
+    pendingWholePhoto: "",
     location: "",
     acquisitionPriceKrw: "",
     manufacturerProvider: "",
