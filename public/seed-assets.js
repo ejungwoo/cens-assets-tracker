@@ -15,7 +15,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "201800288",
@@ -33,7 +34,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "201901580",
@@ -51,7 +53,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2019-02-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000096",
@@ -69,7 +72,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-01-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000097",
@@ -87,7 +91,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-01-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000099",
@@ -105,7 +110,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000241",
@@ -123,7 +129,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000242",
@@ -141,7 +148,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000243",
@@ -159,7 +167,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000533",
@@ -177,7 +186,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-04-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000539",
@@ -195,7 +205,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000540",
@@ -213,7 +224,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000541",
@@ -231,7 +243,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000542",
@@ -249,7 +262,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000543",
@@ -267,7 +281,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000544",
@@ -285,7 +300,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202000548",
@@ -303,7 +319,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-02-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001074",
@@ -321,7 +338,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001075",
@@ -339,7 +357,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001076",
@@ -357,7 +376,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001077",
@@ -375,7 +395,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001078",
@@ -393,7 +414,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001079",
@@ -411,7 +433,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001080",
@@ -429,7 +452,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001081",
@@ -447,7 +471,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001082",
@@ -465,7 +490,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001083",
@@ -483,7 +509,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001084",
@@ -501,7 +528,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001085",
@@ -519,7 +547,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001086",
@@ -537,7 +566,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-06-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001117",
@@ -555,7 +585,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001118",
@@ -573,7 +604,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001119",
@@ -591,7 +623,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001120",
@@ -609,7 +642,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001121",
@@ -627,7 +661,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202001490",
@@ -645,7 +680,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202001493",
@@ -663,7 +699,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-05-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202001494",
@@ -681,7 +718,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-05-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002482",
@@ -699,7 +737,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002483",
@@ -717,7 +756,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002484",
@@ -735,7 +775,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002486",
@@ -753,7 +794,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002487",
@@ -771,7 +813,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002488",
@@ -789,7 +832,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002489",
@@ -807,7 +851,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002490",
@@ -825,7 +870,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002491",
@@ -843,7 +889,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-05-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002492",
@@ -861,7 +908,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-05-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002567",
@@ -879,7 +927,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002568",
@@ -897,7 +946,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002569",
@@ -915,7 +965,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002570",
@@ -933,7 +984,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002571",
@@ -951,7 +1003,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002572",
@@ -969,7 +1022,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002573",
@@ -987,7 +1041,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002574",
@@ -1005,7 +1060,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002575",
@@ -1023,7 +1079,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002576",
@@ -1041,7 +1098,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002577",
@@ -1059,7 +1117,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002578",
@@ -1077,7 +1136,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002579",
@@ -1095,7 +1155,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002580",
@@ -1113,7 +1174,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002581",
@@ -1131,7 +1193,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002582",
@@ -1149,7 +1212,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002583",
@@ -1167,7 +1231,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002584",
@@ -1185,7 +1250,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002585",
@@ -1203,7 +1269,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002586",
@@ -1221,7 +1288,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002587",
@@ -1239,7 +1307,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002588",
@@ -1257,7 +1326,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002589",
@@ -1275,7 +1345,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002590",
@@ -1293,7 +1364,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002591",
@@ -1311,7 +1383,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002634",
@@ -1329,7 +1402,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002635",
@@ -1347,7 +1421,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002636",
@@ -1365,7 +1440,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002637",
@@ -1383,7 +1459,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002638",
@@ -1401,7 +1478,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002639",
@@ -1419,7 +1497,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002640",
@@ -1437,7 +1516,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002641",
@@ -1455,7 +1535,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002642",
@@ -1473,7 +1554,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002643",
@@ -1491,7 +1573,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002644",
@@ -1509,7 +1592,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002645",
@@ -1527,7 +1611,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002646",
@@ -1545,7 +1630,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002647",
@@ -1563,7 +1649,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002648",
@@ -1581,7 +1668,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002649",
@@ -1599,7 +1687,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002650",
@@ -1617,7 +1706,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002651",
@@ -1635,7 +1725,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002652",
@@ -1653,7 +1744,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002653",
@@ -1671,7 +1763,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002654",
@@ -1689,7 +1782,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002655",
@@ -1707,7 +1801,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002656",
@@ -1725,7 +1820,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002657",
@@ -1743,7 +1839,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002658",
@@ -1761,7 +1858,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002659",
@@ -1779,7 +1877,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002660",
@@ -1797,7 +1896,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002661",
@@ -1815,7 +1915,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002662",
@@ -1833,7 +1934,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002663",
@@ -1851,7 +1953,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002664",
@@ -1869,7 +1972,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002665",
@@ -1887,7 +1991,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002666",
@@ -1905,7 +2010,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002667",
@@ -1923,7 +2029,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002668",
@@ -1941,7 +2048,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002669",
@@ -1959,7 +2067,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002670",
@@ -1977,7 +2086,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002671",
@@ -1995,7 +2105,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002672",
@@ -2013,7 +2124,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002673",
@@ -2031,7 +2143,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002674",
@@ -2049,7 +2162,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002675",
@@ -2067,7 +2181,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002676",
@@ -2085,7 +2200,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002677",
@@ -2103,7 +2219,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002678",
@@ -2121,7 +2238,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002679",
@@ -2139,7 +2257,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002680",
@@ -2157,7 +2276,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002681",
@@ -2175,7 +2295,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002682",
@@ -2193,7 +2314,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002683",
@@ -2211,7 +2333,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002684",
@@ -2229,7 +2352,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002685",
@@ -2247,7 +2371,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002686",
@@ -2265,7 +2390,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002687",
@@ -2283,7 +2409,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002688",
@@ -2301,7 +2428,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002689",
@@ -2319,7 +2447,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002690",
@@ -2337,7 +2466,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002691",
@@ -2355,7 +2485,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002692",
@@ -2373,7 +2504,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002693",
@@ -2391,7 +2523,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002694",
@@ -2409,7 +2542,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002695",
@@ -2427,7 +2561,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002696",
@@ -2445,7 +2580,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002697",
@@ -2463,7 +2599,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002698",
@@ -2481,7 +2618,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002699",
@@ -2499,7 +2637,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002700",
@@ -2517,7 +2656,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002701",
@@ -2535,7 +2675,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002702",
@@ -2553,7 +2694,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002703",
@@ -2571,7 +2713,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002704",
@@ -2589,7 +2732,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002705",
@@ -2607,7 +2751,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002706",
@@ -2625,7 +2770,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002707",
@@ -2643,7 +2789,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002708",
@@ -2661,7 +2808,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002709",
@@ -2679,7 +2827,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002710",
@@ -2697,7 +2846,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002711",
@@ -2715,7 +2865,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002712",
@@ -2733,7 +2884,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002713",
@@ -2751,7 +2903,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002714",
@@ -2769,7 +2922,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202002715",
@@ -2787,7 +2941,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002716",
@@ -2805,7 +2960,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202002717",
@@ -2823,7 +2979,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002718",
@@ -2841,7 +2998,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-08-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002719",
@@ -2859,7 +3017,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002720",
@@ -2877,7 +3036,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002721",
@@ -2895,7 +3055,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202002898",
@@ -2913,7 +3074,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002899",
@@ -2931,7 +3093,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002900",
@@ -2949,7 +3112,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002901",
@@ -2967,7 +3131,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002902",
@@ -2985,7 +3150,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002903",
@@ -3003,7 +3169,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002904",
@@ -3021,7 +3188,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002905",
@@ -3039,7 +3207,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002906",
@@ -3057,7 +3226,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202002907",
@@ -3075,7 +3245,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202002932",
@@ -3093,7 +3264,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002933",
@@ -3111,7 +3283,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002934",
@@ -3129,7 +3302,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002935",
@@ -3147,7 +3321,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002936",
@@ -3165,7 +3340,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002937",
@@ -3183,7 +3359,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002938",
@@ -3201,7 +3378,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002939",
@@ -3219,7 +3397,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002940",
@@ -3237,7 +3416,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002941",
@@ -3255,7 +3435,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002942",
@@ -3273,7 +3454,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002943",
@@ -3291,7 +3473,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002944",
@@ -3309,7 +3492,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002945",
@@ -3327,7 +3511,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002946",
@@ -3345,7 +3530,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002947",
@@ -3363,7 +3549,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002948",
@@ -3381,7 +3568,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002949",
@@ -3399,7 +3587,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002950",
@@ -3417,7 +3606,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002951",
@@ -3435,7 +3625,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002952",
@@ -3453,7 +3644,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002953",
@@ -3471,7 +3663,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002954",
@@ -3489,7 +3682,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002955",
@@ -3507,7 +3701,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002956",
@@ -3525,7 +3720,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002957",
@@ -3543,7 +3739,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002958",
@@ -3561,7 +3758,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002959",
@@ -3579,7 +3777,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002960",
@@ -3597,7 +3796,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002961",
@@ -3615,7 +3815,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002962",
@@ -3633,7 +3834,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002963",
@@ -3651,7 +3853,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002964",
@@ -3669,7 +3872,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002965",
@@ -3687,7 +3891,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002966",
@@ -3705,7 +3910,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002967",
@@ -3723,7 +3929,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-09-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002968",
@@ -3741,7 +3948,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002969",
@@ -3759,7 +3967,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002970",
@@ -3777,7 +3986,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002971",
@@ -3795,7 +4005,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202002972",
@@ -3813,7 +4024,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202002973",
@@ -3831,7 +4043,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002974",
@@ -3849,7 +4062,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002975",
@@ -3867,7 +4081,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002976",
@@ -3885,7 +4100,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002977",
@@ -3903,7 +4119,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002978",
@@ -3921,7 +4138,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002981",
@@ -3939,7 +4157,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002982",
@@ -3957,7 +4176,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002983",
@@ -3975,7 +4195,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002984",
@@ -3993,7 +4214,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002985",
@@ -4011,7 +4233,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002986",
@@ -4029,7 +4252,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002987",
@@ -4047,7 +4271,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002988",
@@ -4065,7 +4290,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002989",
@@ -4083,7 +4309,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002990",
@@ -4101,7 +4328,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002991",
@@ -4119,7 +4347,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002992",
@@ -4137,7 +4366,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002993",
@@ -4155,7 +4385,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202002994",
@@ -4173,7 +4404,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003004",
@@ -4191,7 +4423,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003005",
@@ -4209,7 +4442,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003006",
@@ -4227,7 +4461,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003008",
@@ -4245,7 +4480,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003009",
@@ -4263,7 +4499,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003010",
@@ -4281,7 +4518,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003011",
@@ -4299,7 +4537,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003012",
@@ -4317,7 +4556,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003013",
@@ -4335,7 +4575,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202003014",
@@ -4353,7 +4594,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003015",
@@ -4371,7 +4613,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003016",
@@ -4389,7 +4632,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003017",
@@ -4407,7 +4651,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003018",
@@ -4425,7 +4670,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003019",
@@ -4443,7 +4689,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003020",
@@ -4461,7 +4708,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003021",
@@ -4479,7 +4727,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003022",
@@ -4497,7 +4746,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003023",
@@ -4515,7 +4765,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003024",
@@ -4533,7 +4784,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003025",
@@ -4551,7 +4803,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003026",
@@ -4569,7 +4822,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003027",
@@ -4587,7 +4841,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003028",
@@ -4605,7 +4860,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003029",
@@ -4623,7 +4879,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003030",
@@ -4641,7 +4898,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003031",
@@ -4659,7 +4917,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003032",
@@ -4677,7 +4936,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003033",
@@ -4695,7 +4955,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003034",
@@ -4713,7 +4974,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003035",
@@ -4731,7 +4993,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003036",
@@ -4749,7 +5012,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003037",
@@ -4767,7 +5031,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003038",
@@ -4785,7 +5050,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003039",
@@ -4803,7 +5069,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003040",
@@ -4821,7 +5088,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003041",
@@ -4839,7 +5107,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003042",
@@ -4857,7 +5126,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003043",
@@ -4875,7 +5145,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003044",
@@ -4893,7 +5164,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003045",
@@ -4911,7 +5183,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003046",
@@ -4929,7 +5202,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003047",
@@ -4947,7 +5221,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003048",
@@ -4965,7 +5240,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003049",
@@ -4983,7 +5259,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003050",
@@ -5001,7 +5278,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003051",
@@ -5019,7 +5297,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003052",
@@ -5037,7 +5316,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003053",
@@ -5055,7 +5335,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003054",
@@ -5073,7 +5354,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003055",
@@ -5091,7 +5373,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003056",
@@ -5109,7 +5392,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003057",
@@ -5127,7 +5411,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003058",
@@ -5145,7 +5430,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003059",
@@ -5163,7 +5449,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003060",
@@ -5181,7 +5468,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003061",
@@ -5199,7 +5487,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003062",
@@ -5217,7 +5506,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003063",
@@ -5235,7 +5525,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003064",
@@ -5253,7 +5544,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003065",
@@ -5271,7 +5563,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003066",
@@ -5289,7 +5582,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003067",
@@ -5307,7 +5601,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003068",
@@ -5325,7 +5620,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003069",
@@ -5343,7 +5639,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003070",
@@ -5361,7 +5658,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003071",
@@ -5379,7 +5677,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003072",
@@ -5397,7 +5696,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003073",
@@ -5415,7 +5715,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003074",
@@ -5433,7 +5734,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003075",
@@ -5451,7 +5753,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003076",
@@ -5469,7 +5772,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003077",
@@ -5487,7 +5791,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003078",
@@ -5505,7 +5810,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003079",
@@ -5523,7 +5829,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003080",
@@ -5541,7 +5848,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003081",
@@ -5559,7 +5867,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003082",
@@ -5577,7 +5886,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202003083",
@@ -5595,7 +5905,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202003084",
@@ -5613,7 +5924,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202003292",
@@ -5631,7 +5943,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202003565",
@@ -5649,7 +5962,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202003566",
@@ -5667,7 +5981,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202003567",
@@ -5685,7 +6000,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202003568",
@@ -5703,7 +6019,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-11-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202100092",
@@ -5721,7 +6038,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-01-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100098",
@@ -5739,7 +6057,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-01-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100217",
@@ -5757,7 +6076,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100218",
@@ -5775,7 +6095,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100219",
@@ -5793,7 +6114,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100220",
@@ -5811,7 +6133,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100221",
@@ -5829,7 +6152,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100222",
@@ -5847,7 +6171,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100223",
@@ -5865,7 +6190,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100224",
@@ -5883,7 +6209,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100252",
@@ -5901,7 +6228,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100253",
@@ -5919,7 +6247,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100254",
@@ -5937,7 +6266,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100255",
@@ -5955,7 +6285,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-02-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100256",
@@ -5973,7 +6304,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100257",
@@ -5991,7 +6323,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100258",
@@ -6009,7 +6342,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100259",
@@ -6027,7 +6361,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100260",
@@ -6045,7 +6380,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100261",
@@ -6063,7 +6399,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100262",
@@ -6081,7 +6418,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100263",
@@ -6099,7 +6437,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100264",
@@ -6117,7 +6456,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100265",
@@ -6135,7 +6475,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100266",
@@ -6153,7 +6494,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100267",
@@ -6171,7 +6513,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100268",
@@ -6189,7 +6532,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100269",
@@ -6207,7 +6551,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100270",
@@ -6225,7 +6570,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100271",
@@ -6243,7 +6589,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100272",
@@ -6261,7 +6608,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100273",
@@ -6279,7 +6627,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100274",
@@ -6297,7 +6646,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100275",
@@ -6315,7 +6665,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100276",
@@ -6333,7 +6684,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100451",
@@ -6351,7 +6703,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100452",
@@ -6369,7 +6722,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100453",
@@ -6387,7 +6741,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100454",
@@ -6405,7 +6760,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100599",
@@ -6423,7 +6779,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100600",
@@ -6441,7 +6798,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100601",
@@ -6459,7 +6817,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100674",
@@ -6477,7 +6836,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100675",
@@ -6495,7 +6855,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100676",
@@ -6513,7 +6874,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-03-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100779",
@@ -6531,7 +6893,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100780",
@@ -6549,7 +6912,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100781",
@@ -6567,7 +6931,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100782",
@@ -6585,7 +6950,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100783",
@@ -6603,7 +6969,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100784",
@@ -6621,7 +6988,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202100785",
@@ -6639,7 +7007,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100786",
@@ -6657,7 +7026,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100787",
@@ -6675,7 +7045,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100788",
@@ -6693,7 +7064,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100825",
@@ -6711,7 +7083,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100826",
@@ -6729,7 +7102,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100827",
@@ -6747,7 +7121,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100828",
@@ -6765,7 +7140,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100829",
@@ -6783,7 +7159,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100830",
@@ -6801,7 +7178,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-04-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202100831",
@@ -6819,7 +7197,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202101646",
@@ -6837,7 +7216,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101647",
@@ -6855,7 +7235,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101975",
@@ -6873,7 +7254,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202101976",
@@ -6891,7 +7273,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202101977",
@@ -6909,7 +7292,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202101978",
@@ -6927,7 +7311,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202101979",
@@ -6945,7 +7330,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202101980",
@@ -6963,7 +7349,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202101981",
@@ -6981,7 +7368,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202101982",
@@ -6999,7 +7387,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202101983",
@@ -7017,7 +7406,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-08-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202101984",
@@ -7035,7 +7425,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-05-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101985",
@@ -7053,7 +7444,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-05-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101986",
@@ -7071,7 +7463,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-05-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101987",
@@ -7089,7 +7482,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-05-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101988",
@@ -7107,7 +7501,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101989",
@@ -7125,7 +7520,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101990",
@@ -7143,7 +7539,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101991",
@@ -7161,7 +7558,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202101992",
@@ -7179,7 +7577,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202101993",
@@ -7197,7 +7596,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202101994",
@@ -7215,7 +7615,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-09-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202101995",
@@ -7233,7 +7634,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-09-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202101996",
@@ -7251,7 +7653,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-07-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202103281",
@@ -7269,7 +7672,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103282",
@@ -7287,7 +7691,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103283",
@@ -7305,7 +7710,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103284",
@@ -7323,7 +7729,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103285",
@@ -7341,7 +7748,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103286",
@@ -7359,7 +7767,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103287",
@@ -7377,7 +7786,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103288",
@@ -7395,7 +7805,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103289",
@@ -7413,7 +7824,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103290",
@@ -7431,7 +7843,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103291",
@@ -7449,7 +7862,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103292",
@@ -7467,7 +7881,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103293",
@@ -7485,7 +7900,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103294",
@@ -7503,7 +7919,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103295",
@@ -7521,7 +7938,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103296",
@@ -7539,7 +7957,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103297",
@@ -7557,7 +7976,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103298",
@@ -7575,7 +7995,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103299",
@@ -7593,7 +8014,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103300",
@@ -7611,7 +8033,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202103301",
@@ -7629,7 +8052,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202103302",
@@ -7647,7 +8071,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-12-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202103303",
@@ -7665,7 +8090,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-18T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202103304",
@@ -7683,7 +8109,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202103305",
@@ -7701,7 +8128,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202103306",
@@ -7719,7 +8147,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202103307",
@@ -7737,7 +8166,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202103308",
@@ -7755,7 +8185,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202103309",
@@ -7773,7 +8204,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104404",
@@ -7791,7 +8223,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104405",
@@ -7809,7 +8242,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104406",
@@ -7827,7 +8261,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104407",
@@ -7845,7 +8280,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104408",
@@ -7863,7 +8299,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104409",
@@ -7881,7 +8318,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104410",
@@ -7899,7 +8337,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104411",
@@ -7917,7 +8356,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104412",
@@ -7935,7 +8375,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104413",
@@ -7953,7 +8394,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-12-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202104414",
@@ -7971,7 +8413,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104415",
@@ -7989,7 +8432,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104416",
@@ -8007,7 +8451,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104417",
@@ -8025,7 +8470,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104418",
@@ -8043,7 +8489,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104419",
@@ -8061,7 +8508,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104420",
@@ -8079,7 +8527,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104421",
@@ -8097,7 +8546,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202104422",
@@ -8115,7 +8565,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202104423",
@@ -8133,7 +8584,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202104424",
@@ -8151,7 +8603,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202104425",
@@ -8169,7 +8622,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202104426",
@@ -8187,7 +8641,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202104427",
@@ -8205,7 +8660,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104428",
@@ -8223,7 +8679,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104429",
@@ -8241,7 +8698,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104430",
@@ -8259,7 +8717,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104431",
@@ -8277,7 +8736,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104432",
@@ -8295,7 +8755,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104433",
@@ -8313,7 +8774,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104434",
@@ -8331,7 +8793,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-01T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202104464",
@@ -8349,7 +8812,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202104465",
@@ -8367,7 +8831,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104466",
@@ -8385,7 +8850,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104467",
@@ -8403,7 +8869,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104468",
@@ -8421,7 +8888,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104469",
@@ -8439,7 +8907,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104470",
@@ -8457,7 +8926,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104471",
@@ -8475,7 +8945,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202104472",
@@ -8493,7 +8964,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202104487",
@@ -8511,7 +8983,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-12-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104488",
@@ -8529,7 +9002,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-11-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104489",
@@ -8547,7 +9021,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104490",
@@ -8565,7 +9040,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104491",
@@ -8583,7 +9059,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202104492",
@@ -8601,7 +9078,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104493",
@@ -8619,7 +9097,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104494",
@@ -8637,7 +9116,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104495",
@@ -8655,7 +9135,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104496",
@@ -8673,7 +9154,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-06-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202104551",
@@ -8691,7 +9173,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2021-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202104552",
@@ -8709,7 +9192,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202200001",
@@ -8727,7 +9211,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202200005",
@@ -8745,7 +9230,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202200270",
@@ -8763,7 +9249,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-03-08T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202200271",
@@ -8781,7 +9268,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202200272",
@@ -8799,7 +9287,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202200273",
@@ -8817,7 +9306,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202200274",
@@ -8835,7 +9325,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202200275",
@@ -8853,7 +9344,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-03-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202200276",
@@ -8871,7 +9363,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200277",
@@ -8889,7 +9382,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200278",
@@ -8907,7 +9401,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200279",
@@ -8925,7 +9420,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200280",
@@ -8943,7 +9439,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200281",
@@ -8961,7 +9458,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200282",
@@ -8979,7 +9477,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200283",
@@ -8997,7 +9496,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200284",
@@ -9015,7 +9515,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202200285",
@@ -9033,7 +9534,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202200286",
@@ -9051,7 +9553,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202200287",
@@ -9069,7 +9572,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202200288",
@@ -9087,7 +9591,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202200289",
@@ -9105,7 +9610,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-02-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202200291",
@@ -9123,7 +9629,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-25T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202200404",
@@ -9141,7 +9648,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-03-25T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202202973",
@@ -9159,7 +9667,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202202974",
@@ -9177,7 +9686,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2020-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202203096",
@@ -9195,7 +9705,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203097",
@@ -9213,7 +9724,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203098",
@@ -9231,7 +9743,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203099",
@@ -9249,7 +9762,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203100",
@@ -9267,7 +9781,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203101",
@@ -9285,7 +9800,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203102",
@@ -9303,7 +9819,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203103",
@@ -9321,7 +9838,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203104",
@@ -9339,7 +9857,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203105",
@@ -9357,7 +9876,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203106",
@@ -9375,7 +9895,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203107",
@@ -9393,7 +9914,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203108",
@@ -9411,7 +9933,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203109",
@@ -9429,7 +9952,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203110",
@@ -9447,7 +9971,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203111",
@@ -9465,7 +9990,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203112",
@@ -9483,7 +10009,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203113",
@@ -9501,7 +10028,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203114",
@@ -9519,7 +10047,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203115",
@@ -9537,7 +10066,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203116",
@@ -9555,7 +10085,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203117",
@@ -9573,7 +10104,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203118",
@@ -9591,7 +10123,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203119",
@@ -9609,7 +10142,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203120",
@@ -9627,7 +10161,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203121",
@@ -9645,7 +10180,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203122",
@@ -9663,7 +10199,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203123",
@@ -9681,7 +10218,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203124",
@@ -9699,7 +10237,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203129",
@@ -9717,7 +10256,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202203130",
@@ -9735,7 +10275,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-18T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202203131",
@@ -9753,7 +10294,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-18T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202203132",
@@ -9771,7 +10313,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203133",
@@ -9789,7 +10332,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203134",
@@ -9807,7 +10351,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203135",
@@ -9825,7 +10370,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203136",
@@ -9843,7 +10389,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203137",
@@ -9861,7 +10408,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203138",
@@ -9879,7 +10427,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203139",
@@ -9897,7 +10446,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203140",
@@ -9915,7 +10465,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203141",
@@ -9933,7 +10484,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203142",
@@ -9951,7 +10503,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203143",
@@ -9969,7 +10522,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-04-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202203144",
@@ -9987,7 +10541,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203145",
@@ -10005,7 +10560,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203146",
@@ -10023,7 +10579,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-05-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203465",
@@ -10041,7 +10598,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203466",
@@ -10059,7 +10617,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203467",
@@ -10077,7 +10636,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-07-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202203468",
@@ -10095,7 +10655,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202203469",
@@ -10113,7 +10674,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202203470",
@@ -10131,7 +10693,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202203471",
@@ -10149,7 +10712,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202203472",
@@ -10167,7 +10731,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-06-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202203550",
@@ -10185,7 +10750,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-08-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202203551",
@@ -10203,7 +10769,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-08-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203552",
@@ -10221,7 +10788,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-08-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202203663",
@@ -10239,7 +10807,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-07-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202203763",
@@ -10257,7 +10826,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-09-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205772",
@@ -10275,7 +10845,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-09-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205773",
@@ -10293,7 +10864,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-09-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205774",
@@ -10311,7 +10883,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205777",
@@ -10329,7 +10902,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205778",
@@ -10347,7 +10921,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205779",
@@ -10365,7 +10940,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205780",
@@ -10383,7 +10959,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205781",
@@ -10401,7 +10978,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205782",
@@ -10419,7 +10997,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205783",
@@ -10437,7 +11016,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205784",
@@ -10455,7 +11035,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205785",
@@ -10473,7 +11054,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205786",
@@ -10491,7 +11073,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205787",
@@ -10509,7 +11092,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205788",
@@ -10527,7 +11111,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205789",
@@ -10545,7 +11130,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205790",
@@ -10563,7 +11149,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205791",
@@ -10581,7 +11168,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205792",
@@ -10599,7 +11187,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205793",
@@ -10617,7 +11206,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205794",
@@ -10635,7 +11225,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205795",
@@ -10653,7 +11244,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205796",
@@ -10671,7 +11263,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205797",
@@ -10689,7 +11282,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205798",
@@ -10707,7 +11301,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205799",
@@ -10725,7 +11320,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205800",
@@ -10743,7 +11339,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205801",
@@ -10761,7 +11358,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205802",
@@ -10779,7 +11377,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205803",
@@ -10797,7 +11396,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205804",
@@ -10815,7 +11415,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205805",
@@ -10833,7 +11434,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205806",
@@ -10851,7 +11453,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205807",
@@ -10869,7 +11472,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205808",
@@ -10887,7 +11491,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205809",
@@ -10905,7 +11510,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205810",
@@ -10923,7 +11529,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205811",
@@ -10941,7 +11548,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202205812",
@@ -10959,7 +11567,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202205813",
@@ -10977,7 +11586,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202205814",
@@ -10995,7 +11605,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205815",
@@ -11013,7 +11624,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205816",
@@ -11031,7 +11643,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205817",
@@ -11049,7 +11662,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205818",
@@ -11067,7 +11681,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202205819",
@@ -11085,7 +11700,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-21T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205820",
@@ -11103,7 +11719,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205823",
@@ -11121,7 +11738,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-18T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205824",
@@ -11139,7 +11757,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205825",
@@ -11157,7 +11776,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205826",
@@ -11175,7 +11795,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205827",
@@ -11193,7 +11814,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205828",
@@ -11211,7 +11833,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205829",
@@ -11229,7 +11852,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-14T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205832",
@@ -11247,7 +11871,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205833",
@@ -11265,7 +11890,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205834",
@@ -11283,7 +11909,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205835",
@@ -11301,7 +11928,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-25T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205836",
@@ -11319,7 +11947,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-10-25T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205837",
@@ -11337,7 +11966,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205838",
@@ -11355,7 +11985,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205945",
@@ -11373,7 +12004,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205946",
@@ -11391,7 +12023,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205947",
@@ -11409,7 +12042,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205948",
@@ -11427,7 +12061,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205949",
@@ -11445,7 +12080,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205950",
@@ -11463,7 +12099,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205951",
@@ -11481,7 +12118,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205952",
@@ -11499,7 +12137,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205953",
@@ -11517,7 +12156,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205954",
@@ -11535,7 +12175,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202205955",
@@ -11553,7 +12194,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202205956",
@@ -11571,7 +12213,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202205957",
@@ -11589,7 +12232,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205958",
@@ -11607,7 +12251,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205959",
@@ -11625,7 +12270,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205960",
@@ -11643,7 +12289,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205961",
@@ -11661,7 +12308,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205962",
@@ -11679,7 +12327,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205963",
@@ -11697,7 +12346,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205964",
@@ -11715,7 +12365,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205965",
@@ -11733,7 +12384,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205966",
@@ -11751,7 +12403,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205967",
@@ -11769,7 +12422,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205968",
@@ -11787,7 +12441,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205969",
@@ -11805,7 +12460,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202205970",
@@ -11823,7 +12479,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205971",
@@ -11841,7 +12498,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205972",
@@ -11859,7 +12517,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202205973",
@@ -11877,7 +12536,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202205983",
@@ -11895,7 +12555,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205984",
@@ -11913,7 +12574,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205985",
@@ -11931,7 +12593,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205986",
@@ -11949,7 +12612,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205987",
@@ -11967,7 +12631,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205988",
@@ -11985,7 +12650,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205989",
@@ -12003,7 +12669,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205990",
@@ -12021,7 +12688,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205991",
@@ -12039,7 +12707,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205992",
@@ -12057,7 +12726,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205993",
@@ -12075,7 +12745,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205994",
@@ -12093,7 +12764,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205995",
@@ -12111,7 +12783,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202205996",
@@ -12129,7 +12802,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202206923",
@@ -12147,7 +12821,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202206936",
@@ -12165,7 +12840,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-12-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202207071",
@@ -12183,7 +12859,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202207072",
@@ -12201,7 +12878,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202207073",
@@ -12219,7 +12897,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202207074",
@@ -12237,7 +12916,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202207075",
@@ -12255,7 +12935,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202207076",
@@ -12273,7 +12954,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2022-01-05T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202300007",
@@ -12291,7 +12973,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-01-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300008",
@@ -12309,7 +12992,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-01-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300106",
@@ -12327,7 +13011,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-01-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300116",
@@ -12345,7 +13030,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300117",
@@ -12363,7 +13049,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300118",
@@ -12381,7 +13068,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300119",
@@ -12399,7 +13087,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300120",
@@ -12417,7 +13106,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300121",
@@ -12435,7 +13125,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300122",
@@ -12453,7 +13144,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300123",
@@ -12471,7 +13163,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-02-22T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300141",
@@ -12489,7 +13182,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300142",
@@ -12507,7 +13201,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300143",
@@ -12525,7 +13220,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300144",
@@ -12543,7 +13239,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300145",
@@ -12561,7 +13258,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300146",
@@ -12579,7 +13277,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300147",
@@ -12597,7 +13296,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300148",
@@ -12615,7 +13315,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300149",
@@ -12633,7 +13334,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300150",
@@ -12651,7 +13353,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300151",
@@ -12669,7 +13372,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300152",
@@ -12687,7 +13391,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300153",
@@ -12705,7 +13410,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300154",
@@ -12723,7 +13429,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300155",
@@ -12741,7 +13448,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300156",
@@ -12759,7 +13467,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300157",
@@ -12777,7 +13486,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300158",
@@ -12795,7 +13505,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300159",
@@ -12813,7 +13524,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300160",
@@ -12831,7 +13543,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300244",
@@ -12849,7 +13562,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300245",
@@ -12867,7 +13581,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-03-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300418",
@@ -12885,7 +13600,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202300419",
@@ -12903,7 +13619,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202300607",
@@ -12921,7 +13638,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300608",
@@ -12939,7 +13657,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202300609",
@@ -12957,7 +13676,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202300610",
@@ -12975,7 +13695,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202300611",
@@ -12993,7 +13714,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202300612",
@@ -13011,7 +13733,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202300613",
@@ -13029,7 +13752,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300614",
@@ -13047,7 +13771,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300615",
@@ -13065,7 +13790,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300616",
@@ -13083,7 +13809,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300617",
@@ -13101,7 +13828,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300618",
@@ -13119,7 +13847,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300619",
@@ -13137,7 +13866,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300620",
@@ -13155,7 +13885,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-11T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300638",
@@ -13173,7 +13904,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-04-20T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202300639",
@@ -13191,7 +13923,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202300640",
@@ -13209,7 +13942,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202300641",
@@ -13227,7 +13961,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202300642",
@@ -13245,7 +13980,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202300643",
@@ -13263,7 +13999,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202300664",
@@ -13281,7 +14018,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300665",
@@ -13299,7 +14037,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300666",
@@ -13317,7 +14056,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300667",
@@ -13335,7 +14075,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300668",
@@ -13353,7 +14094,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300669",
@@ -13371,7 +14113,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300670",
@@ -13389,7 +14132,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300671",
@@ -13407,7 +14151,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300672",
@@ -13425,7 +14170,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300673",
@@ -13443,7 +14189,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300674",
@@ -13461,7 +14208,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300675",
@@ -13479,7 +14227,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300676",
@@ -13497,7 +14246,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300677",
@@ -13515,7 +14265,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-30T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202300678",
@@ -13533,7 +14284,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-05-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202300714",
@@ -13551,7 +14303,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-06-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202300884",
@@ -13569,7 +14322,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-06-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202300885",
@@ -13587,7 +14341,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-06-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202300886",
@@ -13605,7 +14360,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-06-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202300887",
@@ -13623,7 +14379,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-06-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202301916",
@@ -13641,7 +14398,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202301917",
@@ -13659,7 +14417,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202301918",
@@ -13677,7 +14436,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202302364",
@@ -13695,7 +14455,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302365",
@@ -13713,7 +14474,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302366",
@@ -13731,7 +14493,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302367",
@@ -13749,7 +14512,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302368",
@@ -13767,7 +14531,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202302369",
@@ -13785,7 +14550,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202302370",
@@ -13803,7 +14569,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302371",
@@ -13821,7 +14588,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202302372",
@@ -13839,7 +14607,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-01-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302373",
@@ -13857,7 +14626,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302374",
@@ -13875,7 +14645,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302375",
@@ -13893,7 +14664,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302376",
@@ -13911,7 +14683,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302377",
@@ -13929,7 +14702,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302378",
@@ -13947,7 +14721,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302379",
@@ -13965,7 +14740,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-31T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202302990",
@@ -13983,7 +14759,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302991",
@@ -14001,7 +14778,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302992",
@@ -14019,7 +14797,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302993",
@@ -14037,7 +14816,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302994",
@@ -14055,7 +14835,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302995",
@@ -14073,7 +14854,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302996",
@@ -14091,7 +14873,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302997",
@@ -14109,7 +14892,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302998",
@@ -14127,7 +14911,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202302999",
@@ -14145,7 +14930,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303000",
@@ -14163,7 +14949,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303001",
@@ -14181,7 +14968,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303002",
@@ -14199,7 +14987,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303003",
@@ -14217,7 +15006,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202303004",
@@ -14235,7 +15025,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303005",
@@ -14253,7 +15044,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303006",
@@ -14271,7 +15063,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202303007",
@@ -14289,7 +15082,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202303008",
@@ -14307,7 +15101,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303009",
@@ -14325,7 +15120,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-31T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303010",
@@ -14343,7 +15139,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-01-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303011",
@@ -14361,7 +15158,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303012",
@@ -14379,7 +15177,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303013",
@@ -14397,7 +15196,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303014",
@@ -14415,7 +15215,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303015",
@@ -14433,7 +15234,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303016",
@@ -14451,7 +15253,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303017",
@@ -14469,7 +15272,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303018",
@@ -14487,7 +15291,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303019",
@@ -14505,7 +15310,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303020",
@@ -14523,7 +15329,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303021",
@@ -14541,7 +15348,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303022",
@@ -14559,7 +15367,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303023",
@@ -14577,7 +15386,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303024",
@@ -14595,7 +15405,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303025",
@@ -14613,7 +15424,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303026",
@@ -14631,7 +15443,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303027",
@@ -14649,7 +15462,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303028",
@@ -14667,7 +15481,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303029",
@@ -14685,7 +15500,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303030",
@@ -14703,7 +15519,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303031",
@@ -14721,7 +15538,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303032",
@@ -14739,7 +15557,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303033",
@@ -14757,7 +15576,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303034",
@@ -14775,7 +15595,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303035",
@@ -14793,7 +15614,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303036",
@@ -14811,7 +15633,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303037",
@@ -14829,7 +15652,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303038",
@@ -14847,7 +15671,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303039",
@@ -14865,7 +15690,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303040",
@@ -14883,7 +15709,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202303041",
@@ -14901,7 +15728,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202303042",
@@ -14919,7 +15747,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202303043",
@@ -14937,7 +15766,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202303044",
@@ -14955,7 +15785,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202303045",
@@ -14973,7 +15804,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202303046",
@@ -14991,7 +15823,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303047",
@@ -15009,7 +15842,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303048",
@@ -15027,7 +15861,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202303049",
@@ -15045,7 +15880,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303050",
@@ -15063,7 +15899,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303051",
@@ -15081,7 +15918,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303052",
@@ -15099,7 +15937,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303053",
@@ -15117,7 +15956,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303054",
@@ -15135,7 +15975,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202303055",
@@ -15153,7 +15994,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303056",
@@ -15171,7 +16013,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303057",
@@ -15189,7 +16032,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303058",
@@ -15207,7 +16051,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303059",
@@ -15225,7 +16070,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202303060",
@@ -15243,7 +16089,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202303061",
@@ -15261,7 +16108,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202303062",
@@ -15279,7 +16127,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202303063",
@@ -15297,7 +16146,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303117",
@@ -15315,7 +16165,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303118",
@@ -15333,7 +16184,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303119",
@@ -15351,7 +16203,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303120",
@@ -15369,7 +16222,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303121",
@@ -15387,7 +16241,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303122",
@@ -15405,7 +16260,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303123",
@@ -15423,7 +16279,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303124",
@@ -15441,7 +16298,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "VME device"
   },
   {
     "assetId": "202303125",
@@ -15459,7 +16317,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303126",
@@ -15477,7 +16336,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303127",
@@ -15495,7 +16355,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303128",
@@ -15513,7 +16374,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303129",
@@ -15531,7 +16393,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303130",
@@ -15549,7 +16412,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303131",
@@ -15567,7 +16431,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303132",
@@ -15585,7 +16450,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303133",
@@ -15603,7 +16469,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303134",
@@ -15621,7 +16488,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303135",
@@ -15639,7 +16507,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303136",
@@ -15657,7 +16526,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303137",
@@ -15675,7 +16545,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303138",
@@ -15693,7 +16564,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303139",
@@ -15711,7 +16583,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303140",
@@ -15729,7 +16602,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303141",
@@ -15747,7 +16621,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303142",
@@ -15765,7 +16640,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303143",
@@ -15783,7 +16659,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303144",
@@ -15801,7 +16678,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303145",
@@ -15819,7 +16697,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303146",
@@ -15837,7 +16716,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303147",
@@ -15855,7 +16735,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303148",
@@ -15873,7 +16754,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202303149",
@@ -15891,7 +16773,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303150",
@@ -15909,7 +16792,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303152",
@@ -15927,7 +16811,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303153",
@@ -15945,7 +16830,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303154",
@@ -15963,7 +16849,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303155",
@@ -15981,7 +16868,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303156",
@@ -15999,7 +16887,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303157",
@@ -16017,7 +16906,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303158",
@@ -16035,7 +16925,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303159",
@@ -16053,7 +16944,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303160",
@@ -16071,7 +16963,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303161",
@@ -16089,7 +16982,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303165",
@@ -16107,7 +17001,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303170",
@@ -16125,7 +17020,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303171",
@@ -16143,7 +17039,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303172",
@@ -16161,7 +17058,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303173",
@@ -16179,7 +17077,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303174",
@@ -16197,7 +17096,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303175",
@@ -16215,7 +17115,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303176",
@@ -16233,7 +17134,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202303181",
@@ -16251,7 +17153,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-31T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202303184",
@@ -16269,7 +17172,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2023-12-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400009",
@@ -16287,7 +17191,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-01-09T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202400053",
@@ -16305,7 +17210,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400094",
@@ -16323,7 +17229,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2026-05-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400095",
@@ -16341,7 +17248,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-03-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400256",
@@ -16359,7 +17267,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-05-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400258",
@@ -16377,7 +17286,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-04-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202400259",
@@ -16395,7 +17305,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-04-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202400260",
@@ -16413,7 +17324,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-04-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202400261",
@@ -16431,7 +17343,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-04-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202400425",
@@ -16449,7 +17362,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400426",
@@ -16467,7 +17381,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400427",
@@ -16485,7 +17400,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400428",
@@ -16503,7 +17419,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400429",
@@ -16521,7 +17438,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202400430",
@@ -16539,7 +17457,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400431",
@@ -16557,7 +17476,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400432",
@@ -16575,7 +17495,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400433",
@@ -16593,7 +17514,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400434",
@@ -16611,7 +17533,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400435",
@@ -16629,7 +17552,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-07-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400454",
@@ -16647,7 +17571,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-05-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202400457",
@@ -16665,7 +17590,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-06-18T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401081",
@@ -16683,7 +17609,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-09-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401082",
@@ -16701,7 +17628,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-09-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401083",
@@ -16719,7 +17647,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-09-23T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401084",
@@ -16737,7 +17666,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-08-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202401085",
@@ -16755,7 +17685,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-08-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202401086",
@@ -16773,7 +17704,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-08-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202401087",
@@ -16791,7 +17723,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401088",
@@ -16809,7 +17742,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-02T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202401089",
@@ -16827,7 +17761,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401090",
@@ -16845,7 +17780,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401091",
@@ -16863,7 +17799,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401092",
@@ -16881,7 +17818,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401093",
@@ -16899,7 +17837,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-10T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401366",
@@ -16917,7 +17856,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-07T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401367",
@@ -16935,7 +17875,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401368",
@@ -16953,7 +17894,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401369",
@@ -16971,7 +17913,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401370",
@@ -16989,7 +17932,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401371",
@@ -17007,7 +17951,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401372",
@@ -17025,7 +17970,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401373",
@@ -17043,7 +17989,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401374",
@@ -17061,7 +18008,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401375",
@@ -17079,7 +18027,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401376",
@@ -17097,7 +18046,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401377",
@@ -17115,7 +18065,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401378",
@@ -17133,7 +18084,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401379",
@@ -17151,7 +18103,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401380",
@@ -17169,7 +18122,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401381",
@@ -17187,7 +18141,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401382",
@@ -17205,7 +18160,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401383",
@@ -17223,7 +18179,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401384",
@@ -17241,7 +18198,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401385",
@@ -17259,7 +18217,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401386",
@@ -17277,7 +18236,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401387",
@@ -17295,7 +18255,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401388",
@@ -17313,7 +18274,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401389",
@@ -17331,7 +18293,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401390",
@@ -17349,7 +18312,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401391",
@@ -17367,7 +18331,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Computing device"
   },
   {
     "assetId": "202401392",
@@ -17385,7 +18350,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-26T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "NIM device"
   },
   {
     "assetId": "202401393",
@@ -17403,7 +18369,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202401394",
@@ -17421,7 +18388,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-15T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Electrical apparatus"
   },
   {
     "assetId": "202401395",
@@ -17439,7 +18407,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-04T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401396",
@@ -17457,7 +18426,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Vacuum equipment"
   },
   {
     "assetId": "202401397",
@@ -17475,7 +18445,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401398",
@@ -17493,7 +18464,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401399",
@@ -17511,7 +18483,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401400",
@@ -17529,7 +18502,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401401",
@@ -17547,7 +18521,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-10-29T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401975",
@@ -17565,7 +18540,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401976",
@@ -17583,7 +18559,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-13T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401977",
@@ -17601,7 +18578,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401978",
@@ -17619,7 +18597,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-27T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector"
   },
   {
     "assetId": "202401979",
@@ -17637,7 +18616,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-17T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401980",
@@ -17655,7 +18635,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-11-28T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401981",
@@ -17673,7 +18654,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401982",
@@ -17691,7 +18673,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401983",
@@ -17709,7 +18692,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401984",
@@ -17727,7 +18711,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401985",
@@ -17745,7 +18730,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401986",
@@ -17763,7 +18749,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-24T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401987",
@@ -17781,7 +18768,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-03T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401988",
@@ -17799,7 +18787,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401989",
@@ -17817,7 +18806,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-12T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401990",
@@ -17835,7 +18825,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-16T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   },
   {
     "assetId": "202401991",
@@ -17853,7 +18844,8 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-19T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Detector/DAQ electronics"
   },
   {
     "assetId": "202401992",
@@ -17871,6 +18863,7 @@ window.CENS_SEED_ASSETS = [
     "lastVerifiedDate": "",
     "lastVerifiedBy": "",
     "createdAt": "2024-12-06T00:00:00.000Z",
-    "updatedAt": "2026-05-29T00:00:00.000Z"
+    "updatedAt": "2026-05-29T00:00:00.000Z",
+    "type": "Infrastructure"
   }
-];
+]

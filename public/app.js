@@ -16,6 +16,15 @@ const STORAGE_KEYS = {
 };
 
 const AUTH_ALLOWED_DOMAIN = "ibs.re.kr";
+const AUTH_LOGIN_TEXT = {
+  project: "List",
+  newProject: "New list",
+  email: "IBS ID",
+  password: "Password",
+  signIn: "Sign in",
+  signUp: "Sign up",
+  resetPassword: "Reset password"
+};
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCzqVQWrkKsYRWZO3cZylOUyNI31Odc_fk",
   authDomain: "cens-assets-tracker.firebaseapp.com",
@@ -506,9 +515,27 @@ async function init() {
   document.addEventListener("input", handleInput);
   document.addEventListener("change", handleChange);
   document.addEventListener("keydown", handleKeydown);
-  if ("serviceWorker" in navigator) navigator.serviceWorker.register("/service-worker.js").catch(() => {});
+  initServiceWorker();
   initAuth();
   render();
+}
+
+function initServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  if (isLocalDevelopmentHost()) {
+    navigator.serviceWorker.getRegistrations()
+      .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+      .catch(() => {});
+    if (window.caches) caches.keys()
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith("cens-assets-tracker-")).map((key) => caches.delete(key))))
+      .catch(() => {});
+    return;
+  }
+  navigator.serviceWorker.register("/service-worker.js").catch(() => {});
+}
+
+function isLocalDevelopmentHost() {
+  return ["localhost", "127.0.0.1", "0.0.0.0"].includes(location.hostname);
 }
 
 function readJson(key, fallback) {
@@ -591,14 +618,14 @@ async function signIn() {
     await finishSignedInUser(credential.user);
   } catch (error) {
     state.authStatus = "signedOut";
-    state.authError = t("authSignInFailed", { error: authErrorMessage(error) });
+    state.authError = `Sign-in failed: ${authErrorMessage(error)}`;
     render();
   }
 }
 
 function validateAuthEmail(email) {
   if (isAllowedEmail(email)) return true;
-  state.authError = t("authEmailRequired", { domain: `@${AUTH_ALLOWED_DOMAIN}` });
+  state.authError = `Enter an IBS ID or @${AUTH_ALLOWED_DOMAIN} email address.`;
   state.authMessage = "";
   render();
   return false;
@@ -606,7 +633,7 @@ function validateAuthEmail(email) {
 
 function validateAuthPassword(password) {
   if (password) return true;
-  state.authError = t("authPasswordRequired");
+  state.authError = "Enter your password.";
   state.authMessage = "";
   render();
   return false;
@@ -629,7 +656,7 @@ async function signUp() {
     state.authCreatingAccount = false;
     state.authUser = null;
     state.authStatus = "signedOut";
-    state.authMessage = t("authSignedUp", { email });
+    state.authMessage = `Sign-up email sent to ${email}.`;
     render();
   } catch (error) {
     state.authCreatingAccount = false;
@@ -638,7 +665,7 @@ async function signUp() {
       return;
     }
     state.authStatus = "signedOut";
-    state.authError = t("authSignUpFailed", { error: authErrorMessage(error) });
+    state.authError = `Sign-up failed: ${authErrorMessage(error)}`;
     render();
   }
 }
@@ -655,11 +682,11 @@ async function sendPasswordResetEmail() {
   try {
     await sendPasswordEmail(email);
     state.authStatus = "signedOut";
-    state.authMessage = t("authPasswordEmailSent", { email });
+    state.authMessage = `Password reset email sent to ${email}.`;
     render();
   } catch (error) {
     state.authStatus = "signedOut";
-    state.authError = t("authPasswordEmailFailed", { error: authErrorMessage(error) });
+    state.authError = `Could not send password reset email: ${authErrorMessage(error)}`;
     render();
   }
 }
@@ -973,29 +1000,28 @@ function renderAuthPage() {
   const loading = state.authStatus === "loading";
   const unavailable = state.authStatus === "unavailable";
   const denied = state.authStatus === "denied";
-  const message = state.authError || state.authMessage || (loading ? t("authLoading") : unavailable ? t("authUnavailable") : denied ? t("authDomainDenied", { domain: `@${AUTH_ALLOWED_DOMAIN}` }) : t("signInLead"));
   return `
     <main class="auth-page">
       <section class="auth-panel">
-        <div>
-          <p class="eyebrow">${escapeHtml(t("appName"))}</p>
-          <h1>${escapeHtml(t("signInTitle"))}</h1>
-          <p>${escapeHtml(message)}</p>
+        <div class="auth-heading">
+          <h1>Asset manager</h1>
+          ${state.authError || state.authMessage ? `<p class="auth-message">${escapeHtml(state.authError || state.authMessage)}</p>` : ""}
         </div>
-        <label>${escapeHtml(t("signInEmail"))}
-          <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" autocomplete="username">
-        </label>
-        <label>${escapeHtml(t("signInPassword"))}
-          <input data-bind="authPassword" data-enter-action="sign-in" type="password" value="${escapeAttr(state.authPassword)}" placeholder="${escapeAttr(t("signInPasswordPlaceholder"))}" autocomplete="current-password">
-        </label>
-        <label>${escapeHtml(t("project"))}
+        <label>${escapeHtml(AUTH_LOGIN_TEXT.project)}
           <select data-bind="authProjectId">
             ${projects.map((project) => option(project.projectId, project.name, state.authProjectId || currentProjectId)).join("")}
           </select>
         </label>
-        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signInSubmit"))}</button>
-        <button class="secondary" data-action="sign-up" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("signUp"))}</button>
-        <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(t("resetPassword"))}</button>
+        <button class="auth-new-list" data-action="create-auth-project" ${loading ? "disabled" : ""}>${escapeHtml(AUTH_LOGIN_TEXT.newProject)}</button>
+        <label>${escapeHtml(AUTH_LOGIN_TEXT.email)}
+          <input data-bind="authEmail" data-enter-action="sign-in" value="${escapeAttr(state.authEmail)}" placeholder="${escapeAttr(t("signInEmailPlaceholder"))}" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email">
+        </label>
+        <label>${escapeHtml(AUTH_LOGIN_TEXT.password)}
+          <input data-bind="authPassword" data-enter-action="sign-in" type="password" value="${escapeAttr(state.authPassword)}" placeholder="${escapeAttr(t("signInPasswordPlaceholder"))}" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+        </label>
+        <button data-action="sign-in" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(AUTH_LOGIN_TEXT.signIn)}</button>
+        <button class="secondary" data-action="sign-up" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(AUTH_LOGIN_TEXT.signUp)}</button>
+        <button class="ghost" data-action="reset-password" ${loading || unavailable ? "disabled" : ""}>${escapeHtml(AUTH_LOGIN_TEXT.resetPassword)}</button>
       </section>
     </main>`;
 }
@@ -1491,6 +1517,10 @@ function handleClick(event) {
     signUp();
     return;
   }
+  if (action === "create-auth-project") {
+    createAuthProject();
+    return;
+  }
   if (action === "reset-password") {
     sendPasswordResetEmail();
     return;
@@ -1642,6 +1672,30 @@ function createProject() {
   });
   persist();
   showNotice(t("projectCreated"));
+  render();
+}
+
+function createAuthProject() {
+  const name = prompt(t("projectName"));
+  if (!name || !name.trim()) return;
+  const { projects } = ensureProjectState();
+  const project = makeProject(name);
+  const nextProjects = [...projects, project];
+  localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(nextProjects));
+  localStorage.setItem(STORAGE_KEYS.currentProjectId, project.projectId);
+  saveProjectData(project.projectId, {
+    assets: [],
+    myList: [],
+    records: [],
+    presets: [],
+    locations: [],
+    selectedLocation: "",
+    locationLocked: false
+  });
+  state.authProjectId = project.projectId;
+  state.projects = nextProjects;
+  state.currentProjectId = project.projectId;
+  state.authMessage = t("projectCreated");
   render();
 }
 

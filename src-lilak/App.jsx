@@ -72,7 +72,9 @@ const FIREBASE_CONFIG = {
 // (asset list) is the portal project, and AUTH is the portal account (SSO) — so
 // the app skips its own list-picker + Firebase login.
 const PORTAL_BASE = (typeof window !== 'undefined' && window.__PORTAL_BASE__) || ''
-const PORTAL_PROJECT = PORTAL_BASE ? PORTAL_BASE.split('/').filter(Boolean).pop() : ''
+const PORTAL_PARTS = PORTAL_BASE.split('/').filter(Boolean)        // ['pp','asset_manager','<project>']
+const PORTAL_PROJECT = PORTAL_PARTS.length ? PORTAL_PARTS[PORTAL_PARTS.length - 1] : ''
+const PORTAL_SERVICE = PORTAL_PARTS.length >= 2 ? PORTAL_PARTS[PORTAL_PARTS.length - 2] : ''
 function portalUser() {
   try {
     const t = localStorage.getItem('lilak_portal_token') || localStorage.getItem('elog_token')
@@ -140,6 +142,18 @@ function projectKey(projectId, key) {
 // (where ensureProjectState otherwise rebuilds the name from the portal project).
 function projectDisplayName(projectId, fallback) {
   return localStorage.getItem(projectKey(projectId, 'name')) || fallback
+}
+
+// Sync the in-app list name to the portal so the portal's project list shows the
+// same name (the folder/URL id is unchanged — this only sets a display label).
+function pushPortalName(name) {
+  if (!PORTAL_BASE || !PORTAL_SERVICE || !PORTAL_PROJECT) return
+  const tok = localStorage.getItem('lilak_portal_token') || localStorage.getItem('elog_token')
+  fetch(`/api/services/${PORTAL_SERVICE}/projects/${PORTAL_PROJECT}/name`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...(tok ? { Authorization: `Bearer ${tok}` } : {}) },
+    body: JSON.stringify({ name: name || '' }),
+  }).catch(() => {})
 }
 
 function ensureProjectState() {
@@ -563,6 +577,12 @@ function App() {
     if (name) document.title = name
   }, [projectState])
 
+  // Backfill: on load under the portal, push the current list name so a name set
+  // in-app before this sync existed still propagates to the portal's project list.
+  useEffect(() => {
+    if (PORTAL_BASE) pushPortalName(projectDisplayName(PORTAL_PROJECT, PORTAL_PROJECT))
+  }, [])
+
   useEffect(() => {
     saveProjectData(projectState.currentProjectId, { assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation })
     writeJson(STORAGE_KEYS.assets, assets)
@@ -600,8 +620,7 @@ function App() {
   }, [])
 
   const filteredAssets = useMemo(() => {
-    const list = sortAssets(assets.filter((asset) => matchesAsset(asset, query)), sort)
-    return list.slice(0, 250)
+    return sortAssets(assets.filter((asset) => matchesAsset(asset, query)), sort)
   }, [assets, query, sort])
   const isAdmin = isAdminUser(authUser)
   const myAssets = useMemo(() => {
@@ -983,6 +1002,8 @@ function App() {
     const projects = projectState.projects.map((project) => (project.projectId === id ? { ...project, name } : project))
     if (!PORTAL_BASE) writeJson(STORAGE_KEYS.projects, projects)
     setProjectState((current) => ({ ...current, projects }))
+    // Under the portal, push the new name so the portal's project list matches.
+    pushPortalName(name)
     show('리스트 이름을 변경했습니다.')
   }
 
