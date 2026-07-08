@@ -161,7 +161,10 @@ function ensureProjectState() {
   // project); the portal manages create/switch, so don't use the in-app picker.
   if (PORTAL_PROJECT) {
     if (!localStorage.getItem(projectKey(PORTAL_PROJECT, 'assets'))) {
-      saveProjectData(PORTAL_PROJECT, { assets: seedAssets(), records: [], myList: [] })
+      // New portal projects start empty — asset data is managed per server, not
+      // bundled with the app. (Seed injection here previously pre-filled every
+      // new portal project with the ~1k-row CENS_SEED_ASSETS list.)
+      saveProjectData(PORTAL_PROJECT, { assets: [], records: [], myList: [] })
     }
     return { projects: [{ projectId: PORTAL_PROJECT, name: PORTAL_PROJECT }], currentProjectId: PORTAL_PROJECT }
   }
