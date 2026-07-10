@@ -8,6 +8,9 @@ export default defineConfig({
   base: './',
   plugins: [react()],
   resolve: {
+    // Resolve react/react-dom to ONE copy (this app's), so the source-aliased kit
+    // can't pull in its own React and trigger "Invalid hook call".
+    dedupe: ['react', 'react-dom'],
     alias: {
       // env-overridable (build-all sets LILAK_UI_PATH); default = sibling checkout.
       'lilak-ui': resolve(process.env.LILAK_UI_PATH || resolve(__dirname, '../lilak_ui'), 'src'),
