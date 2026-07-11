@@ -500,6 +500,9 @@ function App() {
   const [types, setTypes] = useState(() => loadProjectData(projectState.currentProjectId).types)
   const [myLocation, setMyLocation] = useState(() => loadProjectData(projectState.currentProjectId).myLocation)
   const [notice, setNotice] = useState('')
+  // Inline confirm/prompt dialog. Native window.confirm/prompt are BLOCKED when the
+  // app runs inside the portal proxy frame, so all confirmations use this instead.
+  const [dialog, setDialog] = useState(null)   // null | {kind, message, value?, onConfirm}
   const [scanning, setScanning] = useState(false)
   const [capture, setCapture] = useState(null)   // { kind:'asset', id } | { kind:'location', name }
   const [myListBadge, setMyListBadge] = useState(0)   // new My List adds while on another tab
@@ -601,6 +604,14 @@ function App() {
     window.setTimeout(() => setNotice(''), 1800)
   }
 
+  // Portal-safe replacements for window.confirm / window.prompt.
+  function askConfirm(message, onConfirm) {
+    setDialog({ kind: 'confirm', message, onConfirm })
+  }
+  function askPrompt(message, value, onConfirm) {
+    setDialog({ kind: 'prompt', message, value: value ?? '', onConfirm })
+  }
+
   function signOut() {
     // The only session is the portal's — leaving means going back to the portal.
     window.location.assign('/projects')
@@ -660,12 +671,18 @@ function App() {
 
   // Merge = rename into an (existing) target.
   function mergeClass(field, setStore, name) {
-    const target = window.prompt(`'${name}'을(를) 어디로 병합할까요? (대상 이름)`, '')
-    if (target && target.trim()) updateClass(field, setStore, name, { name: target.trim() })
+    askPrompt(`'${name}'을(를) 어디로 병합할까요? (대상 이름)`, '', (target) => {
+      if (target && target.trim()) updateClass(field, setStore, name, { name: target.trim() })
+    })
   }
 
   function deleteClass(field, setStore, name) {
-    if (!window.confirm(`'${name}'을(를) 제거할까요? 해당 자산의 값이 비워집니다.`)) return
+    askConfirm(`'${name}'을(를) 제거할까요? 해당 자산의 값이 비워집니다.`, () => {
+      doDeleteClass(field, setStore, name)
+    })
+  }
+
+  function doDeleteClass(field, setStore, name) {
     setAssets((items) => items.map((a) => (a[field] === name ? { ...a, [field]: '' } : a)))
     setStore((list) => list.filter((l) => l.name !== name))
     if (field === 'location' && myLocation === name) setMyLocation('')
@@ -703,8 +720,7 @@ function App() {
   }
 
   function editProjectName() {
-    const next = window.prompt('목록 이름', projectName)
-    if (next !== null) renameProject(next)
+    askPrompt('목록 이름', projectName, (next) => renameProject(next))
   }
 
   function recordAction(type, assetIds = myList) {
@@ -800,9 +816,10 @@ function App() {
   }
 
   function deleteRecord(id) {
-    if (!window.confirm('이 기록을 삭제할까요?')) return
-    setRecords((items) => items.filter((r) => r.id !== id))
-    show('기록을 삭제했습니다.')
+    askConfirm('이 기록을 삭제할까요?', () => {
+      setRecords((items) => items.filter((r) => r.id !== id))
+      show('기록을 삭제했습니다.')
+    })
   }
 
   // Import a HWPX/JSON file → add its (existing) asset numbers to My List.
@@ -863,10 +880,11 @@ function App() {
 
   function clearMyList() {
     if (!myList.length) return
-    if (!window.confirm('My List를 모두 비울까요?')) return
-    setMyList([])
-    setMyPhotos({})
-    show('My List를 비웠습니다.')
+    askConfirm('My List를 모두 비울까요?', () => {
+      setMyList([])
+      setMyPhotos({})
+      show('My List를 비웠습니다.')
+    })
   }
 
   function onScanResult(text) {
@@ -1033,6 +1051,7 @@ function App() {
         )}
       </nav>
       {scanning && <ScannerModal onResult={onScanResult} onResultMany={onScanMany} onClose={() => setScanning(false)} />}
+      {dialog && <Dialog dialog={dialog} onClose={() => setDialog(null)} />}
       {capture && (
         <PhotoCaptureModal
           title={
@@ -1236,6 +1255,45 @@ function PhotoCaptureModal({ title, steps, onDone, onClose }) {
 
 // Shown only when the app is opened OUTSIDE the LILAK portal (there is no standalone
 // login any more — the list is a portal project and identity is the portal account).
+// Inline confirm/prompt overlay — a portal-safe replacement for the native
+// window.confirm/window.prompt dialogs (blocked inside the portal proxy frame).
+function Dialog({ dialog, onClose }) {
+  const [value, setValue] = useState(dialog.kind === 'prompt' ? (dialog.value ?? '') : '')
+  const inputRef = useRef(null)
+  useEffect(() => { if (dialog.kind === 'prompt') inputRef.current?.focus() }, [])
+  function confirm() {
+    const cb = dialog.onConfirm
+    onClose()
+    if (dialog.kind === 'prompt') cb?.(value)
+    else cb?.()
+  }
+  return (
+    <div className="dialog-overlay" role="dialog" aria-modal="true"
+         style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.45)', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', padding: 16, zIndex: 1000 }}
+         onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <Card style={{ width: '100%', maxWidth: 420 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: 4 }}>
+          <p style={{ margin: 0, lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{dialog.message}</p>
+          {dialog.kind === 'prompt' && (
+            <Input
+              ref={inputRef}
+              size="md"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') confirm() }}
+            />
+          )}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <Button size="md" variant="secondary" type="button" onClick={onClose}>취소</Button>
+            <Button size="md" type="button" onClick={confirm}>확인</Button>
+          </div>
+        </div>
+      </Card>
+    </div>
+  )
+}
+
 function NoPortalScreen() {
   return (
     <main className="login-page">
