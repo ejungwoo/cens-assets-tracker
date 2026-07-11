@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Html5Qrcode } from 'html5-qrcode'   // bundled (was a unpkg CDN <script>)
 import {
   applyTheme,
   applyPreset,
@@ -1081,7 +1082,7 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
   const galleryRef = useRef(null)
 
   useEffect(() => {
-    const Lib = window.Html5Qrcode
+    const Lib = Html5Qrcode
     if (!Lib) {
       setError('QR 스캐너 라이브러리를 불러오지 못했습니다. 새로고침 후 다시 시도하세요.')
       return
@@ -1109,7 +1110,7 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
     const files = [...(event.target.files || [])]
     event.target.value = ''
     if (!files.length) return
-    const Lib = window.Html5Qrcode
+    const Lib = Html5Qrcode
     if (!Lib) { setError('QR 라이브러리를 불러오지 못했습니다.'); return }
     setBusy(true)
     try {
