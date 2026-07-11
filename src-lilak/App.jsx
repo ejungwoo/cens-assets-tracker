@@ -56,21 +56,12 @@ const STORAGE_KEYS = {
   currentProjectId: 'cens.currentProjectId',
 }
 
-const AUTH_ALLOWED_DOMAIN = 'ibs.re.kr'
 const DEFAULT_PROJECT_ID = 'LIST-default'
-const FIREBASE_CONFIG = {
-  apiKey: 'AIzaSyCzqVQWrkKsYRWZO3cZylOUyNI31Odc_fk',
-  authDomain: 'cens-assets-tracker.firebaseapp.com',
-  projectId: 'cens-assets-tracker',
-  storageBucket: 'cens-assets-tracker.firebasestorage.app',
-  messagingSenderId: '493140318257',
-  appId: '1:493140318257:web:ad8e3c879d40765645dd10',
-}
 
-// Portal integration: when served under the LILAK portal proxy, the portal
-// injects window.__PORTAL_BASE__ = /pp/asset_manager/<project>. Then the PROJECT
-// (asset list) is the portal project, and AUTH is the portal account (SSO) — so
-// the app skips its own list-picker + Firebase login.
+// Portal-only: this app is delivered through the LILAK portal, which injects
+// window.__PORTAL_BASE__ = /pp/asset_manager/<project>. The PROJECT (chosen in the
+// portal) IS the asset list, and identity is the portal account (SSO). There is no
+// standalone login any more — the old Firebase email/password path was removed.
 const PORTAL_BASE = (typeof window !== 'undefined' && window.__PORTAL_BASE__) || ''
 const PORTAL_PARTS = PORTAL_BASE.split('/').filter(Boolean)        // ['pp','asset_manager','<project>']
 const PORTAL_PROJECT = PORTAL_PARTS.length ? PORTAL_PARTS[PORTAL_PARTS.length - 1] : ''
@@ -85,10 +76,9 @@ function portalUser() {
   } catch { return null }
 }
 
-// The portal marks admins with role "manager" (first signup). Outside the portal
-// (standalone) the local user owns their own lists, so treat them as admin.
+// The portal marks admins with role "manager" (first signup).
 function isAdminUser(user) {
-  if (!PORTAL_BASE) return true
+  if (!PORTAL_BASE) return false
   return ['manager', 'admin'].includes(String(user?.role || '').toLowerCase())
 }
 
@@ -440,12 +430,6 @@ function exportRequestPdf(type, fields, assets, title) {
   setTimeout(() => { iframe.contentWindow.print(); setTimeout(() => iframe.remove(), 1000) }, 300)
 }
 
-function normalizeEmail(value) {
-  const input = String(value || '').trim().toLowerCase()
-  if (!input) return ''
-  return input.includes('@') ? input : `${input}@${AUTH_ALLOWED_DOMAIN}`
-}
-
 function sortAssets(list, sort) {
   const dir = sort.dir === 'asc' ? 1 : -1
   const val = (a) => {
@@ -495,10 +479,10 @@ function matchesAsset(asset, query) {
 }
 
 function App() {
-  const [authStatus, setAuthStatus] = useState(PORTAL_BASE ? 'ready' : 'loading')
-  const [authUser, setAuthUser] = useState(PORTAL_BASE ? (portalUser() || { email: 'portal', name: 'portal' }) : null)
-  const [authForm, setAuthForm] = useState({ email: '', password: '' })
-  const [authMessage, setAuthMessage] = useState('')
+  // Portal-only: ready immediately with the portal (SSO) identity. Opened outside
+  // the portal there is no login — show a "open via the portal" notice instead.
+  const [authStatus] = useState(PORTAL_BASE ? 'ready' : 'no-portal')
+  const [authUser] = useState(PORTAL_BASE ? (portalUser() || { email: 'portal', name: 'portal' }) : null)
   const [projectState, setProjectState] = useState(() => ensureProjectState())
   const [tab, setTab] = useState('assets')
   const [query, setQuery] = useState('')
@@ -593,35 +577,6 @@ function App() {
     writeJson(STORAGE_KEYS.myList, myList)
   }, [assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation, projectState.currentProjectId])
 
-  useEffect(() => {
-    if (PORTAL_BASE) return            // authenticated via the portal (SSO) — skip Firebase
-    if (!window.firebase?.auth) {
-      setAuthStatus('unavailable')
-      setAuthMessage('Firebase Auth를 불러오지 못했습니다. 네트워크를 확인하거나 다시 새로고침하세요.')
-      return
-    }
-    if (!window.firebase.apps.length) window.firebase.initializeApp(FIREBASE_CONFIG)
-    return window.firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        setAuthUser(null)
-        setAuthStatus('signedOut')
-        return
-      }
-      const email = String(user.email || '').toLowerCase()
-      if (!email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`)) {
-        window.firebase.auth().signOut().catch(() => {})
-        setAuthUser(null)
-        setAuthStatus('signedOut')
-        setAuthMessage(`Only @${AUTH_ALLOWED_DOMAIN} email accounts can use this app.`)
-        return
-      }
-      setAuthUser({ email, name: user.displayName || email })
-      setAuthForm((form) => ({ ...form, email }))
-      setAuthStatus('ready')
-      setAuthMessage('')
-    })
-  }, [])
-
   const filteredAssets = useMemo(() => {
     return sortAssets(assets.filter((asset) => matchesAsset(asset, query)), sort)
   }, [assets, query, sort])
@@ -646,70 +601,9 @@ function App() {
     window.setTimeout(() => setNotice(''), 1800)
   }
 
-  async function signIn(event) {
-    event?.preventDefault?.()
-    const email = normalizeEmail(authForm.email)
-    if (!email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`)) {
-      setAuthMessage(`Enter an IBS ID or @${AUTH_ALLOWED_DOMAIN} email address.`)
-      return
-    }
-    if (!authForm.password) {
-      setAuthMessage('Enter your password.')
-      return
-    }
-    setAuthStatus('loading')
-    setAuthMessage('Signing in.')
-    try {
-      await window.firebase.auth().signInWithEmailAndPassword(email, authForm.password)
-    } catch (error) {
-      setAuthStatus('signedOut')
-      setAuthMessage(`Sign-in failed: ${error?.message || error}`)
-    }
-  }
-
-  async function signOut() {
-    if (PORTAL_BASE) { window.location.assign('/projects'); return }   // back to the portal
-    await window.firebase?.auth?.().signOut()
-    setAuthStatus('signedOut')
-  }
-
-  async function sendPasswordReset() {
-    const email = normalizeEmail(authForm.email)
-    if (!email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`)) {
-      setAuthMessage(`Enter an IBS ID or @${AUTH_ALLOWED_DOMAIN} email address.`)
-      return
-    }
-    try {
-      await window.firebase.auth().sendPasswordResetEmail(email)
-      setAuthMessage(`Password reset email sent to ${email}.`)
-    } catch (error) {
-      setAuthMessage(`Could not send password reset email: ${error?.message || error}`)
-    }
-  }
-
-  async function signUp() {
-    const email = normalizeEmail(authForm.email)
-    if (!email.endsWith(`@${AUTH_ALLOWED_DOMAIN}`)) {
-      setAuthMessage(`Enter an IBS ID or @${AUTH_ALLOWED_DOMAIN} email address.`)
-      return
-    }
-    setAuthStatus('loading')
-    setAuthMessage('Preparing sign-up email.')
-    try {
-      await window.firebase.auth().createUserWithEmailAndPassword(email, makeTemporaryPassword())
-      await window.firebase.auth().sendPasswordResetEmail(email)
-      await window.firebase.auth().signOut()
-      setAuthStatus('signedOut')
-      setAuthMessage(`Sign-up email sent to ${email}.`)
-    } catch (error) {
-      if (error?.code === 'auth/email-already-in-use') {
-        await sendPasswordReset()
-        setAuthStatus('signedOut')
-        return
-      }
-      setAuthStatus('signedOut')
-      setAuthMessage(`Sign-up failed: ${error?.message || error}`)
-    }
+  function signOut() {
+    // The only session is the portal's — leaving means going back to the portal.
+    window.location.assign('/projects')
   }
 
   function toggleMyList(assetId) {
@@ -1010,66 +904,8 @@ function App() {
     show('리스트 이름을 변경했습니다.')
   }
 
-  function switchProject(projectId) {
-    if (!projectState.projects.some((project) => project.projectId === projectId)) return
-    saveProjectData(projectState.currentProjectId, { assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation })
-    localStorage.setItem(STORAGE_KEYS.currentProjectId, projectId)
-    const next = loadProjectData(projectId)
-    setProjectState((current) => ({ ...current, currentProjectId: projectId }))
-    setAssets(next.assets)
-    setRecords(next.records)
-    setMyList(next.myList)
-    setMyPhotos(next.myPhotos)
-    setLocations(next.locations)
-    setTypes(next.types)
-    setMyListName(next.myListName || makeListName(next.records))
-    setCurrentListId(next.currentListId)
-    setMyLocation(next.myLocation)
-    setExpandedId('')
-    setQuery('')
-  }
-
-  function createProject() {
-    const name = window.prompt('List 이름')
-    if (!name || !name.trim()) return
-    saveProjectData(projectState.currentProjectId, { assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation })
-    const now = new Date().toISOString()
-    const project = { projectId: `LIST-${Date.now().toString(36)}`, name: name.trim(), createdAt: now, updatedAt: now }
-    const projects = [...projectState.projects, project]
-    writeJson(STORAGE_KEYS.projects, projects)
-    localStorage.setItem(STORAGE_KEYS.currentProjectId, project.projectId)
-    saveProjectData(project.projectId, { assets: [], records: [], myList: [], myPhotos: {}, locations: [], types: [], myListName: '', currentListId: '', myLocation: '' })
-    setProjectState({ projects, currentProjectId: project.projectId })
-    setAssets([])
-    setRecords([])
-    setMyList([])
-    setMyPhotos({})
-    setLocations([])
-    setTypes([])
-    setMyListName(makeListName([]))
-    setCurrentListId('')
-    setMyLocation('')
-    setExpandedId('')
-    setQuery('')
-    setAuthMessage('List created.')
-  }
-
   if (authStatus !== 'ready') {
-    return (
-      <LoginScreen
-        status={authStatus}
-        message={authMessage}
-        form={authForm}
-        setForm={setAuthForm}
-        projects={projectState.projects}
-        currentProjectId={projectState.currentProjectId}
-        onProjectChange={switchProject}
-        onCreateProject={createProject}
-        onSubmit={signIn}
-        onSignUp={signUp}
-        onReset={sendPasswordReset}
-      />
-    )
+    return <NoPortalScreen />
   }
 
   const currentProject = projectState.projects.find((project) => project.projectId === projectState.currentProjectId)
@@ -1398,56 +1234,23 @@ function PhotoCaptureModal({ title, steps, onDone, onClose }) {
   )
 }
 
-function LoginScreen({ status, message, form, setForm, projects, currentProjectId, onProjectChange, onCreateProject, onSubmit, onSignUp, onReset }) {
-  const disabled = status === 'loading' || status === 'unavailable'
+// Shown only when the app is opened OUTSIDE the LILAK portal (there is no standalone
+// login any more — the list is a portal project and identity is the portal account).
+function NoPortalScreen() {
   return (
     <main className="login-page">
       <section className="login-shell">
         <Card style={{ width: '100%', maxWidth: 520 }}>
-          <form className="login-form" onSubmit={onSubmit}>
+          <div className="login-form">
             <h1>Asset manager</h1>
-            {message && <p className="login-message">{message}</p>}
-            <label>
-              List
-              <select className="login-select" value={currentProjectId} onChange={(event) => onProjectChange(event.target.value)}>
-                {projects.map((project) => (
-                  <option key={project.projectId} value={project.projectId}>{project.name}</option>
-                ))}
-              </select>
-            </label>
-            <Button size="md" style={loginNewListButtonStyle} variant="success" disabled={status === 'loading'} type="button" onClick={onCreateProject}>New list</Button>
-            <label>
-              IBS ID
-              <Input
-                size="md"
-                value={form.email}
-                autoComplete="username"
-                autoCapitalize="none"
-                autoCorrect="off"
-                spellCheck="false"
-                inputMode="email"
-                placeholder="name"
-                onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-              />
-            </label>
-            <label>
-              Password
-              <Input
-                size="md"
-                type="password"
-                value={form.password}
-                autoComplete="current-password"
-                autoCapitalize="none"
-                autoCorrect="off"
-                spellCheck="false"
-                placeholder="password"
-                onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-              />
-            </label>
-            <Button size="md" style={loginButtonStyle} disabled={disabled} type="submit">Sign in</Button>
-            <Button size="md" style={loginButtonStyle} variant="secondary" disabled={disabled} type="button" onClick={onSignUp}>Sign up</Button>
-            <Button size="md" style={loginButtonStyle} variant="ghost" disabled={disabled} type="button" onClick={onReset}>Reset password</Button>
-          </form>
+            <p className="login-message">
+              이 앱은 LILAK 포털을 통해 열어주세요. 목록(리스트)은 포털의 프로젝트로 선택하고,
+              로그인은 포털 계정으로 대체되었습니다.
+            </p>
+            <Button size="md" style={loginButtonStyle} type="button" onClick={() => window.location.assign('/projects')}>
+              포털로 이동
+            </Button>
+          </div>
         </Card>
       </section>
     </main>
@@ -2158,10 +1961,5 @@ const loginNewListButtonStyle = {
   ...loginButtonStyle,
 }
 
-function makeTemporaryPassword() {
-  const bytes = new Uint8Array(18)
-  crypto.getRandomValues(bytes)
-  return Array.from(bytes, (byte) => byte.toString(36)).join('') + 'Aa1!'
-}
 
 export default App
