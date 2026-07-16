@@ -24,7 +24,6 @@ import {
   Images,
   MagnifyingGlass,
   PencilSimple,
-  CaretDown,
   Trash,
   CheckCircle,
   ArrowCircleDown,
@@ -32,11 +31,11 @@ import {
   FloppyDisk,
   MapPin,
   Tag,
-  CaretRight,
   ShieldCheck,
   CalendarPlus,
   UploadSimple,
   ArrowsMerge,
+  ArrowUp,
 } from '@phosphor-icons/react'
 
 // Two-tone palette. Tone A (primary): top-bar icons, scan FAB, active tab, selection.
@@ -75,6 +74,14 @@ function portalUser() {
     const email = p.email || p.username || 'portal'
     return { email, name: p.name || p.username || email, role: p.role || p.prole || '' }
   } catch { return null }
+}
+
+// PWA: offline shell. Relative 'sw.js' resolves under the portal-injected <base>,
+// so the worker registers per-project (scope = /pp/asset_manager/<project>/).
+if (PORTAL_BASE && typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {})
+  })
 }
 
 // The portal marks admins with role "manager" (first signup).
@@ -592,12 +599,16 @@ function App() {
   // Classification lists (location / type) merged with asset values + item counts.
   const locationList = useMemo(() => buildClassList('location', locations, assets), [locations, assets])
   const typeList = useMemo(() => buildClassList('type', types, assets), [types, assets])
+  // Existing class names — the asset edit form's location/type dropdowns.
+  const classOptions = useMemo(() => ({
+    location: locationList.map((l) => l.name),
+    type: typeList.map((l) => l.name),
+  }), [locationList, typeList])
   const locationPhoto = useMemo(() => {
     const m = {}
     for (const l of locations) if (l?.name && l.photo) m[l.name] = l.photo
     return (name) => m[name] || ''
   }, [locations])
-  const locationCount = locationList.length
   const latestRecords = records.slice(0, 80)
 
   function show(message) {
@@ -653,6 +664,17 @@ function App() {
 
   function setClassPhoto(setStore, name, photo) {
     upsertClass(setStore, name, { photo })
+  }
+
+  // Register a new location/type from the "새 등록" card. Name required, no dupes.
+  function createClass(field, setStore, form) {
+    const name = String(form.name || '').trim()
+    if (!name) { show('이름을 입력해야 등록할 수 있습니다.'); return false }
+    const list = field === 'location' ? locationList : typeList
+    if (list.some((l) => l.name === name)) { show(`'${name}'은(는) 이미 있습니다.`); return false }
+    upsertClass(setStore, name, { ...form, name, lastUpdate: new Date().toISOString() })
+    show(`'${name}'을(를) 등록했습니다.`)
+    return true
   }
 
   // Edit a class record's name + fields; renaming reassigns the asset field.
@@ -823,6 +845,16 @@ function App() {
     })
   }
 
+  function renameRecord(id) {
+    const rec = records.find((r) => r.id === id)
+    askPrompt('기록 이름 편집', rec?.name || '', (name) => {
+      const v = String(name || '').trim()
+      if (!v) return
+      setRecords((items) => items.map((r) => (r.id === id ? { ...r, name: v } : r)))
+      show('기록 이름을 변경했습니다.')
+    })
+  }
+
   // Import a HWPX/JSON file → add its (existing) asset numbers to My List.
   async function importToMyList(file) {
     try {
@@ -903,11 +935,69 @@ function App() {
     }
   }
 
+  // Append-only editor trail: "kim → lee → kim". Never cleared, never editable;
+  // consecutive edits by the same person are collapsed into one entry.
+  function appendEditedBy(prev, me) {
+    if (!me) return prev || ''
+    const chain = String(prev || '').trim()
+    const last = chain.split('→').map((s) => s.trim()).filter(Boolean).pop()
+    return last === me ? chain : (chain ? `${chain} → ${me}` : me)
+  }
+
   function updateAsset(assetId, patch) {
     const now = new Date().toISOString()
-    setAssets((items) => items.map((asset) => (asset.assetId === assetId ? { ...asset, ...patch, lastUpdate: now } : asset)))
+    const me = authUser?.email ? String(authUser.email).split('@')[0] : ''
+    // The asset number itself is editable — validate + carry references along.
+    if ('assetId' in patch) {
+      const newId = String(patch.assetId || '').trim()
+      if (!newId) { show('자산번호는 비울 수 없습니다.'); return false }
+      if ('name' in patch && !String(patch.name || '').trim()) { show('이름은 비울 수 없습니다.'); return false }
+      patch = { ...patch, assetId: newId }
+      if (newId !== assetId) {
+        if (assets.some((a) => a.assetId === newId)) { show(`자산번호 ${newId}는 이미 있습니다.`); return false }
+        setMyList((list) => list.map((id) => (id === assetId ? newId : id)))
+        setMyPhotos((m) => {
+          if (!m[assetId]) return m
+          const n = { ...m, [newId]: m[assetId] }
+          delete n[assetId]
+          return n
+        })
+        if (expandedId === assetId) setExpandedId(newId)
+      }
+    }
+    setAssets((items) => items.map((asset) => (
+      asset.assetId === assetId ? { ...asset, ...patch, editedBy: appendEditedBy(asset.editedBy, me), lastUpdate: now } : asset
+    )))
     touchClasses([assetId], now)
     show('자산 정보를 저장했습니다.')
+    return true
+  }
+
+  // "전체추가" — add every asset currently listed (i.e. the filtered set) to My List.
+  function addAllAssets(ids) {
+    const added = ids.filter((id) => !myList.includes(id))
+    if (!added.length) { show('이미 모두 My List에 있습니다.'); return }
+    setMyList((list) => [...list, ...added.filter((id) => !list.includes(id))])
+    bumpBadge(added.length)
+    show(`${added.length}개 자산을 My List에 추가했습니다.`)
+  }
+
+  // Register a brand-new asset (the "새 자산 등록" card). Number + name required.
+  function createAsset(form) {
+    const id = String(form.assetId || '').trim()
+    const name = String(form.name || '').trim()
+    if (!id || !name) { show('자산번호와 이름을 입력해야 등록할 수 있습니다.'); return false }
+    if (assets.some((a) => a.assetId === id)) { show(`자산번호 ${id}는 이미 있습니다.`); return false }
+    const now = new Date().toISOString()
+    const me = authUser?.email ? String(authUser.email).split('@')[0] : ''
+    const asset = { photo1: '', photo2: '', photo3: '', createdAt: now, updatedAt: now, lastUpdate: now, user: authUser?.email || '', editedBy: me }
+    EDIT_FIELDS.forEach((f) => { asset[f.key] = String(form[f.key] || '').trim() })
+    asset.assetId = id
+    asset.name = name
+    setAssets((items) => [asset, ...items])
+    setExpandedId(id)
+    show(`새 자산 ${id}를 등록했습니다.`)
+    return true
   }
 
   function renameProject(rawName) {
@@ -929,8 +1019,8 @@ function App() {
 
   const currentProject = projectState.projects.find((project) => project.projectId === projectState.currentProjectId)
   const projectName = projectDisplayName(projectState.currentProjectId, currentProject?.name || '')
-  const tabIconSize = isMobile ? 25 : 16
-  const logoutIconSize = isMobile ? 23 : 16
+  const tabIconSize = isMobile ? 29 : 19
+  const logoutIconSize = isMobile ? 24 : 17
 
   const myListSet = useMemo(() => new Set(myList), [myList])
 
@@ -972,7 +1062,9 @@ function App() {
             records={latestRecords}
             sort={sort}
             setSort={setSort}
-            counts={{ assets: assets.length, locations: locationCount, myList: myList.length, records: records.length }}
+            onCreate={createAsset}
+            onAddAll={addAllAssets}
+            classOptions={classOptions}
           />
         )}
         {tab === 'mylist' && (
@@ -1004,9 +1096,10 @@ function App() {
             onLocationPhoto={(name) => name && setCapture({ kind: 'location', name })}
             sort={sort}
             setSort={setSort}
+            classOptions={classOptions}
           />
         )}
-        {tab === 'history' && <RecordsPage records={latestRecords} assets={assets} myListSet={myListSet} toggleMyList={toggleMyList} onAdd={addListToMyList} onRemove={removeListFromMyList} isAdmin={isAdmin} onDelete={deleteRecord} />}
+        {tab === 'history' && <RecordsPage records={latestRecords} assets={assets} myListSet={myListSet} toggleMyList={toggleMyList} onAdd={addListToMyList} onRemove={removeListFromMyList} isAdmin={isAdmin} onDelete={deleteRecord} onRename={renameRecord} />}
         {tab === 'classification' && (
           <ClassificationPage
             assets={assets}
@@ -1015,6 +1108,8 @@ function App() {
             toggleMyList={toggleMyList}
             locationList={locationList}
             typeList={typeList}
+            onCreateLocation={(f) => createClass('location', setLocations, f)}
+            onCreateType={(f) => createClass('type', setTypes, f)}
             onUpdateLocation={(o, p) => updateClass('location', setLocations, o, p)}
             onMergeLocation={(n) => mergeClass('location', setLocations, n)}
             onDeleteLocation={(n) => deleteClass('location', setLocations, n)}
@@ -1032,14 +1127,20 @@ function App() {
         {tabs.map((item) =>
           item.fab ? (
             <button key={item.id} type="button" className="tabbar-fab" title={item.label} onClick={() => setScanning(true)}>
-              <item.Glyph size={28} weight="fill" color="#ffffff" />
+              <item.Glyph size={31} weight="fill" color="#ffffff" />
             </button>
           ) : (
             <button
               key={item.id}
               type="button"
               className={`tabbar-tab${tab === item.id ? ' is-active' : ''}`}
-              onClick={() => setTab(item.id)}
+              onClick={() => {
+                if (tab === item.id) {
+                  // Re-tapping the active tab: close the open card + glide to top.
+                  setExpandedId('')
+                  pageRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+                } else setTab(item.id)
+              }}
               title={item.label}
             >
               <span className="tabbar-glyph">
@@ -1098,7 +1199,7 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
     scanner
       .start(
         { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 240, height: 240 } },
+        { fps: 15, qrbox: { width: 240, height: 240 }, experimentalFeatures: { useBarCodeDetectorIfSupported: true } },
         (decodedText) => { stop(); onResult(decodedText) },
       )
       .catch((err) => setError(`카메라를 시작할 수 없습니다: ${err?.message || err}`))
@@ -1338,20 +1439,92 @@ function SortBar({ sort, setSort }) {
   )
 }
 
-function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myListSet, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, sort, setSort, counts }) {
+// One asset edit field — dropdown (existing locations/types only), textarea, or input.
+function EditField({ field, form, setForm, classOptions }) {
+  const set = (v) => setForm((c) => ({ ...c, [field.key]: v }))
+  if (field.options) {
+    const opts = classOptions?.[field.options] || []
+    const cur = form[field.key] || ''
+    // A legacy value not in the list stays selectable so it isn't silently lost.
+    const withCur = cur && !opts.includes(cur) ? [cur, ...opts] : opts
+    return (
+      <label>
+        {field.label}
+        <select className="edit-select" value={cur} onChange={(e) => set(e.target.value)}>
+          <option value="">(선택 안 함)</option>
+          {withCur.map((n) => <option key={n} value={n}>{n}</option>)}
+        </select>
+      </label>
+    )
+  }
+  return (
+    <label>
+      {field.label}
+      {field.textarea ? (
+        <textarea className="edit-textarea" value={form[field.key] || ''} onChange={(e) => set(e.target.value)} />
+      ) : (
+        <Input
+          size="md"
+          className={field.required && !String(form[field.key] || '').trim() ? 'is-req-empty' : undefined}
+          value={form[field.key] || ''}
+          onChange={(e) => set(e.target.value)}
+        />
+      )}
+    </label>
+  )
+}
+
+// "새 자산 등록" — the first card on the Assets tab (normal, un-searched state).
+// Opens inline with the same form as Edit; number + name are required to save.
+function NewAssetCard({ onCreate, classOptions }) {
+  const [open, setOpen] = useState(false)
+  const [form, setForm] = useState({})
+  function save() {
+    if (onCreate(form)) { setForm({}); setOpen(false) }
+  }
+  return (
+    <div className={`asset-row${open ? ' is-open' : ''}`}>
+      <div className="asset-row-head" role="button" tabIndex={0} onClick={() => setOpen((o) => !o)}>
+        <div className="asset-photo"><Plus size={24} weight="bold" color={BRAND} /></div>
+        <div className="asset-row-open">
+          <div className="asset-row-main"><strong>새 자산 등록</strong></div>
+        </div>
+      </div>
+      {open && (
+        <div className="asset-row-body">
+          <div className="asset-edit">
+            <div className="action-row">
+              <button type="button" className="amber-btn" onClick={save}>Save</button>
+              <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => { setForm({}); setOpen(false) }}>Cancel</Button>
+            </div>
+            {EDIT_FIELDS.map((field) => (
+              <EditField key={field.key} field={field} form={form} setForm={setForm} classOptions={classOptions} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myListSet, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, sort, setSort, onCreate, onAddAll, classOptions }) {
   return (
     <div className="stack">
-      <Card title="Find asset">
+      <Card>
         <div className="search-box">
-          <MagnifyingGlass size={18} weight="fill" color={BRAND} />
+          <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
           <Input size="md" value={query} placeholder="asset number, name, location" onChange={(event) => setQuery(event.target.value)} autoFocus />
         </div>
       </Card>
       <div className="list-toolbar">
-        <span className="list-count">총 {assets.length}개</span>
+        <span className="list-count">
+          총 {assets.length}개
+          <button type="button" className="sort-btn add-all" onClick={() => onAddAll(assets.map((a) => a.assetId))}>전체추가</button>
+        </span>
         <SortBar sort={sort} setSort={setSort} />
       </div>
       <div className="result-list result-list-full">
+        {!query.trim() && <NewAssetCard onCreate={onCreate} classOptions={classOptions} />}
         {assets.length === 0 && <Card><p className="muted">일치하는 자산이 없습니다.</p></Card>}
         {assets.map((asset) => (
           <AssetRow
@@ -1368,23 +1541,19 @@ function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myL
             updateAsset={updateAsset}
             locationPhoto={locationPhoto}
             records={records}
+            classOptions={classOptions}
           />
         ))}
-      </div>
-      <div className="metric-grid">
-        <Metric label="Assets" value={counts.assets} />
-        <Metric label="Locations" value={counts.locations} />
-        <Metric label="My List" value={counts.myList} />
-        <Metric label="Records" value={counts.records} />
       </div>
     </div>
   )
 }
 
 const EDIT_FIELDS = [
-  { key: 'name', label: 'Name' },
-  { key: 'location', label: 'Location' },
-  { key: 'type', label: 'Type' },
+  { key: 'assetId', label: 'Asset number', required: true },
+  { key: 'name', label: 'Name', required: true },
+  { key: 'location', label: 'Location', options: 'location' },
+  { key: 'type', label: 'Type', options: 'type' },
   { key: 'accountHolder', label: 'Account holder' },
   { key: 'applicationName', label: 'Application name (반출·반입·연장용)' },
   { key: 'weight', label: 'Weight (kg)' },
@@ -1396,17 +1565,18 @@ const EDIT_FIELDS = [
 ]
 
 function AssetThumb({ asset, inMyList, shots, onCapture }) {
-  // In My List → a camera-plus button to (re)take the two guided photos.
+  // The photo is the card's whole left section (flush, like the +/- square on the
+  // right). In My List it doubles as the camera hitbox for the guided photos.
   if (inMyList) {
     return (
-      <button type="button" className={`asset-thumb is-photo${shots ? ' has-shot' : ''}`} title="사진 촬영" onClick={(e) => { e.stopPropagation(); onCapture() }}>
-        {shots?.sticker ? <img src={shots.sticker} alt="" /> : <CameraPlus size={22} weight="fill" color={PHOTO_COLOR} />}
+      <button type="button" className={`asset-photo is-photo${shots ? ' has-shot' : ''}`} title="사진 촬영" onClick={(e) => { e.stopPropagation(); onCapture() }}>
+        {shots?.sticker ? <img src={shots.sticker} alt="" /> : <CameraPlus size={24} weight="fill" color={PHOTO_COLOR} />}
       </button>
     )
   }
   return (
-    <div className="asset-thumb">
-      {asset.photo1 ? <img src={asset.photo1} alt="" /> : <Images size={20} weight="fill" color="#c2c8d2" />}
+    <div className="asset-photo">
+      {asset.photo1 ? <img src={asset.photo1} alt="" /> : <Images size={22} weight="fill" color="#c2c8d2" />}
     </div>
   )
 }
@@ -1422,7 +1592,7 @@ function PhotoSlot({ src, label }) {
   )
 }
 
-function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records }) {
+function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, classOptions }) {
   const [editing, setEditing] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const [form, setForm] = useState(asset)
@@ -1438,35 +1608,56 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
     if (!expanded) { setEditing(false); setShowHistory(false) }
   }, [asset, expanded])
 
+  const rowRef = useRef(null)
+  // When a row expands, glide it up so it sits just below the top bar.
+  useEffect(() => {
+    if (expanded && rowRef.current) rowRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [expanded])
+
+  // After leaving edit mode the row may have moved far down — glide it back
+  // under the top bar (rAF: let the collapsed layout settle first).
+  function scrollBack() {
+    requestAnimationFrame(() => rowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+  }
+
   function save() {
     const patch = {}
     EDIT_FIELDS.forEach((f) => { patch[f.key] = form[f.key] || '' })
-    updateAsset(asset.assetId, patch)
+    if (!updateAsset(asset.assetId, patch)) return   // invalid/duplicate — stay editing
     setEditing(false)
+    scrollBack()
   }
 
   return (
-    <div className={`asset-row${expanded ? ' is-open' : ''}`}>
-      <div className="asset-row-head" role="button" tabIndex={0} onClick={onToggle}>
+    <div ref={rowRef} className={`asset-row${expanded ? ' is-open' : ''}`}>
+      <div className="asset-row-head">
         <AssetThumb asset={asset} inMyList={inMyList} shots={shots} onCapture={onCapture} />
-        <div className="asset-row-main">
-          <span className="mono">{asset.assetId}</span>
-          <strong className={asset.verifyRequested ? 'is-requested' : ''}>{asset.name || 'Unnamed asset'}</strong>
-          <span className="asset-row-caret"><CaretDown size={15} weight="bold" /></span>
+        <div className="asset-row-open" role="button" tabIndex={0} onClick={onToggle}>
+          <div className="asset-row-main">
+            <span className="mono asset-id2">
+              <span>{String(asset.assetId).slice(0, 4)}</span>
+              {String(asset.assetId).length > 4 && <span>{String(asset.assetId).slice(4)}</span>}
+            </span>
+            <strong className={asset.verifyRequested ? 'is-requested' : ''}>{asset.name || 'Unnamed asset'}</strong>
+          </div>
         </div>
         <button
           type="button"
-          className={`asset-circle${inMyList ? ' is-on' : ''}`}
+          className={`asset-add${inMyList ? ' is-on' : ''}`}
           title={inMyList ? 'My List에서 제거' : 'My List에 추가'}
           onClick={(e) => { e.stopPropagation(); onToggleMyList() }}
         >
-          {inMyList ? <Minus size={15} weight="bold" color="#ffffff" /> : <Plus size={15} weight="bold" color="#ffffff" />}
+          {inMyList ? <Minus size={22} weight="bold" color="#ffffff" /> : <Plus size={22} weight="bold" color="#ffffff" />}
         </button>
       </div>
       {expanded && (
         <div className="asset-row-body">
           {editing ? (
             <div className="asset-edit">
+              <div className="action-row">
+                <button type="button" className="amber-btn" onClick={save}>Save</button>
+                <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => { setForm(asset); setEditing(false); scrollBack() }}>Cancel</Button>
+              </div>
               <div className="photo-row">
                 {[{ slot: 'photo2', label: '자산 스티커' }, { slot: 'photo1', label: '자산 전체' }].map((p) => (
                   <div className="photo-slot" key={p.slot}>
@@ -1482,58 +1673,20 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
                 ))}
               </div>
               {EDIT_FIELDS.map((field) => (
-                <label key={field.key}>
-                  {field.label}
-                  {field.textarea ? (
-                    <textarea
-                      className="edit-textarea"
-                      value={form[field.key] || ''}
-                      onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))}
-                    />
-                  ) : (
-                    <Input size="md" value={form[field.key] || ''} onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))} />
-                  )}
-                </label>
+                <EditField key={field.key} field={field} form={form} setForm={setForm} classOptions={classOptions} />
               ))}
               <div className="action-row">
-                <button type="button" className="amber-btn" onClick={save}>Save</button>
-                <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => { setForm(asset); setEditing(false) }}>Cancel</Button>
+                <button type="button" className="amber-btn" onClick={scrollBack}><ArrowUp size={18} weight="bold" /> 맨 위로</button>
               </div>
             </div>
           ) : (
             <div className="detail-body">
-              <div className="photo-row">
-                <PhotoSlot src={shots?.sticker || asset.photo2} label="자산 스티커" />
-                <PhotoSlot src={shots?.whole || asset.photo1} label="자산 전체" />
-                <PhotoSlot src={locationPhoto ? locationPhoto(asset.location) : ''} label="위치" />
-              </div>
-              <h3 className="asset-full-name">{asset.name || 'Unnamed asset'}</h3>
-              <p>{asset.description || 'No description'}</p>
-              <dl className="kv">
-                <dt>Location</dt>
-                <dd>{asset.location || '-'}</dd>
-                <dt>Type</dt>
-                <dd>{asset.type || '-'}</dd>
-                <dt>Account holder</dt>
-                <dd>{asset.accountHolder || '-'}</dd>
-                <dt>Application</dt>
-                <dd>{asset.applicationName || '-'}</dd>
-                <dt>Weight</dt>
-                <dd>{asset.weight ? `${asset.weight} kg` : '-'}</dd>
-                {asset.memo && <><dt>Memo</dt><dd>{asset.memo}</dd></>}
-                <dt>Manufacturer</dt>
-                <dd>{asset.manufacturerProvider || '-'}</dd>
-                <dt>Acquired</dt>
-                <dd>{asset.acquisitionDate || '-'}</dd>
-                <dt>User (위치변경)</dt>
-                <dd>{asset.user ? String(asset.user).split('@')[0] : '-'}</dd>
-                <dt>Last update</dt>
-                <dd>{formatDate(asset.lastUpdate) || '-'}</dd>
-              </dl>
               <div className="action-row">
                 <button type="button" className="amber-btn" onClick={() => setEditing(true)}><PencilSimple size={18} weight="fill" /> Edit</button>
                 <button type="button" className="amber-btn" onClick={() => setShowHistory((s) => !s)}><ClockCounterClockwise size={18} weight="fill" /> History</button>
               </div>
+              <div className="asset-full-id mono">{asset.assetId}</div>
+              <h3 className="asset-full-name">{asset.name || 'Unnamed asset'}</h3>
               {showHistory && (
                 <div className="asset-history">
                   {history.length === 0 && <p className="muted">이 자산의 기록이 없습니다.</p>}
@@ -1547,6 +1700,35 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
                   ))}
                 </div>
               )}
+              <div className="photo-row">
+                <PhotoSlot src={shots?.sticker || asset.photo2} label="자산 스티커" />
+                <PhotoSlot src={shots?.whole || asset.photo1} label="자산 전체" />
+                <PhotoSlot src={locationPhoto ? locationPhoto(asset.location) : ''} label="위치" />
+              </div>
+              <p>{asset.description || 'No description'}</p>
+              <dl className="kv">
+                <dt>Location</dt>
+                <dd>{asset.location || '-'}</dd>
+                <dt>User (위치변경)</dt>
+                <dd>{asset.user ? String(asset.user).split('@')[0] : '-'}</dd>
+                <dt>Type</dt>
+                <dd>{asset.type || '-'}</dd>
+                <dt>Account holder</dt>
+                <dd>{asset.accountHolder || '-'}</dd>
+                <dt>Application</dt>
+                <dd>{asset.applicationName || '-'}</dd>
+                <dt>Weight</dt>
+                <dd>{asset.weight ? `${asset.weight} kg` : '-'}</dd>
+                {asset.memo && <><dt>Memo</dt><dd>{asset.memo}</dd></>}
+                <dt>Manufacturer</dt>
+                <dd>{asset.manufacturerProvider || '-'}</dd>
+                <dt>Acquired</dt>
+                <dd>{asset.acquisitionDate || '-'}</dd>
+                <dt>Edited by</dt>
+                <dd>{asset.editedBy || '-'}</dd>
+                <dt>Last update</dt>
+                <dd>{formatDate(asset.lastUpdate) || '-'}</dd>
+              </dl>
             </div>
           )}
         </div>
@@ -1555,12 +1737,13 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
   )
 }
 
-function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, listName, setListName, onSave, onClear, onRequest, onImport, profile, onSaveProfile, notify, locationList, myLocation, setMyLocation, addLocation, onLocationPhoto, sort, setSort }) {
+function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, listName, setListName, onSave, onClear, onRequest, onImport, profile, onSaveProfile, notify, locationList, myLocation, setMyLocation, addLocation, onLocationPhoto, sort, setSort, classOptions }) {
   const ids = assets.map((asset) => asset.assetId)
   const empty = !assets.length
   const [panel, setPanel] = useState('')        // '', 'takeout', 'return', 'extension'
   const [fields, setFields] = useState({ applicantName: profile?.name || '', applicantOrg: profile?.org || '' })
   const [dragOver, setDragOver] = useState(false)
+  const [locOpen, setLocOpen] = useState(false)
   const importRef = useRef(null)
   async function runExport(kind) {
     const placeKey = REQUEST_FORMS[panel].placeKey
@@ -1604,6 +1787,7 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
     { key: 'import', label: 'Import', Glyph: UploadSimple, onClick: () => importRef.current?.click(), cls: 'no-bg' },
   ]
   const form = panel ? REQUEST_FORMS[panel] : null
+  const locFiltered = locationList.filter((l) => !myLocation.trim() || String(l.name).toLowerCase().includes(myLocation.trim().toLowerCase()))
   const titleReq = panel && !String(listName || '').trim()
   const locReq = panel && form?.placeKey && !String(myLocation || '').trim()
   return (
@@ -1630,82 +1814,112 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
           </button>
           <input
             className={`loc-input${locReq ? ' is-req-empty' : ''}`}
-            list="mylist-loc-options"
             value={myLocation}
             placeholder="위치 검색·선택 또는 새 위치"
-            onChange={(event) => setMyLocation(event.target.value)}
-            onBlur={(event) => commitLocation(event.target.value)}
+            onFocus={() => setLocOpen(true)}
+            onChange={(event) => { setMyLocation(event.target.value); setLocOpen(true) }}
+            onBlur={(event) => { commitLocation(event.target.value); setTimeout(() => setLocOpen(false), 120) }}
           />
-          <datalist id="mylist-loc-options">
-            {locationList.map((l) => <option key={l.name} value={l.name} />)}
-          </datalist>
         </div>
-        <div className="mylist-actions">
-          {rowTop.map((item) => (
-            <button key={item.key} type="button" className={`mylist-btn${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
-              <item.Glyph size={20} weight="fill" color="#3d5a80" />
-              <span>{item.label}</span>
-            </button>
-          ))}
-        </div>
-        <div className="mylist-actions">
-          {rowBottom.map((item) => (
-            <button key={item.key} type="button" className={`mylist-btn tone-amber${item.active ? ' is-active' : ''}${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
-              <item.Glyph size={20} weight="fill" color="currentColor" />
-              <span>{item.label}</span>
-            </button>
-          ))}
-        </div>
-        {form && (
-          <div className="request-panel">
-            <h4>{form.label}</h4>
-            {form.fields.map((f) => (
-              <label key={f.k} className={f.req && !String(fields[f.k] || '').trim() ? 'req-empty' : ''}>
-                <span className="field-label">{f.l}{f.req && <span className="req-mark"> *</span>}</span>
-                {f.area ? (
-                  <textarea className="edit-textarea" value={fields[f.k] || ''} placeholder={f.ph || ''} onChange={(e) => setFields((c) => ({ ...c, [f.k]: e.target.value }))} />
-                ) : (
-                  <Input size="md" value={fields[f.k] || ''} placeholder={f.ph || ''} onChange={(e) => setFields((c) => ({ ...c, [f.k]: e.target.value }))} />
-                )}
-              </label>
-            ))}
-            {form.placeKey && <p className="muted">장소는 위 위치 입력칸 값으로 들어갑니다: {myLocation || '(미입력)'}</p>}
-            <div className="action-row">
-              <button type="button" className="amber-btn" onClick={() => runExport('pdf')}>PDF</button>
-              <button type="button" className="amber-btn" onClick={() => runExport('hwpx')}>HWPX</button>
+        {!locOpen && (
+          <>
+            <div className="mylist-actions">
+              {rowTop.map((item) => (
+                <button key={item.key} type="button" className={`mylist-btn${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
+                  <item.Glyph size={20} weight="fill" color="#3d5a80" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
             </div>
-          </div>
+            <div className="mylist-actions">
+              {rowBottom.map((item) => (
+                <button key={item.key} type="button" className={`mylist-btn tone-amber${item.active ? ' is-active' : ''}${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
+                  <item.Glyph size={20} weight="fill" color="currentColor" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+            {form && (
+              <div className="request-panel">
+                <h4>{form.label}</h4>
+                {form.fields.map((f) => (
+                  <label key={f.k} className={f.req && !String(fields[f.k] || '').trim() ? 'req-empty' : ''}>
+                    <span className="field-label">{f.l}{f.req && <span className="req-mark"> *</span>}</span>
+                    {f.area ? (
+                      <textarea className="edit-textarea" value={fields[f.k] || ''} placeholder={f.ph || ''} onChange={(e) => setFields((c) => ({ ...c, [f.k]: e.target.value }))} />
+                    ) : (
+                      <Input size="md" value={fields[f.k] || ''} placeholder={f.ph || ''} onChange={(e) => setFields((c) => ({ ...c, [f.k]: e.target.value }))} />
+                    )}
+                  </label>
+                ))}
+                {form.placeKey && <p className="muted">장소는 위 위치 입력칸 값으로 들어갑니다: {myLocation || '(미입력)'}</p>}
+                <div className="action-row">
+                  <button type="button" className="amber-btn" onClick={() => runExport('pdf')}>PDF</button>
+                  <button type="button" className="amber-btn" onClick={() => runExport('hwpx')}>HWPX</button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </Card>
-      <div className="list-toolbar">
-        <span className="list-count">총 {assets.length}개</span>
-        <SortBar sort={sort} setSort={setSort} />
-      </div>
-      <div className="result-list result-list-full">
-        {empty && <Card><p className="muted">My List가 비어 있습니다.</p></Card>}
-        {assets.map((asset) => (
-          <AssetRow
-            key={asset.assetId}
-            asset={asset}
-            expanded={expandedId === asset.assetId}
-            onToggle={() => setExpandedId(expandedId === asset.assetId ? '' : asset.assetId)}
-            inMyList
-            shots={myPhotos[asset.assetId]}
-            onToggleMyList={() => toggleMyList(asset.assetId)}
-            onCapture={() => onCapture(asset.assetId)}
-            onCaptureSlot={onCaptureSlot}
-            recordAction={recordAction}
-            updateAsset={updateAsset}
-            locationPhoto={locationPhoto}
-            records={records}
-          />
-        ))}
-      </div>
+      {locOpen ? (
+        <div className="result-list result-list-full">
+          {locFiltered.length === 0 && (
+            <Card><p className="muted">{locationList.length ? '일치하는 위치가 없습니다.' : '등록된 위치가 없습니다.'}{String(myLocation).trim() ? ` 입력한 "${String(myLocation).trim()}" 이름으로 새 위치가 등록됩니다.` : ''}</p></Card>
+          )}
+          {locFiltered.map((l) => (
+            <Card key={l.name}>
+              <button
+                type="button"
+                className={`loc-row loc-pick-row${String(myLocation).trim() === l.name ? ' is-sel' : ''}`}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => { setMyLocation(l.name); commitLocation(l.name); setLocOpen(false) }}
+              >
+                <span className="asset-thumb is-photo loc-thumb">
+                  {l.photo ? <img src={l.photo} alt="" /> : <CameraPlus size={22} weight="fill" color={PHOTO_COLOR} />}
+                </span>
+                <span className="loc-main">
+                  <strong>{l.name}</strong>
+                  <span className="history-meta">{l.count}개 물품{l.lastUpdate ? ` · 최근변경 ${formatDate(l.lastUpdate)}` : ''}</span>
+                </span>
+              </button>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div className="list-toolbar">
+            <span className="list-count">총 {assets.length}개</span>
+            <SortBar sort={sort} setSort={setSort} />
+          </div>
+          <div className="result-list result-list-full">
+            {empty && <Card><p className="muted">My List가 비어 있습니다.</p></Card>}
+            {assets.map((asset) => (
+              <AssetRow
+                key={asset.assetId}
+                asset={asset}
+                expanded={expandedId === asset.assetId}
+                onToggle={() => setExpandedId(expandedId === asset.assetId ? '' : asset.assetId)}
+                inMyList
+                shots={myPhotos[asset.assetId]}
+                onToggleMyList={() => toggleMyList(asset.assetId)}
+                onCapture={() => onCapture(asset.assetId)}
+                onCaptureSlot={onCaptureSlot}
+                recordAction={recordAction}
+                updateAsset={updateAsset}
+                locationPhoto={locationPhoto}
+                records={records}
+                classOptions={classOptions}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
 
-function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove, isAdmin, onDelete }) {
+function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove, isAdmin, onDelete, onRename }) {
   const [query, setQuery] = useState('')
   const [openId, setOpenId] = useState('')
   const assetMap = useMemo(() => {
@@ -1724,63 +1938,87 @@ function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove
   }, [records, query])
   return (
     <div className="stack">
-      <Card title="History">
+      <Card>
         <div className="search-box">
-          <MagnifyingGlass size={18} weight="fill" color={BRAND} />
+          <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
           <Input size="md" value={query} placeholder="제목 · 작성자 · 자산번호 검색" onChange={(event) => setQuery(event.target.value)} />
         </div>
       </Card>
       {filtered.length === 0 && <Card><p className="muted">{records.length ? '검색 결과가 없습니다.' : '저장된 기록이 없습니다.'}</p></Card>}
       {filtered.map((record) => (
-        <Card key={record.id}>
-          <div className="history-row">
-            <button type="button" className="history-info" onClick={() => setOpenId(openId === record.id ? '' : record.id)}>
-              <strong>{record.name || record.id}</strong>
-              <span className="history-meta">
-                <span className={`type-chip type-${record.type}`}>{typeLabel(record.type)}</span>
-                <span>
-                  {[`${(record.assetIds || []).length}개`, record.user ? String(record.user).split('@')[0] : '', formatDate(record.createdAt)]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </span>
-              </span>
-            </button>
-            <span className={`loc-caret${openId === record.id ? ' is-open' : ''}`}><CaretRight size={15} weight="bold" /></span>
-            <button type="button" className="asset-circle" title="My List에 추가" onClick={() => onAdd(record)}>
-              <Plus size={15} weight="bold" color="#ffffff" />
-            </button>
-            <button type="button" className="asset-circle is-on" title="My List에서 제거" onClick={() => onRemove(record)}>
-              <Minus size={15} weight="bold" color="#ffffff" />
-            </button>
-            {isAdmin && (
-              <button type="button" className="history-del" title="기록 삭제" onClick={() => onDelete(record.id)}>
-                <Trash size={16} weight="fill" color="#a32d2d" />
-              </button>
-            )}
-          </div>
-          {openId === record.id && (
-            <div className="loc-detail">
-              <div className="loc-items">
-                {(record.assetIds || []).length === 0 && <p className="muted">항목이 없습니다.</p>}
-                {(record.assetIds || []).map((id) => (
-                  <div key={id} className="loc-item">
-                    <span className="mono">{id}</span>
-                    <strong>{assetMap[id]?.name || '(목록에 없는 자산)'}</strong>
-                    <button
-                      type="button"
-                      className={`asset-circle${myListSet.has(id) ? ' is-on' : ''}`}
-                      title={myListSet.has(id) ? 'My List에서 제거' : 'My List에 추가'}
-                      onClick={() => toggleMyList(id)}
-                    >
-                      {myListSet.has(id) ? <Minus size={15} weight="bold" color="#fff" /> : <Plus size={15} weight="bold" color="#fff" />}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </Card>
+        <HistoryCard
+          key={record.id}
+          record={record}
+          assetMap={assetMap}
+          myListSet={myListSet}
+          isAdmin={isAdmin}
+          open={openId === record.id}
+          onToggle={() => setOpenId(openId === record.id ? '' : record.id)}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onRename={onRename}
+          toggleMyList={toggleMyList}
+        />
       ))}
+    </div>
+  )
+}
+
+function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onAdd, onRemove, onDelete, onRename, toggleMyList }) {
+  const cardRef = useRef(null)
+  // Open → glide the card up so it sits just below the top bar (like asset rows).
+  useEffect(() => {
+    if (open && cardRef.current) cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [open])
+  return (
+    <div ref={cardRef}>
+      <Card>
+        <div className="history-row">
+          <button type="button" className="history-info" onClick={onToggle}>
+            <strong>{record.name || record.id}</strong>
+            <span className="history-meta">
+              <span className={`type-chip type-${record.type}`}>{typeLabel(record.type)}</span>
+              <span>
+                {[`${(record.assetIds || []).length}개`, record.user ? String(record.user).split('@')[0] : '', formatDate(record.createdAt)]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </span>
+            </span>
+          </button>
+        </div>
+        {open && (
+          <div className="loc-detail">
+            <div className="class-admin-row">
+              <button type="button" className="class-admin-btn" onClick={() => onAdd(record)}><Plus size={16} weight="bold" /> 추가</button>
+              <button type="button" className="class-admin-btn" onClick={() => onRemove(record)}><Minus size={16} weight="bold" /> 제거</button>
+              {isAdmin && (
+                <button type="button" className="class-admin-btn" onClick={() => onRename(record.id)}><PencilSimple size={16} weight="fill" /> 이름</button>
+              )}
+              {isAdmin && (
+                <button type="button" className="class-admin-btn danger" onClick={() => onDelete(record.id)}><Trash size={16} weight="fill" /> 삭제</button>
+              )}
+            </div>
+            <div className="loc-items">
+              {(record.assetIds || []).length === 0 && <p className="muted">항목이 없습니다.</p>}
+              {(record.assetIds || []).map((id) => (
+                <div key={id} className="loc-item">
+                  <span className="mono">{id}</span>
+                  <strong>{assetMap[id]?.name || '(목록에 없는 자산)'}</strong>
+                  <button
+                    type="button"
+                    className={`asset-circle${myListSet.has(id) ? ' is-on' : ''}`}
+                    title={myListSet.has(id) ? 'My List에서 제거' : 'My List에 추가'}
+                    onClick={() => toggleMyList(id)}
+                  >
+                    {myListSet.has(id) ? <Minus size={15} weight="bold" color="#fff" /> : <Plus size={15} weight="bold" color="#fff" />}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </Card>
     </div>
   )
 }
@@ -1789,6 +2027,7 @@ function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove
 const CLASS_CONFIG = {
   location: {
     field: 'location',
+    createLabel: '새 위치 등록',
     searchPlaceholder: '위치 이름 · 자산번호 검색',
     emptyText: '위치가 없습니다. 자산에 위치를 지정하거나 My List에서 위치를 추가하세요.',
     editFields: [
@@ -1800,6 +2039,7 @@ const CLASS_CONFIG = {
   },
   type: {
     field: 'type',
+    createLabel: '새 타입 등록',
     searchPlaceholder: '타입 이름 · 자산번호 검색',
     emptyText: '타입이 없습니다. 자산에 타입을 지정하세요.',
     editFields: [
@@ -1832,6 +2072,7 @@ function ClassificationPage(props) {
           onDelete={props.onDeleteLocation}
           onAddAll={props.onAddAllLocation}
           onPhoto={props.onPhotoLocation}
+          onCreate={props.onCreateLocation}
         />
       ) : (
         <ClassPage
@@ -1846,13 +2087,57 @@ function ClassificationPage(props) {
           onDelete={props.onDeleteType}
           onAddAll={props.onAddAllType}
           onPhoto={props.onPhotoType}
+          onCreate={props.onCreateType}
         />
       )}
     </div>
   )
 }
 
-function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMerge, onDelete, onPhoto, onAddAll, toggleMyList }) {
+// "새 위치/타입 등록" — same pattern as the new-asset card; name is required.
+function NewClassCard({ cfg, onCreate }) {
+  const [open, setOpen] = useState(false)
+  const [form, setForm] = useState({})
+  function save() {
+    if (onCreate(form)) { setForm({}); setOpen(false) }
+  }
+  return (
+    <div className={`asset-row${open ? ' is-open' : ''}`}>
+      <div className="asset-row-head" role="button" tabIndex={0} onClick={() => setOpen((o) => !o)}>
+        <div className="asset-photo"><Plus size={24} weight="bold" color={BRAND} /></div>
+        <div className="asset-row-open">
+          <div className="asset-row-main"><strong>{cfg.createLabel}</strong></div>
+        </div>
+      </div>
+      {open && (
+        <div className="asset-row-body loc-body loc-edit">
+          <div className="action-row">
+            <button type="button" className="amber-btn" onClick={save}>Save</button>
+            <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => { setForm({}); setOpen(false) }}>Cancel</Button>
+          </div>
+          {cfg.editFields.map((x) => (
+            <label key={x.k}>
+              {x.l}
+              {x.area ? (
+                <textarea className="edit-textarea" value={form[x.k] || ''} onChange={(e) => setForm((c) => ({ ...c, [x.k]: e.target.value }))} />
+              ) : (
+                <Input
+                  size="md"
+                  className={x.k === 'name' && !String(form.name || '').trim() ? 'is-req-empty' : undefined}
+                  value={form[x.k] || ''}
+                  placeholder={x.ph || ''}
+                  onChange={(e) => setForm((c) => ({ ...c, [x.k]: e.target.value }))}
+                />
+              )}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMerge, onDelete, onPhoto, onAddAll, toggleMyList, onCreate }) {
   const [openName, setOpenName] = useState('')
   const [query, setQuery] = useState('')
   const filtered = useMemo(() => {
@@ -1867,10 +2152,11 @@ function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMer
     <>
       <Card>
         <div className="search-box">
-          <MagnifyingGlass size={18} weight="fill" color={BRAND} />
+          <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
           <Input size="md" value={query} placeholder={cfg.searchPlaceholder} onChange={(event) => setQuery(event.target.value)} />
         </div>
       </Card>
+      {!query.trim() && <NewClassCard cfg={cfg} onCreate={onCreate} />}
       {filtered.length === 0 && <Card><p className="muted">{classList.length ? '검색 결과가 없습니다.' : cfg.emptyText}</p></Card>}
       {filtered.map((c) => (
         <ClassCard
@@ -1899,39 +2185,32 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
   const [editing, setEditing] = useState(false)
   const initForm = () => { const f = {}; cfg.editFields.forEach((x) => { f[x.k] = x.k === 'name' ? rec.name : (rec[x.k] || '') }); return f }
   const [form, setForm] = useState(initForm)
+  const cardRef = useRef(null)
   useEffect(() => { setForm(initForm()) }, [rec.name, rec.address, rec.description, rec.memo])
+  useEffect(() => {
+    if (!open) setEditing(false)
+    else if (cardRef.current) cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [open])
   function saveEdit() {
     const patch = { ...form, name: (form.name || '').trim() || rec.name }
     onUpdate(rec.name, patch)
     setEditing(false)
   }
   return (
-    <Card>
-      <div className="loc-row">
-        <button type="button" className="asset-thumb is-photo loc-thumb" title="사진 촬영" onClick={() => onPhoto(rec.name)}>
-          {rec.photo ? <img src={rec.photo} alt="" /> : <CameraPlus size={22} weight="fill" color={PHOTO_COLOR} />}
+    <div ref={cardRef} className={`asset-row${open ? ' is-open' : ''}`}>
+      <div className="asset-row-head">
+        <button type="button" className="asset-photo is-photo" title="사진 촬영" onClick={() => onPhoto(rec.name)}>
+          {rec.photo ? <img src={rec.photo} alt="" /> : <CameraPlus size={24} weight="fill" color={PHOTO_COLOR} />}
         </button>
-        <button type="button" className="loc-main" onClick={onToggle}>
-          <strong>{rec.name}</strong>
-          <span className="history-meta">{rec.count}개 물품{rec.lastUpdate ? ` · 최근변경 ${formatDate(rec.lastUpdate)}` : ''}</span>
+        <button type="button" className="asset-row-open" onClick={onToggle}>
+          <span className="loc-main">
+            <strong>{rec.name}</strong>
+            <span className="history-meta">{rec.count}개 물품{rec.lastUpdate ? ` · 최근변경 ${formatDate(rec.lastUpdate)}` : ''}</span>
+          </span>
         </button>
-        {isAdmin && (
-          <>
-            <button type="button" className={`loc-icon-btn${editing ? ' is-active' : ''}`} title="수정하기" onClick={() => setEditing((e) => !e)}>
-              <PencilSimple size={18} weight="fill" color="#3d5a80" />
-            </button>
-            <button type="button" className="loc-icon-btn" title="병합" onClick={() => onMerge(rec.name)}>
-              <ArrowsMerge size={18} weight="fill" color="#3d5a80" />
-            </button>
-            <button type="button" className="loc-icon-btn loc-del" title="제거" onClick={() => onDelete(rec.name)}>
-              <Trash size={18} weight="fill" color="#a32d2d" />
-            </button>
-          </>
-        )}
-        <span className={`loc-caret${open ? ' is-open' : ''}`}><CaretRight size={16} weight="bold" /></span>
       </div>
       {editing && isAdmin && (
-        <div className="loc-detail loc-edit">
+        <div className="asset-row-body loc-body loc-edit">
           {cfg.editFields.map((x) => (
             <label key={x.k}>
               {x.l}
@@ -1949,7 +2228,14 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
         </div>
       )}
       {open && !editing && (
-        <div className="loc-detail">
+        <div className="asset-row-body loc-body">
+          {isAdmin && (
+            <div className="class-admin-row">
+              <button type="button" className="class-admin-btn" onClick={() => setEditing(true)}><PencilSimple size={16} weight="fill" /> 편집</button>
+              <button type="button" className="class-admin-btn" onClick={() => onMerge(rec.name)}><ArrowsMerge size={16} weight="fill" /> 병합</button>
+              <button type="button" className="class-admin-btn danger" onClick={() => onDelete(rec.name)}><Trash size={16} weight="fill" /> 제거</button>
+            </div>
+          )}
           <dl className="kv">
             {rec.createdBy && <><dt>만든 사람</dt><dd>{String(rec.createdBy).split('@')[0]}</dd></>}
             {cfg.detailFields.map((x) => (rec[x.k] ? <React.Fragment key={x.k}><dt>{x.l}</dt><dd>{rec[x.k]}</dd></React.Fragment> : null))}
@@ -1977,18 +2263,7 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
           </div>
         </div>
       )}
-    </Card>
-  )
-}
-
-function Metric({ label, value }) {
-  return (
-    <Card>
-      <div className="metric">
-        <span>{label}</span>
-        <strong>{Number(value).toLocaleString()}</strong>
-      </div>
-    </Card>
+    </div>
   )
 }
 
