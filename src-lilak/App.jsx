@@ -36,6 +36,9 @@ import {
   UploadSimple,
   ArrowsMerge,
   ArrowUp,
+  ArrowClockwise,
+  Crop,
+  X,
 } from '@phosphor-icons/react'
 
 // Two-tone palette. Tone A (primary): top-bar icons, scan FAB, active tab, selection.
@@ -144,6 +147,38 @@ function projectDisplayName(projectId, fallback) {
 
 // Sync the in-app list name to the portal so the portal's project list shows the
 // same name (the folder/URL id is unchanged — this only sets a display label).
+// ── Server storage ───────────────────────────────────────────────────────────
+// The asset list is SHARED: it lives in the backend under the portal project, not
+// in this browser. localStorage stays as a fast first paint + per-user state, but
+// the server is the source of truth for `SERVER_KEYS`. Standalone (no portal) has
+// no backend, so it keeps the old localStorage-only behaviour.
+const SERVER = !!PORTAL_PROJECT
+const SERVER_KEYS = ['assets', 'records', 'locations', 'types']
+
+function authHeaders() {
+  const tok = localStorage.getItem('lilak_portal_token') || localStorage.getItem('elog_token')
+  return tok ? { Authorization: `Bearer ${tok}` } : {}
+}
+
+async function fetchServerData() {
+  const r = await fetch(`${PORTAL_BASE}/api/data`, { headers: authHeaders() })
+  if (!r.ok) throw new Error(`GET /api/data → ${r.status}`)
+  return r.json()
+}
+
+// Returns {conflict:true, current} when someone else saved first — the caller
+// reloads from `current` instead of overwriting their work.
+async function putServerData(baseVersion, shared) {
+  const r = await fetch(`${PORTAL_BASE}/api/data`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({ baseVersion, ...shared }),
+  })
+  if (r.status === 409) return { conflict: true, current: (await r.json()).current }
+  if (!r.ok) throw new Error(`PUT /api/data → ${r.status}`)
+  return { conflict: false, doc: await r.json() }
+}
+
 function pushPortalName(name) {
   if (!PORTAL_BASE || !PORTAL_SERVICE || !PORTAL_PROJECT) return
   const tok = localStorage.getItem('lilak_portal_token') || localStorage.getItem('elog_token')
@@ -490,7 +525,27 @@ function App() {
   // Portal-only: ready immediately with the portal (SSO) identity. Opened outside
   // the portal there is no login — show a "open via the portal" notice instead.
   const [authStatus] = useState(PORTAL_BASE ? 'ready' : 'no-portal')
-  const [authUser] = useState(PORTAL_BASE ? (portalUser() || { email: 'portal', name: 'portal' }) : null)
+  const [authUser, setAuthUser] = useState(PORTAL_BASE ? (portalUser() || { email: 'portal', name: 'portal' }) : null)
+
+  // The localStorage token can be missing on a device even though the portal
+  // COOKIE is what got the user through the proxy (e.g. an installed PWA has its
+  // own storage partition on iOS) — then portalUser() falls back to 'portal'.
+  // The backend reads the cookie too, so ask IT who we are and correct the guess.
+  useEffect(() => {
+    if (!SERVER) return
+    fetch(`${PORTAL_BASE}/api/whoami`, { headers: authHeaders() })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((me) => {
+        if (me?.authenticated && (me.email || me.username)) {
+          setAuthUser({
+            email: me.email || me.username,
+            name: me.name || me.username || me.email,
+            role: me.role || '',
+          })
+        }
+      })
+      .catch(() => {})
+  }, [])
   const [projectState, setProjectState] = useState(() => ensureProjectState())
   const [tab, setTab] = useState('assets')
   const [query, setQuery] = useState('')
@@ -513,6 +568,8 @@ function App() {
   const [dialog, setDialog] = useState(null)   // null | {kind, message, value?, onConfirm}
   const [scanning, setScanning] = useState(false)
   const [capture, setCapture] = useState(null)   // { kind:'asset', id } | { kind:'location', name }
+  // Scanned-but-unknown asset number → prefills the "새 자산 등록" card once.
+  const [assetDraft, setAssetDraft] = useState(null)
   const [myListBadge, setMyListBadge] = useState(0)   // new My List adds while on another tab
   const [sort, setSort] = useState({ key: 'assetId', dir: 'asc' })
   const isMobile = useMediaQuery('(max-width: 760px)')
@@ -523,9 +580,30 @@ function App() {
   function saveProfile(name, org) {
     writeJson(profileKey, { name: name || '', org: org || '' })
   }
+  // Badge = net NEW My List items since the last visit to the tab: adds bump it
+  // up, removes bump it down (floored at 0), so it always matches reality.
   function bumpBadge(n) {
-    if (n > 0 && tab !== 'mylist') setMyListBadge((b) => b + n)
+    if (n !== 0 && tab !== 'mylist') setMyListBadge((b) => Math.max(0, b + n))
   }
+  // The same "new since last visit" items, as ids — My List outlines them in a
+  // different border colour. Cleared when the user LEAVES the tab (they've seen
+  // them by then), and kept in sync with removals.
+  const [newIds, setNewIds] = useState(() => new Set())
+  function markNew(ids) {
+    if (tab === 'mylist' || !ids.length) return
+    setNewIds((s) => { const n = new Set(s); ids.forEach((id) => n.add(id)); return n })
+  }
+  function unmarkNew(ids) {
+    setNewIds((s) => {
+      if (![...ids].some((id) => s.has(id))) return s
+      const n = new Set(s); ids.forEach((id) => n.delete(id)); return n
+    })
+  }
+  const prevTab = useRef(tab)
+  useEffect(() => {
+    if (prevTab.current === 'mylist' && tab !== 'mylist') setNewIds(new Set())
+    prevTab.current = tab
+  }, [tab])
   const pageRef = useRef(null)
   const scrollTimer = useRef(null)
 
@@ -588,14 +666,77 @@ function App() {
     writeJson(STORAGE_KEYS.myList, myList)
   }, [assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation, projectState.currentProjectId])
 
+  // ── Server sync (shared data) ──────────────────────────────────────────────
+  // `serverVersion` is the version this client last agreed with; `syncedRef` is the
+  // exact payload the server holds. Comparing against it (rather than juggling
+  // "skip the next save" flags) is self-correcting: a hydrate/conflict-reload sets
+  // it, so the resulting state change can't echo straight back as a save.
+  const serverVersion = useRef(null)
+  const syncedRef = useRef(null)
+  const [hydrated, setHydrated] = useState(!SERVER)
+
+  function applyServerDoc(doc) {
+    serverVersion.current = doc.version
+    syncedRef.current = JSON.stringify({
+      assets: doc.assets || [], records: doc.records || [],
+      locations: doc.locations || [], types: doc.types || [],
+    })
+    setAssets(doc.assets || [])
+    setRecords(doc.records || [])
+    setLocations(doc.locations || [])
+    setTypes(doc.types || [])
+  }
+
+  useEffect(() => {
+    if (!SERVER) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const doc = await fetchServerData()
+        if (cancelled) return
+        applyServerDoc(doc)
+      } catch {
+        if (!cancelled) setNotice('서버에서 자산을 불러오지 못했습니다. 이 기기의 사본을 표시합니다.')
+      } finally {
+        if (!cancelled) setHydrated(true)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    if (!SERVER || !hydrated || serverVersion.current === null) return
+    const payload = JSON.stringify({ assets, records, locations, types })
+    if (payload === syncedRef.current) return           // identical to the server
+    const t = setTimeout(async () => {
+      try {
+        const res = await putServerData(serverVersion.current, JSON.parse(payload))
+        if (res.conflict) {
+          applyServerDoc(res.current)
+          setNotice('다른 사용자가 먼저 저장했습니다. 최신 목록으로 새로고침했어요.')
+        } else {
+          serverVersion.current = res.doc.version
+          syncedRef.current = payload
+        }
+      } catch {
+        setNotice('서버 저장에 실패했습니다. 변경사항이 아직 반영되지 않았어요.')
+      }
+    }, 600)                                             // debounce a burst of edits
+    return () => clearTimeout(t)
+  }, [assets, records, locations, types, hydrated])
+
   const filteredAssets = useMemo(() => {
     return sortAssets(assets.filter((asset) => matchesAsset(asset, query)), sort)
   }, [assets, query, sort])
   const isAdmin = isAdminUser(authUser)
+  // My List has its own sort, defaulting to the order items were added (the
+  // myList array itself — newest first, since adds unshift).
+  const [mySort, setMySort] = useState({ key: 'added', dir: 'asc' })
   const myAssets = useMemo(() => {
     const list = myList.map((id) => assets.find((asset) => asset.assetId === id)).filter(Boolean)
-    return sortAssets(list, sort)
-  }, [assets, myList, sort])
+    if (mySort.key === 'added') return mySort.dir === 'asc' ? list : [...list].reverse()
+    return sortAssets(list, mySort)
+  }, [assets, myList, mySort])
   // Classification lists (location / type) merged with asset values + item counts.
   const locationList = useMemo(() => buildClassList('location', locations, assets), [locations, assets])
   const typeList = useMemo(() => buildClassList('type', types, assets), [types, assets])
@@ -632,6 +773,8 @@ function App() {
   function toggleMyList(assetId) {
     if (myList.includes(assetId)) {
       setMyList((list) => list.filter((id) => id !== assetId))
+      bumpBadge(-1)
+      unmarkNew([assetId])
       setMyPhotos((photos) => {
         if (!photos[assetId]) return photos
         const next = { ...photos }
@@ -641,6 +784,7 @@ function App() {
     } else {
       setMyList((list) => [assetId, ...list])
       bumpBadge(1)
+      markNew([assetId])
       show('My List에 추가했습니다.')
     }
   }
@@ -720,6 +864,7 @@ function App() {
       return [...list, ...ids.filter((id) => !set.has(id))]
     })
     bumpBadge(added.length)
+    markNew(added)
     show(`${name}: ${ids.length}개를 My List에 추가했습니다.`)
   }
 
@@ -875,6 +1020,9 @@ function App() {
   function onScanMany(texts) {
     setScanning(false)
     const numbers = [...new Set(texts.map(extractAssetNumber).filter(Boolean))]
+    // One code (e.g. the "촬영" still-capture path) behaves exactly like a live
+    // scan — including the unknown-number → new-asset-card flow.
+    if (numbers.length === 1) { handleScannedNumber(numbers[0]); return }
     const existing = new Set(assets.map((a) => a.assetId))
     const matched = numbers.filter((n) => existing.has(n))
     const added = matched.filter((n) => !myList.includes(n))
@@ -883,6 +1031,7 @@ function App() {
       return [...list, ...matched.filter((n) => !set.has(n))]
     })
     bumpBadge(added.length)
+    markNew(added)
     show(`QR ${matched.length}개 자산을 My List에 추가했습니다.`)
   }
 
@@ -895,12 +1044,15 @@ function App() {
       return [...list, ...ids.filter((id) => !set.has(id))]
     })
     bumpBadge(added.length)
+    markNew(added)
     show(`${ids.length}개를 My List에 추가했습니다.`)
   }
 
   // History "−": remove a saved list's assets from My List in one go.
   function removeListFromMyList(record) {
     const ids = new Set(Array.isArray(record.assetIds) ? record.assetIds : [])
+    bumpBadge(-myList.filter((id) => ids.has(id)).length)   // only those actually removed
+    unmarkNew(ids)
     setMyList((list) => list.filter((id) => !ids.has(id)))
     setMyPhotos((photos) => {
       const next = { ...photos }
@@ -915,24 +1067,41 @@ function App() {
     if (!myList.length) return
     askConfirm('My List를 모두 비울까요?', () => {
       setMyList([])
+      setNewIds(new Set())
       setMyPhotos({})
       show('My List를 비웠습니다.')
     })
+  }
+
+  // A scan is an "add to My List" action (same for live scan / capture / gallery):
+  // a known number drops straight into My List with no card opening and no tab
+  // jump; an UNKNOWN number opens the "새 자산 등록" card with it filled in.
+  function handleScannedNumber(number) {
+    const match = assets.find((asset) => asset.assetId === number)
+    if (!match) {
+      setQuery('')                     // the new-asset card only shows when un-searched
+      setExpandedId('')
+      setAssetDraft({ assetId: number })
+      setTab('assets')
+      show(`미등록 번호(${number})입니다 — 새 자산으로 등록하세요.`)
+      return
+    }
+    setQuery(number)                   // Assets search box shows the scanned item
+    if (myList.includes(number)) {
+      show(`${number} 자산은 이미 My List에 있습니다.`)
+      return
+    }
+    setMyList((list) => [number, ...list])
+    markNew([number])
+    bumpBadge(1)
+    show(`${number} 자산을 My List에 추가했습니다.`)
   }
 
   function onScanResult(text) {
     setScanning(false)
     const number = extractAssetNumber(text)
     if (!number) return
-    const match = assets.find((asset) => asset.assetId === number)
-    setQuery(number)
-    setTab('assets')
-    if (match) {
-      setExpandedId(match.assetId)
-      show(`${match.assetId} 자산을 찾았습니다.`)
-    } else {
-      show(`스캔한 번호(${number})와 일치하는 자산이 없습니다.`)
-    }
+    handleScannedNumber(number)
   }
 
   // Append-only editor trail: "kim → lee → kim". Never cleared, never editable;
@@ -979,6 +1148,7 @@ function App() {
     if (!added.length) { show('이미 모두 My List에 있습니다.'); return }
     setMyList((list) => [...list, ...added.filter((id) => !list.includes(id))])
     bumpBadge(added.length)
+    markNew(added)
     show(`${added.length}개 자산을 My List에 추가했습니다.`)
   }
 
@@ -1030,6 +1200,7 @@ function App() {
         <div className="topbar-title">
           <Cube size={isMobile ? 24 : 20} weight="fill" color={BRAND} />
           {projectName && <span className="topbar-project">{projectName}</span>}
+          {authUser && <span className="topbar-user">{String(authUser.email).split('@')[0]}</span>}
         </div>
         <div className="topbar-right">
           {notice && <Badge tone="success">{notice}</Badge>}
@@ -1063,6 +1234,8 @@ function App() {
             sort={sort}
             setSort={setSort}
             onCreate={createAsset}
+            draft={assetDraft}
+            onDraftDone={() => setAssetDraft(null)}
             onAddAll={addAllAssets}
             classOptions={classOptions}
           />
@@ -1094,8 +1267,10 @@ function App() {
             setMyLocation={setMyLocation}
             addLocation={addLocation}
             onLocationPhoto={(name) => name && setCapture({ kind: 'location', name })}
-            sort={sort}
-            setSort={setSort}
+            sort={mySort}
+            setSort={setMySort}
+            newIds={newIds}
+            onSeenNew={(id) => unmarkNew([id])}
             classOptions={classOptions}
           />
         )}
@@ -1127,7 +1302,7 @@ function App() {
         {tabs.map((item) =>
           item.fab ? (
             <button key={item.id} type="button" className="tabbar-fab" title={item.label} onClick={() => setScanning(true)}>
-              <item.Glyph size={31} weight="fill" color="#ffffff" />
+              <item.Glyph size={26} weight="fill" color="#ffffff" />
             </button>
           ) : (
             <button
@@ -1199,7 +1374,22 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
     scanner
       .start(
         { facingMode: 'environment' },
-        { fps: 15, qrbox: { width: 240, height: 240 }, experimentalFeatures: { useBarCodeDetectorIfSupported: true } },
+        {
+          fps: 15,
+          // Ask for a high-res stream with continuous autofocus. The default stream
+          // is often 640x480 and fixed-focus, which is the main reason a small
+          // asset-sticker QR won't resolve. (Ignored where unsupported.)
+          videoConstraints: {
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            advanced: [{ focusMode: 'continuous' }],
+          },
+          // Scan box scaled to the viewfinder instead of a fixed 240px square, so
+          // the code doesn't have to be aimed into a small centre box.
+          qrbox: (vw, vh) => { const s = Math.round(Math.min(vw, vh) * 0.7); return { width: s, height: s } },
+          experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+        },
         (decodedText) => { stop(); onResult(decodedText) },
       )
       .catch((err) => setError(`카메라를 시작할 수 없습니다: ${err?.message || err}`))
@@ -1226,6 +1416,31 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
     onResultMany(texts)
   }
 
+  // "촬영": grab the CURRENT live viewfinder frame and decode it in place — no
+  // jump to the native camera app. The live scanner keeps running, so a failed
+  // shot just shows a hint and scanning continues.
+  async function onShot() {
+    const video = document.querySelector('#qr-reader video')
+    if (!video || !video.videoWidth) { setError('카메라 화면이 아직 준비되지 않았습니다.'); return }
+    setBusy(true)
+    setError('')
+    try {
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      canvas.getContext('2d').drawImage(video, 0, 0)
+      const blob = await new Promise((res) => canvas.toBlob(res, 'image/jpeg', 0.92))
+      const fileScanner = new Html5Qrcode('qr-file-reader')
+      const text = await fileScanner.scanFile(new File([blob], 'shot.jpg', { type: 'image/jpeg' }), false)
+      try { await scannerRef.current?.stop() } catch { /* already stopped */ }
+      onResultMany([text])
+    } catch {
+      setError('촬영한 화면에서 QR을 찾지 못했습니다 — 더 가까이서 다시 시도하세요.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <div className="scanner-backdrop" onClick={onClose}>
       <section className="scanner-modal" onClick={(event) => event.stopPropagation()}>
@@ -1235,15 +1450,18 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
         </header>
         <div id="qr-reader" className="qr-reader" />
         <div id="qr-file-reader" style={{ display: 'none' }} />
-        <div className="action-row">
+        <div className="action-row scanner-actions">
           <button type="button" className="amber-btn" disabled={busy} onClick={() => galleryRef.current?.click()}>
-            <Images size={16} weight="fill" /> {busy ? '인식 중…' : '사진첩에서 여러 장'}
+            <Images size={20} weight="fill" /> {busy ? '인식 중…' : '사진 선택'}
           </button>
           <input ref={galleryRef} type="file" accept="image/*" multiple hidden onChange={onGallery} />
+          <button type="button" className="amber-btn" disabled={busy} onClick={onShot}>
+            <Camera size={20} weight="fill" /> {busy ? '인식 중…' : '촬영'}
+          </button>
         </div>
         {error
           ? <p className="muted scanner-hint">{error}</p>
-          : <p className="muted scanner-hint">카메라 접근을 허용하세요. 사진첩 버튼으로 여러 QR을 한 번에 인식할 수 있습니다.</p>}
+          : <p className="muted scanner-hint">잘 인식되지 않으면 “촬영”으로 가까이서 또렷하게 찍어보세요.</p>}
       </section>
     </div>
   )
@@ -1331,14 +1549,15 @@ function PhotoCaptureModal({ title, steps, onDone, onClose }) {
           <>
             <video ref={videoRef} className="qr-reader capture-video" playsInline muted />
             <p className="capture-guide">{steps[step].guide}</p>
-            <div className="action-row">
-              <Button variant="primary" onClick={capture}>
-                <CameraPlus size={16} weight="fill" /> {steps[step].label}{last ? ' · 완료' : ''}{progress}
-              </Button>
+            <div className="action-row scanner-actions">
               <button type="button" className="amber-btn" onClick={() => galleryRef.current?.click()}>
-                <Images size={16} weight="fill" /> 사진첩{steps.length > 1 ? ` (최대 ${steps.length}장)` : ''}
+                <Images size={20} weight="fill" /> 사진 선택{steps.length > 1 ? ` (${steps.length}장)` : ''}
               </button>
               <input ref={galleryRef} type="file" accept="image/*" multiple={steps.length > 1} hidden onChange={onGallery} />
+              {/* Snaps the in-app viewfinder above — never the native camera app. */}
+              <button type="button" className="amber-btn" onClick={capture}>
+                <Camera size={20} weight="fill" /> {steps[step].label}{last ? ' · 완료' : ''}{progress}
+              </button>
             </div>
           </>
         )}
@@ -1417,8 +1636,11 @@ function NoPortalScreen() {
   )
 }
 
-function SortBar({ sort, setSort }) {
-  const opts = [{ k: 'assetId', l: '번호' }, { k: 'name', l: '이름' }, { k: 'lastUpdate', l: '수정일' }, { k: 'request', l: '요청' }]
+function SortBar({ sort, setSort, withAdded }) {
+  const opts = [
+    ...(withAdded ? [{ k: 'added', l: '추가순' }] : []),
+    { k: 'assetId', l: '번호' }, { k: 'name', l: '이름' }, { k: 'lastUpdate', l: '수정일' }, { k: 'request', l: '요청' },
+  ]
   return (
     <div className="sort-bar">
       <span className="sort-label">정렬</span>
@@ -1474,47 +1696,132 @@ function EditField({ field, form, setForm, classOptions }) {
   )
 }
 
-// "새 자산 등록" — the first card on the Assets tab (normal, un-searched state).
-// Opens inline with the same form as Edit; number + name are required to save.
-function NewAssetCard({ onCreate, classOptions }) {
-  const [open, setOpen] = useState(false)
-  const [form, setForm] = useState({})
-  function save() {
-    if (onCreate(form)) { setForm({}); setOpen(false) }
-  }
+// Shared search field: magnifier on the left, icon-only clear (×) on the right
+// whenever there's text.
+function SearchBox({ query, setQuery, placeholder }) {
   return (
-    <div className={`asset-row${open ? ' is-open' : ''}`}>
-      <div className="asset-row-head" role="button" tabIndex={0} onClick={() => setOpen((o) => !o)}>
-        <div className="asset-photo"><Plus size={24} weight="bold" color={BRAND} /></div>
-        <div className="asset-row-open">
-          <div className="asset-row-main"><strong>새 자산 등록</strong></div>
-        </div>
-      </div>
-      {open && (
-        <div className="asset-row-body">
-          <div className="asset-edit">
-            <div className="action-row">
-              <button type="button" className="amber-btn" onClick={save}>Save</button>
-              <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => { setForm({}); setOpen(false) }}>Cancel</Button>
-            </div>
-            {EDIT_FIELDS.map((field) => (
-              <EditField key={field.key} field={field} form={form} setForm={setForm} classOptions={classOptions} />
-            ))}
-          </div>
-        </div>
+    <div className="search-box">
+      <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
+      <Input size="md" value={query} placeholder={placeholder} onChange={(event) => setQuery(event.target.value)} />
+      {String(query || '') !== '' && (
+        <button type="button" className="search-clear mylist-icon-cell" title="지우기" onClick={() => setQuery('')}>
+          <X size={16} weight="bold" color={BRAND} />
+        </button>
       )}
     </div>
   )
 }
 
-function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myListSet, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, sort, setSort, onCreate, onAddAll, classOptions }) {
+// ── Two-phase card open/close (asset / class / history cards) ─────────────────
+// OPEN: glide the still-collapsed card up under the top bar FIRST, then grow the
+// body downward, then re-glide once everything settles (a card growing near the
+// list end only gains scroll room as it grows, so the first glide can land off).
+// CLOSE: shrink in place. No scroll restore: when a low card closes and the page
+// runs out of height, the browser clamps the scroll frame-by-frame ALONG the
+// animated shrink, which reads as one smooth "close + settle" motion.
+// SWITCH (A open → tap B): A must vanish INSTANTLY — animating A's shrink while
+// B glides makes B chase a moving target and the whole thing feels wobbly. The
+// close branch defers one tick and checks `_lastOpenAt`: both effects of the same
+// React commit have run by then, whatever their order in the list.
+let _lastOpenAt = -1
+const OPEN_DELAY_MS = 30  // past the other card's 0ms instant-close + reflow
+const GLIDE_MS = 200      // let the open-glide land before the body grows
+const SHRINK_MS = 300     // must match .card-expando's transition duration
+const SETTLE_MS = OPEN_DELAY_MS + GLIDE_MS + SHRINK_MS + 60   // everything done
+
+function useCardGlide(open, ref) {
+  const [mounted, setMounted] = useState(open)   // body kept in the DOM
+  const [grown, setGrown] = useState(open)       // 0fr ↔ 1fr animation class
+  const first = useRef(true)
+  useEffect(() => {
+    if (first.current) { first.current = false; return }
+    if (open) {
+      _lastOpenAt = performance.now()
+      setMounted(true)
+      // Glide only AFTER the previously-open card has instant-closed (its close
+      // check runs on a 0ms timer, whichever card comes first in the list):
+      // computing the scroll target against the old, still-expanded layout sent
+      // this card to the wrong spot. 30ms clears that unmount + reflow and is
+      // invisible to the eye. Sequence: close 1 → measure → glide 2 → grow 2.
+      const t0 = setTimeout(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), OPEN_DELAY_MS)
+      const t1 = setTimeout(() => setGrown(true), OPEN_DELAY_MS + GLIDE_MS)
+      const t2 = setTimeout(() => ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), SETTLE_MS)
+      return () => { clearTimeout(t0); clearTimeout(t1); clearTimeout(t2) }
+    }
+    let t1
+    const t0 = setTimeout(() => {
+      if (performance.now() - _lastOpenAt < 150) {   // another card just opened
+        setGrown(false)
+        setMounted(false)                            // instant, no shrink animation
+        return
+      }
+      setGrown(false)
+      t1 = setTimeout(() => setMounted(false), SHRINK_MS)
+    }, 0)
+    return () => { clearTimeout(t0); clearTimeout(t1) }
+  }, [open])
+  return { mounted, grown }
+}
+
+function Expando({ grown, children }) {
+  return (
+    <div className={`card-expando${grown ? ' is-grown' : ''}`}>
+      <div className="card-expando-inner">{children}</div>
+    </div>
+  )
+}
+
+// "새 자산 등록" — the first card on the Assets tab (normal, un-searched state).
+// Opens inline with the same form as Edit; number + name are required to save.
+function NewAssetCard({ onCreate, classOptions, draft, onDraftDone }) {
+  const [open, setOpen] = useState(false)
+  const [form, setForm] = useState({})
+  const cardRef = useRef(null)
+  const { mounted, grown } = useCardGlide(open, cardRef)
+  // A scanned-but-unknown number arrives as `draft`: open with it filled in, and
+  // consume it right away so a later remount can't re-apply a stale draft.
+  useEffect(() => {
+    if (draft) { setForm((f) => ({ ...f, ...draft })); setOpen(true); onDraftDone?.() }
+  }, [draft])
+  function done() {
+    setForm({}); setOpen(false)
+  }
+  function save() {
+    if (onCreate(form)) done()
+  }
+  return (
+    <div ref={cardRef} className={`asset-row${open ? ' is-open' : ''}`}>
+      <div className="asset-row-head" role="button" tabIndex={0} onClick={() => (open ? done() : setOpen(true))}>
+        <div className="asset-photo"><Plus size={24} weight="bold" color={BRAND} /></div>
+        <div className="asset-row-open">
+          <div className="asset-row-main"><strong>새 자산 등록</strong></div>
+        </div>
+      </div>
+      {mounted && (
+        <Expando grown={grown}>
+          <div className="asset-row-body">
+            <div className="asset-edit">
+              <div className="action-row">
+                <button type="button" className="amber-btn" onClick={save}>Save</button>
+                <Button variant="secondary" size="md" style={ACTION_BTN} onClick={done}>Cancel</Button>
+              </div>
+              {EDIT_FIELDS.map((field) => (
+                <EditField key={field.key} field={field} form={form} setForm={setForm} classOptions={classOptions} />
+              ))}
+            </div>
+          </div>
+        </Expando>
+      )}
+    </div>
+  )
+}
+
+function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myListSet, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, sort, setSort, onCreate, onAddAll, classOptions, draft, onDraftDone }) {
   return (
     <div className="stack">
       <Card>
-        <div className="search-box">
-          <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
-          <Input size="md" value={query} placeholder="asset number, name, location" onChange={(event) => setQuery(event.target.value)} autoFocus />
-        </div>
+        {/* No autoFocus: opening the Assets tab must not pop the keyboard up. */}
+        <SearchBox query={query} setQuery={setQuery} placeholder="asset number, name, location" />
       </Card>
       <div className="list-toolbar">
         <span className="list-count">
@@ -1524,7 +1831,7 @@ function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myL
         <SortBar sort={sort} setSort={setSort} />
       </div>
       <div className="result-list result-list-full">
-        {!query.trim() && <NewAssetCard onCreate={onCreate} classOptions={classOptions} />}
+        {!query.trim() && <NewAssetCard onCreate={onCreate} classOptions={classOptions} draft={draft} onDraftDone={onDraftDone} />}
         {assets.length === 0 && <Card><p className="muted">일치하는 자산이 없습니다.</p></Card>}
         {assets.map((asset) => (
           <AssetRow
@@ -1568,33 +1875,189 @@ function AssetThumb({ asset, inMyList, shots, onCapture }) {
   // The photo is the card's whole left section (flush, like the +/- square on the
   // right). In My List it doubles as the camera hitbox for the guided photos.
   if (inMyList) {
+    // Pending shot wins; otherwise the asset's whole-photo fills the section like
+    // a profile picture. The camera icon only shows when there's no photo at all.
+    const src = shots?.sticker || asset.photo1 || asset.photo2
     return (
       <button type="button" className={`asset-photo is-photo${shots ? ' has-shot' : ''}`} title="사진 촬영" onClick={(e) => { e.stopPropagation(); onCapture() }}>
-        {shots?.sticker ? <img src={shots.sticker} alt="" /> : <CameraPlus size={24} weight="fill" color={PHOTO_COLOR} />}
+        {src ? <img src={src} alt="" /> : <CameraPlus size={24} weight="fill" color={PHOTO_COLOR} />}
       </button>
     )
   }
   return (
     <div className="asset-photo">
-      {asset.photo1 ? <img src={asset.photo1} alt="" /> : <Images size={22} weight="fill" color="#c2c8d2" />}
+      {(asset.photo1 || asset.photo2)
+        ? <img src={asset.photo1 || asset.photo2} alt="" />
+        : <Images size={22} weight="fill" color="#c2c8d2" />}
+    </div>
+  )
+}
+
+// Full-screen photo viewer (tap the backdrop or × to close).
+function ImageViewer({ src, onClose }) {
+  return (
+    <div className="viewer-backdrop" onClick={onClose}>
+      <img src={src} alt="" className="viewer-img" />
+      <button type="button" className="viewer-close" title="닫기" onClick={onClose}>
+        <X size={22} weight="bold" color="#ffffff" />
+      </button>
+    </div>
+  )
+}
+
+// Minimal photo editor: rotate 90° + drag-to-crop. Edits happen on a full-
+// resolution offscreen canvas; the visible canvas is just a scaled view of it.
+function PhotoEditModal({ src, onSave, onClose }) {
+  const workRef = useRef(null)          // offscreen canvas — the real image state
+  const viewRef = useRef(null)          // on-screen, scaled-to-fit
+  const dragRef = useRef(null)
+  const [rect, setRect] = useState(null)  // crop selection, in WORK pixel coords
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const img = new Image()
+    img.onload = () => {
+      const c = document.createElement('canvas')
+      c.width = img.naturalWidth
+      c.height = img.naturalHeight
+      c.getContext('2d').drawImage(img, 0, 0)
+      workRef.current = c
+      setRect(null)
+      setReady(true)
+    }
+    img.src = src
+  }, [src])
+
+  useEffect(() => { if (ready) draw() }, [ready, rect])
+
+  function draw() {
+    const work = workRef.current
+    const view = viewRef.current
+    if (!work || !view) return
+    const maxW = Math.min(window.innerWidth * 0.86, 680)
+    const maxH = window.innerHeight * 0.52
+    const s = Math.min(maxW / work.width, maxH / work.height, 1)
+    view.width = Math.max(1, Math.round(work.width * s))
+    view.height = Math.max(1, Math.round(work.height * s))
+    const ctx = view.getContext('2d')
+    ctx.drawImage(work, 0, 0, view.width, view.height)
+    if (rect) {                          // darken outside the selection
+      const r = { x: rect.x * s, y: rect.y * s, w: rect.w * s, h: rect.h * s }
+      ctx.fillStyle = 'rgba(0,0,0,0.45)'
+      ctx.fillRect(0, 0, view.width, r.y)
+      ctx.fillRect(0, r.y, r.x, r.h)
+      ctx.fillRect(r.x + r.w, r.y, view.width - r.x - r.w, r.h)
+      ctx.fillRect(0, r.y + r.h, view.width, view.height - r.y - r.h)
+      ctx.strokeStyle = '#ffffff'
+      ctx.lineWidth = 2
+      ctx.strokeRect(r.x + 1, r.y + 1, r.w - 2, r.h - 2)
+    }
+  }
+
+  function toWork(e) {
+    const b = viewRef.current.getBoundingClientRect()
+    const s = workRef.current.width / b.width
+    return { x: (e.clientX - b.left) * s, y: (e.clientY - b.top) * s }
+  }
+  function onDown(e) {
+    if (!ready) return
+    e.preventDefault()
+    viewRef.current.setPointerCapture?.(e.pointerId)
+    dragRef.current = toWork(e)
+    setRect(null)
+  }
+  function onMove(e) {
+    if (!dragRef.current) return
+    const a = dragRef.current
+    const p = toWork(e)
+    const work = workRef.current
+    const x = Math.max(0, Math.min(a.x, p.x))
+    const y = Math.max(0, Math.min(a.y, p.y))
+    const w = Math.min(work.width, Math.max(a.x, p.x)) - x
+    const h = Math.min(work.height, Math.max(a.y, p.y)) - y
+    if (w > 4 && h > 4) setRect({ x, y, w, h })
+  }
+  function onUp() { dragRef.current = null }
+
+  function rotate() {
+    const work = workRef.current
+    const c = document.createElement('canvas')
+    c.width = work.height
+    c.height = work.width
+    const ctx = c.getContext('2d')
+    ctx.translate(c.width / 2, c.height / 2)
+    ctx.rotate(Math.PI / 2)
+    ctx.drawImage(work, -work.width / 2, -work.height / 2)
+    workRef.current = c
+    if (rect) setRect(null)
+    else draw()                          // no state change → redraw by hand
+  }
+
+  function applyCrop() {
+    if (!rect) return
+    const work = workRef.current
+    const c = document.createElement('canvas')
+    c.width = Math.max(1, Math.round(rect.w))
+    c.height = Math.max(1, Math.round(rect.h))
+    c.getContext('2d').drawImage(work, rect.x, rect.y, rect.w, rect.h, 0, 0, c.width, c.height)
+    workRef.current = c
+    setRect(null)
+  }
+
+  return (
+    <div className="scanner-backdrop" onClick={onClose}>
+      <section className="scanner-modal" onClick={(e) => e.stopPropagation()}>
+        <header className="scanner-header">
+          <h2>사진 편집</h2>
+          <Button variant="ghost" onClick={onClose}>Close</Button>
+        </header>
+        <div className="photo-edit-stage">
+          <canvas
+            ref={viewRef}
+            className="photo-edit-canvas"
+            onPointerDown={onDown}
+            onPointerMove={onMove}
+            onPointerUp={onUp}
+            onPointerCancel={onUp}
+          />
+        </div>
+        <p className="muted scanner-hint">
+          {rect ? '선택한 영역으로 자르려면 “자르기”를 누르세요.' : '사진 위를 드래그하면 자를 영역을 선택할 수 있습니다.'}
+        </p>
+        <div className="action-row scanner-actions">
+          <button type="button" className="amber-btn" disabled={!ready} onClick={rotate}>
+            <ArrowClockwise size={20} weight="bold" /> 회전
+          </button>
+          <button type="button" className="amber-btn" disabled={!rect} onClick={applyCrop}>
+            <Crop size={20} weight="bold" /> 자르기
+          </button>
+          <button type="button" className="amber-btn" disabled={!ready}
+            onClick={() => onSave(workRef.current.toDataURL('image/jpeg', 0.85))}>
+            저장
+          </button>
+        </div>
+      </section>
     </div>
   )
 }
 
 function PhotoSlot({ src, label }) {
+  const [view, setView] = useState(false)
   return (
     <div className="photo-slot">
-      <div className="photo-box">
+      <div className={`photo-box${src ? ' is-clickable' : ''}`} onClick={() => src && setView(true)}>
         {src ? <img src={src} alt={label} /> : <Images size={28} weight="fill" color="#c2c8d2" />}
       </div>
       <span className="photo-label">{label}</span>
+      {view && <ImageViewer src={src} onClose={() => setView(false)} />}
     </div>
   )
 }
 
-function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, classOptions }) {
+function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, classOptions }) {
   const [editing, setEditing] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
+  const [editPhoto, setEditPhoto] = useState('')   // slot key being edited ('photo1'…)
   const [form, setForm] = useState(asset)
   // Per-asset history is derived from the shared records — never stored twice.
   const history = useMemo(
@@ -1609,10 +2072,8 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
   }, [asset, expanded])
 
   const rowRef = useRef(null)
-  // When a row expands, glide it up so it sits just below the top bar.
-  useEffect(() => {
-    if (expanded && rowRef.current) rowRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [expanded])
+  // Two-phase open/close: glide up first then grow; shrink in place then glide back.
+  const { mounted, grown } = useCardGlide(expanded, rowRef)
 
   // After leaving edit mode the row may have moved far down — glide it back
   // under the top bar (rAF: let the collapsed layout settle first).
@@ -1629,7 +2090,7 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
   }
 
   return (
-    <div ref={rowRef} className={`asset-row${expanded ? ' is-open' : ''}`}>
+    <div ref={rowRef} className={`asset-row${expanded ? ' is-open' : ''}${isNew ? ' is-new' : ''}`}>
       <div className="asset-row-head">
         <AssetThumb asset={asset} inMyList={inMyList} shots={shots} onCapture={onCapture} />
         <div className="asset-row-open" role="button" tabIndex={0} onClick={onToggle}>
@@ -1650,7 +2111,8 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
           {inMyList ? <Minus size={22} weight="bold" color="#ffffff" /> : <Plus size={22} weight="bold" color="#ffffff" />}
         </button>
       </div>
-      {expanded && (
+      {mounted && (
+        <Expando grown={grown}>
         <div className="asset-row-body">
           {editing ? (
             <div className="asset-edit">
@@ -1667,6 +2129,7 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
                     <span className="photo-label">{p.label}</span>
                     <div className="slot-actions">
                       <button type="button" className="slot-btn" onClick={() => onCaptureSlot(asset.assetId, p.slot)}>다시 찍기</button>
+                      <button type="button" className="slot-btn" disabled={!asset[p.slot]} onClick={() => setEditPhoto(p.slot)}>편집</button>
                       <button type="button" className="slot-btn slot-del" disabled={!asset[p.slot]} onClick={() => updateAsset(asset.assetId, { [p.slot]: '' })}>삭제</button>
                     </div>
                   </div>
@@ -1732,12 +2195,20 @@ function AssetRow({ asset, expanded, onToggle, inMyList, shots, onToggleMyList, 
             </div>
           )}
         </div>
+        </Expando>
+      )}
+      {editPhoto && asset[editPhoto] && (
+        <PhotoEditModal
+          src={asset[editPhoto]}
+          onSave={(url) => { updateAsset(asset.assetId, { [editPhoto]: url }); setEditPhoto('') }}
+          onClose={() => setEditPhoto('')}
+        />
       )}
     </div>
   )
 }
 
-function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, listName, setListName, onSave, onClear, onRequest, onImport, profile, onSaveProfile, notify, locationList, myLocation, setMyLocation, addLocation, onLocationPhoto, sort, setSort, classOptions }) {
+function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, listName, setListName, onSave, onClear, onRequest, onImport, profile, onSaveProfile, notify, locationList, myLocation, setMyLocation, addLocation, onLocationPhoto, sort, setSort, newIds, onSeenNew, classOptions }) {
   const ids = assets.map((asset) => asset.assetId)
   const empty = !assets.length
   const [panel, setPanel] = useState('')        // '', 'takeout', 'return', 'extension'
@@ -1768,15 +2239,31 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
   function commitLocation(value) {
     const v = value.trim()
     setMyLocation(v)
+    if (v) setLocNudge(false)
     if (v && !locationList.some((l) => l.name === v)) addLocation(v)
   }
+  // Update / Check-in / Check-out / Extension all write the selected location onto
+  // the assets, so they refuse to run without one: top-bar message + open the
+  // location list + mark the field.
+  const [locNudge, setLocNudge] = useState(false)
+  function requireLocation(fn) {
+    if (!String(myLocation || '').trim()) {
+      notify('위치를 먼저 선택하세요.')
+      setLocNudge(true)
+      setLocOpen(true)
+      return
+    }
+    setLocNudge(false)
+    fn()
+  }
   function togglePanel(type) {
-    setPanel((p) => (p === type ? '' : type))
+    if (panel === type) { setPanel(''); return }        // closing needs no location
+    requireLocation(() => setPanel(type))
   }
   // Top row (slate) — list actions. Bottom row (amber) — application forms / import.
   const rowTop = [
     { key: 'clear', label: 'Clear', Glyph: Trash, onClick: onClear, disabled: empty },
-    { key: 'update', label: 'Update', Glyph: CheckCircle, onClick: () => recordAction('update', ids), disabled: empty, cls: 'is-filled' },
+    { key: 'update', label: 'Update', Glyph: CheckCircle, onClick: () => requireLocation(() => recordAction('update', ids)), disabled: empty, cls: 'is-filled' },
     { key: 'request', label: 'Request', Glyph: ShieldCheck, onClick: () => onRequest(ids), disabled: empty },
     { key: 'save', label: 'Save', Glyph: FloppyDisk, onClick: onSave, disabled: empty },
   ]
@@ -1789,7 +2276,7 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
   const form = panel ? REQUEST_FORMS[panel] : null
   const locFiltered = locationList.filter((l) => !myLocation.trim() || String(l.name).toLowerCase().includes(myLocation.trim().toLowerCase()))
   const titleReq = panel && !String(listName || '').trim()
-  const locReq = panel && form?.placeKey && !String(myLocation || '').trim()
+  const locReq = (locNudge || (panel && form?.placeKey)) && !String(myLocation || '').trim()
   return (
     <div
       className={`stack${dragOver ? ' is-dragover' : ''}`}
@@ -1802,24 +2289,36 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
       <Card>
         <div className="mylist-head-grid">
           <span className="mylist-icon-cell"><PencilSimple size={18} weight="fill" color={BRAND} /></span>
-          <Input size="md" className={titleReq ? 'is-req-empty' : undefined} value={listName} placeholder="목록 이름" onChange={(event) => setListName(event.target.value)} />
+          <Input size="md" className={`span-rest${titleReq ? ' is-req-empty' : ''}`} value={listName} placeholder="목록 이름" onChange={(event) => setListName(event.target.value)} />
+          <span className="mylist-icon-cell"><MapPin size={18} weight="fill" color={BRAND} /></span>
+          <span className="loc-input-wrap">
+            <input
+              className={`loc-input${locReq ? ' is-req-empty' : ''}`}
+              value={myLocation}
+              placeholder="위치 검색·선택 또는 새 위치"
+              onFocus={() => setLocOpen(true)}
+              onChange={(event) => { setMyLocation(event.target.value); setLocOpen(true) }}
+              onBlur={(event) => { commitLocation(event.target.value); setTimeout(() => setLocOpen(false), 120) }}
+            />
+            {String(myLocation || '') !== '' && (
+              <button type="button" className="loc-clear" title="지우기"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => { setMyLocation(''); setLocOpen(true) }}>
+                <X size={14} weight="bold" color={BRAND} />
+              </button>
+            )}
+          </span>
+          {/* Browse the location list WITHOUT focusing the text field (mousedown is
+              swallowed so no keyboard pops up and the input's blur logic stays out). */}
           <button
             type="button"
-            className="loc-photo-btn mylist-icon-cell"
-            title="위치 사진 촬영"
-            disabled={!myLocation.trim()}
-            onClick={() => { commitLocation(myLocation); onLocationPhoto(myLocation.trim()) }}
+            className="loc-list-btn mylist-icon-cell"
+            title="위치 목록 보기"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => setLocOpen((o) => !o)}
           >
-            <CameraPlus size={18} weight="fill" color="#ffffff" />
+            <ListDashes size={18} weight="fill" color={BRAND} />
           </button>
-          <input
-            className={`loc-input${locReq ? ' is-req-empty' : ''}`}
-            value={myLocation}
-            placeholder="위치 검색·선택 또는 새 위치"
-            onFocus={() => setLocOpen(true)}
-            onChange={(event) => { setMyLocation(event.target.value); setLocOpen(true) }}
-            onBlur={(event) => { commitLocation(event.target.value); setTimeout(() => setLocOpen(false), 120) }}
-          />
         </div>
         {!locOpen && (
           <>
@@ -1890,7 +2389,7 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
         <>
           <div className="list-toolbar">
             <span className="list-count">총 {assets.length}개</span>
-            <SortBar sort={sort} setSort={setSort} />
+            <SortBar sort={sort} setSort={setSort} withAdded />
           </div>
           <div className="result-list result-list-full">
             {empty && <Card><p className="muted">My List가 비어 있습니다.</p></Card>}
@@ -1899,8 +2398,9 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
                 key={asset.assetId}
                 asset={asset}
                 expanded={expandedId === asset.assetId}
-                onToggle={() => setExpandedId(expandedId === asset.assetId ? '' : asset.assetId)}
+                onToggle={() => { onSeenNew?.(asset.assetId); setExpandedId(expandedId === asset.assetId ? '' : asset.assetId) }}
                 inMyList
+                isNew={newIds?.has(asset.assetId)}
                 shots={myPhotos[asset.assetId]}
                 onToggleMyList={() => toggleMyList(asset.assetId)}
                 onCapture={() => onCapture(asset.assetId)}
@@ -1939,10 +2439,7 @@ function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove
   return (
     <div className="stack">
       <Card>
-        <div className="search-box">
-          <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
-          <Input size="md" value={query} placeholder="제목 · 작성자 · 자산번호 검색" onChange={(event) => setQuery(event.target.value)} />
-        </div>
+        <SearchBox query={query} setQuery={setQuery} placeholder="제목 · 작성자 · 자산번호 검색" />
       </Card>
       {filtered.length === 0 && <Card><p className="muted">{records.length ? '검색 결과가 없습니다.' : '저장된 기록이 없습니다.'}</p></Card>}
       {filtered.map((record) => (
@@ -1967,10 +2464,8 @@ function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove
 
 function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onAdd, onRemove, onDelete, onRename, toggleMyList }) {
   const cardRef = useRef(null)
-  // Open → glide the card up so it sits just below the top bar (like asset rows).
-  useEffect(() => {
-    if (open && cardRef.current) cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [open])
+  // Two-phase open/close: glide up first then grow; shrink in place then glide back.
+  const { mounted, grown } = useCardGlide(open, cardRef)
   return (
     <div ref={cardRef}>
       <Card>
@@ -1987,7 +2482,8 @@ function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onA
             </span>
           </button>
         </div>
-        {open && (
+        {mounted && (
+          <Expando grown={grown}>
           <div className="loc-detail">
             <div className="class-admin-row">
               <button type="button" className="class-admin-btn" onClick={() => onAdd(record)}><Plus size={16} weight="bold" /> 추가</button>
@@ -2017,6 +2513,7 @@ function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onA
               ))}
             </div>
           </div>
+          </Expando>
         )}
       </Card>
     </div>
@@ -2151,10 +2648,7 @@ function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMer
   return (
     <>
       <Card>
-        <div className="search-box">
-          <span className="mylist-icon-cell"><MagnifyingGlass size={18} weight="fill" color={BRAND} /></span>
-          <Input size="md" value={query} placeholder={cfg.searchPlaceholder} onChange={(event) => setQuery(event.target.value)} />
-        </div>
+        <SearchBox query={query} setQuery={setQuery} placeholder={cfg.searchPlaceholder} />
       </Card>
       {!query.trim() && <NewClassCard cfg={cfg} onCreate={onCreate} />}
       {filtered.length === 0 && <Card><p className="muted">{classList.length ? '검색 결과가 없습니다.' : cfg.emptyText}</p></Card>}
@@ -2187,10 +2681,9 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
   const [form, setForm] = useState(initForm)
   const cardRef = useRef(null)
   useEffect(() => { setForm(initForm()) }, [rec.name, rec.address, rec.description, rec.memo])
-  useEffect(() => {
-    if (!open) setEditing(false)
-    else if (cardRef.current) cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [open])
+  useEffect(() => { if (!open) setEditing(false) }, [open])
+  // Two-phase open/close: glide up first then grow; shrink in place then glide back.
+  const { mounted, grown } = useCardGlide(open, cardRef)
   function saveEdit() {
     const patch = { ...form, name: (form.name || '').trim() || rec.name }
     onUpdate(rec.name, patch)
@@ -2209,7 +2702,8 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
           </span>
         </button>
       </div>
-      {editing && isAdmin && (
+      {mounted && editing && isAdmin && (
+        <Expando grown={grown}>
         <div className="asset-row-body loc-body loc-edit">
           {cfg.editFields.map((x) => (
             <label key={x.k}>
@@ -2226,8 +2720,10 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
             <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setEditing(false)}>취소</Button>
           </div>
         </div>
+        </Expando>
       )}
-      {open && !editing && (
+      {mounted && !editing && (
+        <Expando grown={grown}>
         <div className="asset-row-body loc-body">
           {isAdmin && (
             <div className="class-admin-row">
@@ -2262,6 +2758,7 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
             ))}
           </div>
         </div>
+        </Expando>
       )}
     </div>
   )
