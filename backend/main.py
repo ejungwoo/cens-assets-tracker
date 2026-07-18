@@ -143,6 +143,15 @@ def put_data(body: SaveBody, me: dict = Depends(identity)):
         return doc
 
 
+@app.get("/api/data/version")
+def get_version(_: dict = Depends(identity)) -> dict:
+    """Cheap poll target: clients ask for just the version every few seconds and
+    fetch the full document only when it moved (the doc carries inline photos, so
+    polling GET /api/data itself would be megabytes per tick)."""
+    with _lock:
+        return {"version": _read()["version"]}
+
+
 @app.get("/api/whoami")
 def whoami(me: dict = Depends(identity)) -> dict:
     return {**me, "project": PROJECT}

@@ -166,6 +166,14 @@ async function fetchServerData() {
   return r.json()
 }
 
+// Cheap poll: just the version number, so we only pull the full document (which
+// carries inline photos) when someone actually saved.
+async function fetchServerVersion() {
+  const r = await fetch(`${PORTAL_BASE}/api/data/version`, { headers: authHeaders() })
+  if (!r.ok) throw new Error(`GET /api/data/version → ${r.status}`)
+  return (await r.json()).version
+}
+
 // Returns {conflict:true, current} when someone else saved first — the caller
 // reloads from `current` instead of overwriting their work.
 async function putServerData(baseVersion, shared) {
@@ -674,6 +682,9 @@ function App() {
   const serverVersion = useRef(null)
   const syncedRef = useRef(null)
   const [hydrated, setHydrated] = useState(!SERVER)
+  // Latest shared state, readable from the poll timer without re-arming it.
+  const sharedNow = useRef(null)
+  sharedNow.current = { assets, records, locations, types }
 
   function applyServerDoc(doc) {
     serverVersion.current = doc.version
@@ -702,6 +713,37 @@ function App() {
       }
     })()
     return () => { cancelled = true }
+  }, [])
+
+  // Live refresh: someone else's save should appear here without a reload. Poll
+  // the (tiny) version endpoint every 15s — and immediately when the app comes
+  // back to the foreground — and pull the full document only when it moved.
+  // Never apply over unsaved local edits; the save's 409 path settles those.
+  useEffect(() => {
+    if (!SERVER) return
+    let busy = false
+    const refresh = async () => {
+      if (busy || document.visibilityState === 'hidden') return
+      busy = true
+      try {
+        const v = await fetchServerVersion()
+        const clean = () => serverVersion.current === null ||
+          JSON.stringify(sharedNow.current) === syncedRef.current
+        if (v !== serverVersion.current && clean()) {
+          const doc = await fetchServerData()
+          if (clean()) applyServerDoc(doc)   // re-check: an edit may have landed mid-fetch
+        }
+      } catch {} finally { busy = false }
+    }
+    const timer = setInterval(refresh, 15000)
+    const onWake = () => { if (document.visibilityState === 'visible') refresh() }
+    document.addEventListener('visibilitychange', onWake)
+    window.addEventListener('focus', onWake)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', onWake)
+      window.removeEventListener('focus', onWake)
+    }
   }, [])
 
   useEffect(() => {
