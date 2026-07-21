@@ -4,6 +4,8 @@ localStorage, so nothing was shared across users or devices).
 
 Runs one process per portal project (model A): the portal passes the project's own
 data dir as ASSET_DATA_DIR ({project_data}), so each project's list is isolated.
+Every project starts EMPTY — there is no master/seed inventory; a project's list
+is built up from scratch by the people who share it.
 
 What lives here (shared) vs. in the browser (per-user):
   server : assets, records (saved lists), locations, types
@@ -37,13 +39,6 @@ PROJECT = os.environ.get("PORTAL_PROJECT", "")
 DIST = Path(os.environ.get("ASSET_DIST_DIR", "/app/asset_manager/dist"))
 DATA_FILE = DATA / "data.json"
 
-# One-time seed of the ~993-row CENS inventory (public/seed-assets.js, which vite
-# copies into dist/). Only for the listed projects, and only when the project has
-# no data yet — an existing list is never touched.
-SEED_PROJECTS = {p.strip() for p in
-                 os.environ.get("ASSET_SEED_PROJECTS", "CENS").split(",") if p.strip()}
-SEED_FILE = Path(os.environ.get("ASSET_SEED_FILE", str(DIST / "seed-assets.js")))
-
 # Keys the server owns. Anything else the client sends is ignored (per-user state
 # stays in the browser).
 SHARED_KEYS = ("assets", "records", "locations", "types", "settings")
@@ -67,31 +62,15 @@ def _atomic_write(path: Path, text: str) -> None:
     os.replace(tmp, path)
 
 
-def _parse_seed(path: Path) -> list:
-    """seed-assets.js is `window.CENS_SEED_ASSETS = [ … ];` — a JSON array with a JS
-    wrapper. Slice to the outer brackets and parse; a malformed file just seeds empty."""
-    try:
-        txt = path.read_text(encoding="utf-8")
-        i, j = txt.find("["), txt.rfind("]")
-        if i < 0 or j <= i:
-            return []
-        val = json.loads(txt[i:j + 1])
-        return val if isinstance(val, list) else []
-    except Exception:
-        return []
-
-
 def _blank() -> dict:
     return {"version": 1, "assets": [], "records": [], "locations": [], "types": [],
             "settings": {}, "updatedAt": _now(), "updatedBy": ""}
 
 
 def _read() -> dict:
-    """Current document, creating (and seeding) it on first use."""
+    """Current document, creating an EMPTY one on first use (no seed/master list)."""
     if not DATA_FILE.exists():
         doc = _blank()
-        if PROJECT in SEED_PROJECTS:
-            doc["assets"] = _parse_seed(SEED_FILE)
         _atomic_write(DATA_FILE, json.dumps(doc, ensure_ascii=False))
         return doc
     try:
