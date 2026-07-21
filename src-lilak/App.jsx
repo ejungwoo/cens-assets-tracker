@@ -3304,7 +3304,7 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
           <Card>
             <div className="settings-row">
               <div className="settings-info">
-                <strong>위치 변경 허용 모드</strong>
+                <strong>위치 변경 허용</strong>
                 <span className="settings-desc">켜면 일반 계정도 위치 변경(Update·Check-in/out·Extension)이 바로 적용됩니다. 끄면 그 액션이 보류되어 관리자가 History에서 승인해야 적용됩니다.</span>
               </div>
               <button
@@ -3319,7 +3319,7 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
           <Card>
             <div className="settings-row">
               <div className="settings-info">
-                <strong>새 자산 추가 허용 모드</strong>
+                <strong>새 자산 추가 허용</strong>
                 <span className="settings-desc">끄면 일반 계정은 Assets 탭 맨 위의 '새 자산 등록' 카드로 자산을 추가할 수 없습니다.</span>
               </div>
               <button
