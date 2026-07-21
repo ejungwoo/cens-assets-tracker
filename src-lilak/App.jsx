@@ -190,6 +190,14 @@ async function fetchServerData() {
   return r.json()
 }
 
+// Cheap poll: just the version number, so we only pull the full document (which
+// carries inline photos) when someone actually saved.
+async function fetchServerVersion() {
+  const r = await fetch(`${PORTAL_BASE}/api/data/version`, { headers: authHeaders() })
+  if (!r.ok) throw new Error(`GET /api/data/version → ${r.status}`)
+  return (await r.json()).version
+}
+
 // Returns {conflict:true, current} when someone else saved first — the caller
 // reloads from `current` instead of overwriting their work.
 async function putServerData(baseVersion, shared) {
@@ -885,6 +893,9 @@ function App() {
   const serverVersion = useRef(null)
   const syncedRef = useRef(null)
   const [hydrated, setHydrated] = useState(!SERVER)
+  // Latest shared state, readable from the poll timer without re-arming it.
+  const sharedNow = useRef(null)
+  sharedNow.current = { assets, records, locations, types }
 
   function applyServerDoc(doc) {
     serverVersion.current = doc.version
@@ -916,6 +927,77 @@ function App() {
     })()
     return () => { cancelled = true }
   }, [])
+
+  // Live refresh: someone else's save should appear here without a reload. Pull
+  // the full document only when the (tiny) version endpoint says it moved, and
+  // never apply over unsaved local edits; the save's 409 path settles those.
+  // Called by the 15s poll, foreground return, and pull-to-refresh.
+  const refreshBusy = useRef(false)
+  async function refreshShared() {
+    if (refreshBusy.current) return
+    refreshBusy.current = true
+    try {
+      const v = await fetchServerVersion()
+      const clean = () => serverVersion.current === null ||
+        JSON.stringify(sharedNow.current) === syncedRef.current
+      if (v !== serverVersion.current && clean()) {
+        const doc = await fetchServerData()
+        if (clean()) applyServerDoc(doc)   // re-check: an edit may have landed mid-fetch
+      }
+    } catch {} finally { refreshBusy.current = false }
+  }
+
+  useEffect(() => {
+    if (!SERVER) return
+    const refresh = () => { if (document.visibilityState !== 'hidden') refreshShared() }
+    const timer = setInterval(refresh, 15000)
+    const onWake = () => { if (document.visibilityState === 'visible') refreshShared() }
+    document.addEventListener('visibilitychange', onWake)
+    window.addEventListener('focus', onWake)
+    return () => {
+      clearInterval(timer)
+      document.removeEventListener('visibilitychange', onWake)
+      window.removeEventListener('focus', onWake)
+    }
+  }, [])
+
+  // ── Pull-to-refresh ────────────────────────────────────────────────────────
+  // Standard mobile gesture: drag the list down while it's at the top, an arrow
+  // rides down with the finger, release past the threshold → refresh. The list
+  // itself doesn't move (overscroll is contained); only the indicator does.
+  const PTR_THRESHOLD = 64
+  const ptrStartY = useRef(null)
+  const [ptrPull, setPtrPull] = useState(0)
+  const [ptrBusy, setPtrBusy] = useState(false)
+
+  function onPtrStart(e) {
+    const el = pageRef.current
+    ptrStartY.current = (el && el.scrollTop <= 0 && !ptrBusy) ? e.touches[0].clientY : null
+  }
+  function onPtrMove(e) {
+    if (ptrStartY.current === null) return
+    const el = pageRef.current
+    if (!el || el.scrollTop > 0) { ptrStartY.current = null; setPtrPull(0); return }
+    const dy = e.touches[0].clientY - ptrStartY.current
+    setPtrPull(dy > 0 ? Math.min(dy * 0.4, 96) : 0)   // damped, like native
+  }
+  function onPtrCancel() {
+    ptrStartY.current = null
+    setPtrPull(0)
+  }
+  async function onPtrEnd() {
+    if (ptrStartY.current === null) return
+    ptrStartY.current = null
+    const fired = ptrPull >= PTR_THRESHOLD
+    setPtrPull(0)
+    if (!fired || ptrBusy) return
+    setPtrBusy(true)
+    try {
+      // Keep the spinner visible for a beat even when the fetch is instant,
+      // so the user sees the refresh actually happened.
+      await Promise.all([refreshShared(), new Promise((r) => setTimeout(r, 600))])
+    } finally { setPtrBusy(false) }
+  }
 
   useEffect(() => {
     if (!SERVER || !hydrated || serverVersion.current === null) return
@@ -1618,7 +1700,25 @@ function App() {
           </>
         )}
       </header>
-      <main className="page" ref={pageRef} onScroll={handlePageScroll}>
+      {SERVER && (
+        <div className="ptr-anchor" aria-hidden="true">
+          <div
+            className={`ptr${ptrPull > 0 || ptrBusy ? ' is-active' : ''}${ptrPull > 0 && !ptrBusy ? ' is-dragging' : ''}${ptrPull >= PTR_THRESHOLD ? ' is-ready' : ''}${ptrBusy ? ' is-spinning' : ''}`}
+            style={{ transform: `translate(-50%, ${ptrBusy ? 20 : Math.round(ptrPull) - 44}px)` }}
+          >
+            <ArrowClockwise size={20} weight="bold" style={ptrBusy ? undefined : { transform: `rotate(${Math.round(ptrPull * 3)}deg)` }} />
+          </div>
+        </div>
+      )}
+      <main
+        className="page"
+        ref={pageRef}
+        onScroll={handlePageScroll}
+        onTouchStart={SERVER ? onPtrStart : undefined}
+        onTouchMove={SERVER ? onPtrMove : undefined}
+        onTouchEnd={SERVER ? onPtrEnd : undefined}
+        onTouchCancel={SERVER ? onPtrCancel : undefined}
+      >
         {tab === 'assets' && (
           <AssetListPage
             query={query}
