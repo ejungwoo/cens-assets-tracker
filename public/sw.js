@@ -9,7 +9,7 @@
  *    stale-while-revalidate.
  * Asset data itself lives in localStorage, so a cached shell = a working app.
  */
-const CACHE = 'cens-assets-v1'
+const CACHE = 'cens-assets-v3'
 
 self.addEventListener('install', () => {
   self.skipWaiting()
@@ -35,6 +35,15 @@ self.addEventListener('fetch', (event) => {
         if (res.ok && !res.redirected) {
           const cache = await caches.open(CACHE)
           cache.put('__shell__', res.clone())
+          return res
+        }
+        // Backend down / project not startable (5xx or the portal's error JSON):
+        // serve the cached shell instead of stranding the standalone app on a raw
+        // error page. Auth responses (302 login redirect, 401/403) pass through.
+        if (res.status >= 500) {
+          const cache = await caches.open(CACHE)
+          const shell = await cache.match('__shell__')
+          if (shell) return shell
         }
         return res
       } catch {
@@ -48,6 +57,21 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith((async () => {
     const cache = await caches.open(CACHE)
+    const url = new URL(req.url)
+    // Un-hashed same-origin files (hwpx-export.js, template.hwpx, seed, icons)
+    // change under the same name on deploy → network-first so clients never run
+    // a stale copy; cache is the offline fallback. Hashed bundles (/assets/)
+    // and CDN files are immutable → stale-while-revalidate.
+    const hashed = url.origin !== self.location.origin || url.pathname.includes('/assets/')
+    if (!hashed) {
+      try {
+        const res = await fetch(req)
+        if (res.ok) cache.put(req, res.clone())
+        return res
+      } catch {
+        return (await cache.match(req)) || Response.error()
+      }
+    }
     const cached = await cache.match(req)
     const network = fetch(req)
       .then((res) => {

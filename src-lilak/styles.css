@@ -256,6 +256,208 @@ input {
   color: var(--nav-text);
 }
 
+/* Hamburger dropdown (알림 / 언어변경 / 나가기) anchored to the top-bar right */
+.topbar-right {
+  position: relative;
+}
+
+.topbar-menu-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  min-width: 150px;
+  display: grid;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.topbar-menu-pop button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.topbar-menu-pop button:hover {
+  background: var(--surface-2, #eef1f6);
+}
+
+/* System message: takes over the WHOLE top bar for 2s — coloured dot + short
+   centered text. Hard-capped to the bar: nowrap + ellipsis, smaller font when
+   long. Title/buttons are unmounted while it shows. */
+.topbar-notice {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;                       /* tap anywhere on the bar to dismiss */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.notice-dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.notice-dot.is-info { background: #3d5a80; }
+.notice-dot.is-warn { background: #c98a2e; }
+.notice-dot.is-error { background: #c0392b; }
+
+.topbar-notice-text {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nav-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-notice.is-long .topbar-notice-text {
+  font-size: 12px;
+}
+
+/* HWPX building: spinning ring inside the disabled button. */
+.amber-btn.is-loading {
+  opacity: 0.85;
+  cursor: wait;
+}
+
+.spin-ring {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(138, 95, 27, 0.25);
+  border-top-color: #8a5f1b;
+  border-radius: 50%;
+  animation: hwpx-spin 0.8s linear infinite;
+}
+
+@keyframes hwpx-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Hidden asset (admin view only): greyed card with a dashed edge */
+.asset-row.is-hidden {
+  background: #f1f2f5;
+  border-style: dashed;
+  border-color: #9aa3b2;
+}
+
+.asset-row.is-hidden .asset-row-main strong,
+.asset-row.is-hidden .asset-row-main .mono {
+  color: #8a93a2;
+}
+
+/* Update → 복원 inline confirm (below the My List action rows) */
+.restore-confirm {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #c98a2e;
+  border-radius: 8px;
+  background: #fdf6e8;
+  display: grid;
+  gap: 10px;
+}
+
+.restore-confirm p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Per-class HWPX save buttons (one download per tap — iOS drops extra
+   programmatic downloads in a single gesture). */
+.hwpx-files {
+  display: grid;
+  gap: 6px;
+}
+
+.hwpx-file-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #c98a2e;
+  background: #fdf6e8;
+  color: #8a5f1b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hwpx-file-btn:active {
+  background: #c98a2e;
+  color: #fff;
+}
+
+/* Class merge flow: instruction row, and the ↓ between source and target. */
+.merge-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.merge-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.merge-arrow {
+  display: flex;
+  justify-content: center;
+  margin: -4px 0;
+}
+
+/* Notification history cards (bell view): dot · message · time. */
+.notice-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notice-item-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.notice-item-time {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 /* QR scanner modal */
 .scanner-backdrop {
   position: fixed;
@@ -429,6 +631,22 @@ input {
 .sort-btn.add-all {
   border-color: #c98a2e;
   color: #c98a2e;
+  font-weight: 600;
+}
+
+/* Sort options + the admin hidden-filter button, kept on one flowing line */
+.sort-side {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Admin rotation filter (전체 → 숨김만 → 노출만): amber when filtering */
+.sort-btn.hide-filter.is-active {
+  border-color: #c98a2e;
+  color: #8a5f1b;
+  background: #fdf6e8;
   font-weight: 600;
 }
 
@@ -773,6 +991,34 @@ button.asset-row-open {
   background: #eef1f6;
 }
 
+/* Request: green, filled inside */
+.mylist-btn.tone-green {
+  background: #e6f2e8;
+  color: #2f6b3a;
+  border-color: #4a8f5a;
+}
+
+.mylist-btn.tone-green:hover {
+  background: #dcecdf;
+}
+
+/* Hide / Unhide (admin): dark tones; active = filled dark */
+.mylist-btn.tone-dark {
+  background: #f1f2f4;
+  color: #26292e;
+  border-color: #4b5058;
+}
+
+.mylist-btn.tone-dark:hover {
+  background: #e7e9ec;
+}
+
+.mylist-btn.tone-dark.is-active {
+  background: #26292e;
+  color: #ffffff;
+  border-color: #26292e;
+}
+
 /* Import: keep the amber color but drop the filled background */
 .mylist-btn.tone-amber.no-bg {
   background: transparent;
@@ -831,6 +1077,13 @@ button.asset-row-open {
   border-color: #e24b4a !important;
 }
 
+/* My List tab: total item count next to the label (always), on top of the
+   amber new-adds badge on the glyph. */
+.tab-total {
+  color: #c98a2e;
+  font-weight: 700;
+}
+
 /* Tab badge: count of new My List adds while on another tab */
 .tabbar-glyph {
   position: relative;
@@ -877,6 +1130,179 @@ button.asset-row-open {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
+}
+
+.mylist-actions.cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+/* Delete: red action button in the top row */
+.mylist-btn.tone-red {
+  background: #fdf0ef;
+  color: #a32d2d;
+  border-color: #d98b83;
+}
+
+.mylist-btn.tone-red:hover {
+  background: #fae4e2;
+}
+
+.mylist-btn.tone-red.is-active {
+  background: #a32d2d;
+  color: #ffffff;
+  border-color: #a32d2d;
+}
+
+/* History card action buttons: uniform 2-col grid so every button is the same
+   size regardless of count/permissions. */
+.hcard-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.hcard-actions .amber-btn {
+  width: 100%;
+}
+
+.amber-btn.hcard-full {
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+/* New-asset card: XLSX import — drop target, column→field mapping, summary. */
+.asset-row.is-dropping {
+  outline: 2px dashed #2f7d46;
+  outline-offset: 2px;
+}
+
+.import-hint {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.import-hint.is-warn {
+  color: #a32d2d;
+  font-weight: 600;
+}
+
+/* Header-row picker (XLSX import step 1) */
+.header-pick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hp-nav {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #3d5a80;
+  background: #fff;
+  color: #3d5a80;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hp-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.hp-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.header-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.hp-cell {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #eaf0f8;
+  color: #2a4a72;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hp-empty {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.map-list {
+  display: grid;
+  gap: 6px;
+}
+
+.map-row {
+  display: grid;
+  grid-template-columns: 1fr auto minmax(0, 1.1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.map-row .edit-select {
+  width: 100%;
+  min-width: 0;
+}
+
+.map-arrow {
+  color: var(--text-muted);
+}
+
+.map-field {
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.import-summary p {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.import-summary .add-n {
+  color: #1f6b38;
+}
+
+/* Export buttons: distinct tones (HWPX = blue-slate, XLSX = green). */
+.amber-btn.tone-hwpx {
+  border-color: #3d5a80;
+  background: #eaf0f8;
+  color: #2a4a72;
+}
+
+.amber-btn.tone-hwpx:hover {
+  background: #dde7f3;
+}
+
+.amber-btn.tone-xlsx {
+  border-color: #2f7d46;
+  background: #e6f3ea;
+  color: #1f6b38;
+}
+
+.amber-btn.tone-xlsx:hover {
+  background: #d9ecdf;
+}
+
+/* Danger variant of the inline confirm box (asset delete) */
+.restore-confirm.is-danger {
+  border-color: #d98b83;
+  background: #fdf0ef;
 }
 
 .mylist-btn {
@@ -968,6 +1394,64 @@ button.asset-row-open {
 .type-chip.type-extension { background: #f7ecd6; color: #8a5a12; }
 .type-chip.type-request { background: #f7ecd6; color: #8a5a12; }
 .type-chip.type-save { background: #eef1f6; color: #3d5a80; }
+.type-chip.type-hide { background: #26292e; color: #ffffff; }
+.type-chip.type-unhide { background: #e7e9ec; color: #26292e; }
+.type-chip.type-pending { background: #c98a2e; color: #ffffff; }
+.type-chip.type-delete { background: #fdecea; color: #a32d2d; }
+
+/* Green confirm variant of the amber action button (history approve) */
+.amber-btn.green-btn {
+  border-color: #4a8f5a;
+  background: #e6f2e8;
+  color: #2f6b3a;
+}
+
+/* Admin service-settings panel (My List > Settings) */
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.settings-info {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.settings-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.settings-field-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.setting-toggle {
+  flex: none;
+  min-width: 56px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #9aa3b2;
+  background: #f1f2f4;
+  color: #6b7482;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.setting-toggle.is-on {
+  border-color: #4a8f5a;
+  background: #2f6b3a;
+  color: #ffffff;
+}
 
 /* My List: location search/select dropdown + photo button */
 .mylist-loc-row {
@@ -1082,10 +1566,11 @@ button.asset-row-open {
   cursor: pointer;
 }
 
+/* Long class names wrap onto multiple lines (the card grows) instead of
+   being ellipsis-truncated. */
 .loc-main strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 .loc-icon-btn {
@@ -1266,7 +1751,7 @@ button.asset-row-open {
 .card-expando {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease;
+  transition: grid-template-rows 0.24s ease;
 }
 
 .card-expando.is-grown {
@@ -1436,6 +1921,38 @@ button.asset-row-open {
   display: flex;
   gap: 6px;
   margin-top: 2px;
+}
+
+/* Single full-width 편집 button under a photo — opens the photo editor, which
+   carries the 다시찍기/삭제 actions inside. */
+.slot-edit-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 8px;
+  border-radius: 8px;
+  border: 1px solid #3d5a80;
+  background: #fff;
+  color: #3d5a80;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Class card photo + its 편집 button stacked in one photo-row cell */
+.photo-stack {
+  display: grid;
+  gap: 6px;
+}
+
+/* Red variant of the amber action button (photo delete inside the editor) */
+.amber-btn.danger-btn {
+  border-color: #e0c4c4;
+  background: #fdf0ef;
+  color: #a32d2d;
 }
 
 .slot-btn {

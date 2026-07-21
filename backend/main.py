@@ -46,7 +46,7 @@ SEED_FILE = Path(os.environ.get("ASSET_SEED_FILE", str(DIST / "seed-assets.js"))
 
 # Keys the server owns. Anything else the client sends is ignored (per-user state
 # stays in the browser).
-SHARED_KEYS = ("assets", "records", "locations", "types")
+SHARED_KEYS = ("assets", "records", "locations", "types", "settings")
 
 _lock = threading.Lock()          # serialize read-modify-write within this process
 
@@ -83,7 +83,7 @@ def _parse_seed(path: Path) -> list:
 
 def _blank() -> dict:
     return {"version": 1, "assets": [], "records": [], "locations": [], "types": [],
-            "updatedAt": _now(), "updatedBy": ""}
+            "settings": {}, "updatedAt": _now(), "updatedBy": ""}
 
 
 def _read() -> dict:
@@ -101,7 +101,7 @@ def _read() -> dict:
         # wipes the list. Fail loudly instead.
         raise HTTPException(500, "자산 데이터 파일을 읽을 수 없습니다.")
     for k in SHARED_KEYS:
-        doc.setdefault(k, [])
+        doc.setdefault(k, {} if k == "settings" else [])
     doc.setdefault("version", 1)
     return doc
 
@@ -112,6 +112,7 @@ class SaveBody(BaseModel):
     records: Optional[list] = None
     locations: Optional[list] = None
     types: Optional[list] = None
+    settings: Optional[dict] = None
 
 
 @app.get("/api/data")

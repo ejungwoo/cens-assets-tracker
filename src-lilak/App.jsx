@@ -13,6 +13,16 @@ import {
 } from 'lilak-ui'
 import {
   Cube,
+  Bell,
+  DownloadSimple,
+  ShareNetwork,
+  ArrowCounterClockwise,
+  List as ListIcon,
+  Translate,
+  Eye,
+  EyeSlash,
+  GearSix,
+  Broom,
   ListDashes,
   UserList,
   Camera,
@@ -34,7 +44,7 @@ import {
   ShieldCheck,
   CalendarPlus,
   UploadSimple,
-  ArrowsMerge,
+  Unite,
   ArrowUp,
   ArrowClockwise,
   Crop,
@@ -153,7 +163,21 @@ function projectDisplayName(projectId, fallback) {
 // the server is the source of truth for `SERVER_KEYS`. Standalone (no portal) has
 // no backend, so it keeps the old localStorage-only behaviour.
 const SERVER = !!PORTAL_PROJECT
-const SERVER_KEYS = ['assets', 'records', 'locations', 'types']
+const SERVER_KEYS = ['assets', 'records', 'locations', 'types', 'settings']
+
+// Admin service settings (shared, server-synced). Missing keys = defaults.
+const SETTINGS_DEFAULTS = { allowMove: true, allowPhoto: true, allowCreate: true, fieldVis: {} }
+// Asset-card fields an admin may hide from regular users. 번호·이름·사진·위치·유저
+// are always visible and not listed here.
+const VIS_FIELDS = [
+  { k: 'accountHolder', l: 'Account holder' },
+  { k: 'applicationName', l: 'Application name' },
+  { k: 'spec', l: '규격' },
+  { k: 'memo', l: 'Memo' },
+  { k: 'manufacturerProvider', l: 'Manufacturer' },
+  { k: 'acquisitionDate', l: 'Acquired' },
+  { k: 'acquisitionPriceKrw', l: 'Price' },
+]
 
 function authHeaders() {
   const tok = localStorage.getItem('lilak_portal_token') || localStorage.getItem('elog_token')
@@ -259,6 +283,7 @@ function loadProjectData(projectId) {
     locations: readJson(projectKey(projectId, 'locations'), []),
     // Type classification records: [{ name, photo, description, memo, ... }].
     types: readJson(projectKey(projectId, 'types'), []),
+    settings: readJson(projectKey(projectId, 'settings'), {}),
     myListName: localStorage.getItem(projectKey(projectId, 'myListName')) || '',
     currentListId: localStorage.getItem(projectKey(projectId, 'currentListId')) || '',
     myLocation: localStorage.getItem(projectKey(projectId, 'myLocation')) || '',
@@ -272,6 +297,7 @@ function saveProjectData(projectId, data) {
   writeJson(projectKey(projectId, 'myPhotos'), data.myPhotos || {})
   writeJson(projectKey(projectId, 'locations'), data.locations || [])
   writeJson(projectKey(projectId, 'types'), data.types || [])
+  writeJson(projectKey(projectId, 'settings'), data.settings || {})
   localStorage.setItem(projectKey(projectId, 'myListName'), data.myListName || '')
   localStorage.setItem(projectKey(projectId, 'currentListId'), data.currentListId || '')
   localStorage.setItem(projectKey(projectId, 'myLocation'), data.myLocation || '')
@@ -368,6 +394,35 @@ function fileToDataUrl(file) {
   })
 }
 
+// Rasterize a gallery-picked image to JPEG. A raw readAsDataURL keeps whatever
+// the file was (SVG, HEIC, …) — which the HWPX export then embeds under a
+// png/jpg name, showing up broken in 한글. Falls back to the raw data URL only
+// if the browser can't decode the image at all.
+async function fileToJpegDataUrl(file, maxDim = 1600) {
+  const raw = await fileToDataUrl(file)
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image()
+      el.onload = () => resolve(el)
+      el.onerror = reject
+      el.src = raw
+    })
+    const w = img.naturalWidth || img.width || 1000
+    const h = img.naturalHeight || img.height || 1000
+    const scale = Math.min(1, maxDim / Math.max(w, h))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.max(1, Math.round(w * scale))
+    canvas.height = Math.max(1, Math.round(h * scale))
+    const ctx = canvas.getContext('2d')
+    ctx.fillStyle = '#ffffff'                       // JPEG has no alpha
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+    return canvas.toDataURL('image/jpeg', 0.85)
+  } catch {
+    return raw
+  }
+}
+
 // --- minimal ZIP reader for HWPX import (STORE + DEFLATE via DecompressionStream) ---
 const z16 = (b, o) => b[o] | (b[o + 1] << 8)
 const z32 = (b, o) => (b[o] | (b[o + 1] << 8) | (b[o + 2] << 16) | (b[o + 3] << 24)) >>> 0
@@ -405,6 +460,93 @@ async function readZipEntry(bytes, targetName) {
   throw new Error(`${targetName}를 찾을 수 없습니다.`)
 }
 
+function unescapeXml(s) {
+  return String(s)
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'").replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&amp;/g, '&')
+}
+
+// List every entry name in a zip (central directory).
+function listZipEntries(bytes) {
+  const names = []
+  let eocd = -1
+  for (let i = bytes.length - 22; i >= 0; i -= 1) { if (z32(bytes, i) === 0x06054b50) { eocd = i; break } }
+  if (eocd < 0) return names
+  const count = z16(bytes, eocd + 10)
+  let off = z32(bytes, eocd + 16)
+  for (let i = 0; i < count; i += 1) {
+    if (z32(bytes, off) !== 0x02014b50) break
+    const nlen = z16(bytes, off + 28), elen = z16(bytes, off + 30), clen = z16(bytes, off + 32)
+    names.push(new TextDecoder().decode(bytes.slice(off + 46, off + 46 + nlen)))
+    off += 46 + nlen + elen + clen
+  }
+  return names
+}
+
+const colToIdx = (ref) => { let n = 0; for (const ch of ref.replace(/[0-9]+$/, '')) n = n * 26 + (ch.charCodeAt(0) - 64); return n - 1 }
+
+// Parse an .xlsx File → { headers: [...], rows: [[...], …] } from the first sheet.
+// Handles sharedStrings + inlineStr + plain values, DEFLATE or STORE zips. The
+// header row is auto-detected (the first row that contains an asset-number-like
+// column); everything below it is data.
+async function parseXlsx(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer())
+  const names = listZipEntries(bytes)
+  const sheetName = names.find((n) => /^xl\/worksheets\/sheet1\.xml$/i.test(n)) || names.find((n) => /^xl\/worksheets\/.*\.xml$/i.test(n))
+  if (!sheetName) throw new Error('시트를 찾을 수 없습니다. 올바른 XLSX 파일인가요?')
+  const dec = new TextDecoder()
+  const sheetXml = dec.decode(await readZipEntry(bytes, sheetName))
+  // Shared strings (optional)
+  let shared = []
+  const ssName = names.find((n) => /^xl\/sharedStrings\.xml$/i.test(n))
+  if (ssName) {
+    const ssXml = dec.decode(await readZipEntry(bytes, ssName))
+    shared = [...ssXml.matchAll(/<si>([\s\S]*?)<\/si>/g)].map((m) => {
+      const txt = [...m[1].matchAll(/<t[^>]*>([\s\S]*?)<\/t>/g)].map((t) => t[1]).join('')
+      return unescapeXml(txt)
+    })
+  }
+  const cellText = (cell) => {
+    const t = (/\bt="([^"]+)"/.exec(cell) || [])[1]
+    if (t === 'inlineStr') { const m = /<is>[\s\S]*?<t[^>]*>([\s\S]*?)<\/t>/.exec(cell); return m ? unescapeXml(m[1]) : '' }
+    const v = /<v[^>]*>([\s\S]*?)<\/v>/.exec(cell)
+    if (!v) return ''
+    if (t === 's') return shared[Number(v[1])] ?? ''
+    return unescapeXml(v[1])
+  }
+  const rows = []
+  for (const rowM of sheetXml.matchAll(/<row[^>]*>([\s\S]*?)<\/row>/g)) {
+    const cells = [...rowM[1].matchAll(/<c\b([^>]*)>([\s\S]*?)<\/c>|<c\b([^>]*)\/>/g)]
+    const arr = []
+    for (const c of cells) {
+      const attrs = c[1] ?? c[3] ?? ''
+      const body = c[0]
+      const ref = (/\br="([A-Z]+)\d+"/.exec(attrs) || [])[1]
+      const idx = ref ? colToIdx(ref) : arr.length
+      arr[idx] = cellText(body)
+    }
+    for (let i = 0; i < arr.length; i += 1) if (arr[i] === undefined) arr[i] = ''
+    rows.push(arr)
+  }
+  // Best guess for the header row: first row containing an asset-number-ish
+  // header. The user confirms/adjusts it before mapping, so this is only a hint.
+  // A header cell is one whose VALUE is "자산번호" (not a sentence that merely
+  // mentions it — instruction rows above the table often do). Match the cell
+  // itself: exact, or a short cell that contains it.
+  const isIdHeader = (v) => {
+    const t = String(v || '').replace(/[\s.()]/g, '')
+    if (!t) return false
+    if (t === '자산번호' || /^asset(no|number|id)$/i.test(t)) return true
+    return t.length <= 12 && (t.includes('자산번호') || /asset(no|number|id)/i.test(t))
+  }
+  let hi = rows.findIndex((r) => r.some(isIdHeader))
+  if (hi < 0) hi = rows.findIndex((r) => r.filter((c) => String(c || '').trim()).length >= 2)  // else first row with ≥2 cells
+  if (hi < 0) hi = 0
+  return { rows, headerIdx: hi }
+}
+
 // File → list of asset numbers. Supports .json (our payload) and .hwpx (zip).
 async function importFileToNumbers(file) {
   const lower = file.name.toLowerCase()
@@ -439,38 +581,83 @@ function buildRequestPayload(type, fields, assets, photos, title) {
   }
 }
 
-async function exportRequestHwpx(type, fields, assets, photos, title) {
+async function buildRequestHwpxBlob(type, fields, assets, photos, title) {
   if (!window.CensHwpx) throw new Error('HWPX 모듈을 불러오지 못했습니다. 새로고침하세요.')
   const payload = buildRequestPayload(type, fields, assets, photos, title)
-  const blob = await window.CensHwpx.build(payload, REQUEST_TYPE_LABEL[type] || '')
-  downloadBlob(blob, `${sanitizeFileName(title)}.hwpx`)
+  return window.CensHwpx.build(payload, REQUEST_TYPE_LABEL[type] || '')
 }
 
-// PDF = print the list + filled form via a hidden iframe (no library, like the old page).
-function exportRequestPdf(type, fields, assets, title) {
-  const esc = (s) => String(s ?? '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
-  const placeKey = REQUEST_FORMS[type].placeKey
-  const fieldRows = REQUEST_FORMS[type].fields.map((f) => `<tr><th>${esc(f.l)}</th><td>${esc(fields[f.k] || '')}</td></tr>`).join('')
-    + (placeKey ? `<tr><th>장소</th><td>${esc(fields[placeKey] || '')}</td></tr>` : '')
-  const itemRows = assets.map((a, i) => `<tr><td>${i + 1}</td><td>${esc(a.assetId)}</td><td>${esc(a.name || '')}</td><td>${esc(a.location || '')}</td></tr>`).join('')
-  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${esc(title)}</title><style>
-    body{font-family:'IBM Plex Sans','Apple SD Gothic Neo',sans-serif;color:#111;padding:24px;}
-    h1{font-size:20px;margin:0 0 4px;} h2{font-size:14px;color:#555;margin:0 0 16px;}
-    table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px;}
-    th,td{border:1px solid #999;padding:6px 8px;text-align:left;vertical-align:top;}
-    .info th{width:140px;background:#f3f3f3;} .items th{background:#f3f3f3;}
-  </style></head><body>
-    <h1>${esc(title)}</h1><h2>${esc(REQUEST_TYPE_LABEL[type] || '')}</h2>
-    <table class="info">${fieldRows}</table>
-    <table class="items"><thead><tr><th>#</th><th>자산번호</th><th>자산명</th><th>위치</th></tr></thead><tbody>${itemRows}</tbody></table>
-  </body></html>`
-  const iframe = document.createElement('iframe')
-  iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;'
-  document.body.appendChild(iframe)
-  const doc = iframe.contentWindow.document
-  doc.open(); doc.write(html); doc.close()
-  iframe.contentWindow.focus()
-  setTimeout(() => { iframe.contentWindow.print(); setTimeout(() => iframe.remove(), 1000) }, 300)
+// Table-only HWPX (no request-form fields): just the title + the asset table
+// (photos included, like the My List export). Used by Class/History export.
+async function buildTableHwpxBlob(assets, title) {
+  if (!window.CensHwpx) throw new Error('HWPX 모듈을 불러오지 못했습니다. 새로고침하세요.')
+  const payload = buildRequestPayload('', {}, assets, {}, title)
+  return window.CensHwpx.build(payload, '')
+}
+
+// Group assets by 자산분류 (empty → '미분류'): [[cls, [assets…]], …].
+function groupByClass(assets) {
+  const m = new Map()
+  for (const a of assets) {
+    const cls = String(a.assetClass || '').trim() || '미분류'
+    if (!m.has(cls)) m.set(cls, [])
+    m.get(cls).push(a)
+  }
+  return [...m.entries()]
+}
+
+// Every asset field except photos, for the XLSX export.
+const XLSX_COLUMNS = [
+  ['assetId', '자산번호'], ['name', '자산명'], ['type', 'Type'], ['assetClass', '자산분류'],
+  ['location', '위치'], ['user', '최근변경자'], ['accountHolder', '관리책임자'],
+  ['applicationName', '신청품목명'], ['spec', '규격'], ['description', '설명'], ['memo', '메모'],
+  ['manufacturerProvider', '제조사'], ['acquisitionDate', '취득일'], ['acquisitionPriceKrw', '취득가'],
+  ['lastInOutDate', '최근반출입일'], ['editedBy', '편집이력'], ['lastUpdate', '최근변경'],
+]
+
+// Minimal XLSX (SpreadsheetML) writer — one sheet, inline strings, no external
+// library. Reuses CensHwpx.makeZip (a STORE zip is valid for .xlsx).
+function buildXlsxBlob(assets, showField = () => true) {
+  const esc = (v) => String(v ?? '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+  // Regular accounts only export the fields they're allowed to see. 자산번호·자산명
+  // ·위치·최근변경자 are always in (they're always visible on the card too).
+  const ALWAYS = new Set(['assetId', 'name', 'location', 'user'])
+  const cols = XLSX_COLUMNS.filter(([k]) => ALWAYS.has(k) || showField(k))
+  const rowsXml = [cols.map(([, h]) => h), ...assets.map((a) => cols.map(([k]) => a[k] ?? ''))]
+    .map((cells, r) => {
+      const c = cells.map((val, ci) => {
+        const col = colName(ci) + (r + 1)
+        return `<c r="${col}" t="inlineStr"><is><t xml:space="preserve">${esc(val)}</t></is></c>`
+      }).join('')
+      return `<row r="${r + 1}">${c}</row>`
+    }).join('')
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${rowsXml}</sheetData></worksheet>`
+  const wb = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Assets" sheetId="1" r:id="rId1"/></sheets></workbook>`
+  const wbRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>`
+  const rootRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`
+  const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>`
+  const enc = new TextEncoder()
+  const entries = [
+    { name: '[Content_Types].xml', data: enc.encode(contentTypes) },
+    { name: '_rels/.rels', data: enc.encode(rootRels) },
+    { name: 'xl/workbook.xml', data: enc.encode(wb) },
+    { name: 'xl/_rels/workbook.xml.rels', data: enc.encode(wbRels) },
+    { name: 'xl/worksheets/sheet1.xml', data: enc.encode(sheet) },
+  ]
+  return window.CensHwpx.makeZip(entries)
+}
+
+// Excel column name for a 0-based index (A..Z, AA..).
+function colName(i) {
+  let s = ''
+  i += 1
+  while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26) }
+  return s
 }
 
 function sortAssets(list, sort) {
@@ -547,7 +734,11 @@ function App() {
       .catch(() => {})
   }, [])
   const [projectState, setProjectState] = useState(() => ensureProjectState())
-  const [tab, setTab] = useState('assets')
+  // Restore the last tab across reloads (per project, this device).
+  const [tab, setTab] = useState(() => localStorage.getItem(projectKey(projectState.currentProjectId, 'tab')) || 'assets')
+  useEffect(() => {
+    localStorage.setItem(projectKey(projectState.currentProjectId, 'tab'), tab)
+  }, [tab, projectState.currentProjectId])
   const [query, setQuery] = useState('')
   const [expandedId, setExpandedId] = useState('')
   const [assets, setAssets] = useState(() => loadProjectData(projectState.currentProjectId).assets)
@@ -561,8 +752,27 @@ function App() {
   const [currentListId, setCurrentListId] = useState(() => loadProjectData(projectState.currentProjectId).currentListId)
   const [locations, setLocations] = useState(() => loadProjectData(projectState.currentProjectId).locations)
   const [types, setTypes] = useState(() => loadProjectData(projectState.currentProjectId).types)
+  const [settings, setSettings] = useState(() => loadProjectData(projectState.currentProjectId).settings)
   const [myLocation, setMyLocation] = useState(() => loadProjectData(projectState.currentProjectId).myLocation)
   const [notice, setNotice] = useState('')
+  const noticeTimer = useRef(null)
+  // Notification history — the last 10 system messages (per user/device),
+  // shown by the top-bar bell as a simple time+message card list.
+  const [noticeLog, setNoticeLog] = useState(() =>
+    readJson(projectKey(projectState.currentProjectId, 'notices'), []))
+  useEffect(() => {
+    writeJson(projectKey(projectState.currentProjectId, 'notices'), noticeLog)
+  }, [noticeLog, projectState.currentProjectId])
+  const prevTabRef = useRef('assets')
+  // Top-bar hamburger menu (알림 / 언어변경 / 나가기)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef(null)
+  useEffect(() => {
+    if (!menuOpen) return
+    const away = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false) }
+    document.addEventListener('pointerdown', away)
+    return () => document.removeEventListener('pointerdown', away)
+  }, [menuOpen])
   // Inline confirm/prompt dialog. Native window.confirm/prompt are BLOCKED when the
   // app runs inside the portal proxy frame, so all confirmations use this instead.
   const [dialog, setDialog] = useState(null)   // null | {kind, message, value?, onConfirm}
@@ -571,7 +781,8 @@ function App() {
   // Scanned-but-unknown asset number → prefills the "새 자산 등록" card once.
   const [assetDraft, setAssetDraft] = useState(null)
   const [myListBadge, setMyListBadge] = useState(0)   // new My List adds while on another tab
-  const [sort, setSort] = useState({ key: 'assetId', dir: 'asc' })
+  // Assets default: most recently edited first.
+  const [sort, setSort] = useState({ key: 'lastUpdate', dir: 'desc' })
   const isMobile = useMediaQuery('(max-width: 760px)')
 
   // Remembered applicant name/org for request forms, per account.
@@ -660,11 +871,11 @@ function App() {
   }, [])
 
   useEffect(() => {
-    saveProjectData(projectState.currentProjectId, { assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation })
+    saveProjectData(projectState.currentProjectId, { assets, records, myList, myPhotos, locations, types, settings, myListName, currentListId, myLocation })
     writeJson(STORAGE_KEYS.assets, assets)
     writeJson(STORAGE_KEYS.records, records)
     writeJson(STORAGE_KEYS.myList, myList)
-  }, [assets, records, myList, myPhotos, locations, types, myListName, currentListId, myLocation, projectState.currentProjectId])
+  }, [assets, records, myList, myPhotos, locations, types, settings, myListName, currentListId, myLocation, projectState.currentProjectId])
 
   // ── Server sync (shared data) ──────────────────────────────────────────────
   // `serverVersion` is the version this client last agreed with; `syncedRef` is the
@@ -680,11 +891,13 @@ function App() {
     syncedRef.current = JSON.stringify({
       assets: doc.assets || [], records: doc.records || [],
       locations: doc.locations || [], types: doc.types || [],
+      settings: doc.settings || {},
     })
     setAssets(doc.assets || [])
     setRecords(doc.records || [])
     setLocations(doc.locations || [])
     setTypes(doc.types || [])
+    setSettings(doc.settings || {})
   }
 
   useEffect(() => {
@@ -696,7 +909,7 @@ function App() {
         if (cancelled) return
         applyServerDoc(doc)
       } catch {
-        if (!cancelled) setNotice('서버에서 자산을 불러오지 못했습니다. 이 기기의 사본을 표시합니다.')
+        if (!cancelled) show('서버 연결 실패 — 이 기기의 사본을 표시합니다.', 'warn')
       } finally {
         if (!cancelled) setHydrated(true)
       }
@@ -706,40 +919,77 @@ function App() {
 
   useEffect(() => {
     if (!SERVER || !hydrated || serverVersion.current === null) return
-    const payload = JSON.stringify({ assets, records, locations, types })
+    const payload = JSON.stringify({ assets, records, locations, types, settings })
     if (payload === syncedRef.current) return           // identical to the server
     const t = setTimeout(async () => {
       try {
         const res = await putServerData(serverVersion.current, JSON.parse(payload))
         if (res.conflict) {
           applyServerDoc(res.current)
-          setNotice('다른 사용자가 먼저 저장했습니다. 최신 목록으로 새로고침했어요.')
+          show('다른 사용자가 먼저 저장 — 최신 목록으로 갱신했습니다.', 'warn')
         } else {
           serverVersion.current = res.doc.version
           syncedRef.current = payload
         }
       } catch {
-        setNotice('서버 저장에 실패했습니다. 변경사항이 아직 반영되지 않았어요.')
+        show('서버 저장 실패 — 변경사항이 아직 반영되지 않았습니다.', 'warn')
       }
     }, 600)                                             // debounce a burst of edits
     return () => clearTimeout(t)
-  }, [assets, records, locations, types, hydrated])
+  }, [assets, records, locations, types, settings, hydrated])
 
-  const filteredAssets = useMemo(() => {
-    return sortAssets(assets.filter((asset) => matchesAsset(asset, query)), sort)
-  }, [assets, query, sort])
   const isAdmin = isAdminUser(authUser)
+  // Effective service settings (admin-managed, server-shared; missing keys = defaults).
+  const svcSettings = useMemo(() => ({ ...SETTINGS_DEFAULTS, ...(settings || {}) }), [settings])
+  const canEditPhotos = isAdmin || svcSettings.allowPhoto !== false
+  const canCreate = isAdmin || svcSettings.allowCreate !== false
+  // Field visibility for regular accounts (admins always see everything).
+  const showField = (k) => isAdmin || svcSettings.fieldVis?.[k] !== false
+  function changeSettings(patch) {
+    setSettings((cur) => ({ ...SETTINGS_DEFAULTS, ...(cur || {}), ...patch }))
+  }
+  // What this account is allowed to SEE: hidden assets exist only for admins.
+  // Every UI list/search/count derives from viewAssets, never raw assets.
+  const viewAssets = useMemo(() => (isAdmin ? assets : assets.filter((a) => !a.hidden)), [assets, isAdmin])
+  // Admin-only Assets filter: all → hidden-only → visible-only (rotating button).
+  const [hiddenFilter, setHiddenFilter] = useState('all')   // 'all' | 'hidden' | 'visible'
+  const filteredAssets = useMemo(() => {
+    let base = viewAssets
+    if (isAdmin && hiddenFilter === 'hidden') base = base.filter((a) => a.hidden)
+    else if (isAdmin && hiddenFilter === 'visible') base = base.filter((a) => !a.hidden)
+    return sortAssets(base.filter((asset) => matchesAsset(asset, query)), sort)
+  }, [viewAssets, query, sort, isAdmin, hiddenFilter])
   // My List has its own sort, defaulting to the order items were added (the
   // myList array itself — newest first, since adds unshift).
   const [mySort, setMySort] = useState({ key: 'added', dir: 'asc' })
   const myAssets = useMemo(() => {
-    const list = myList.map((id) => assets.find((asset) => asset.assetId === id)).filter(Boolean)
+    const list = myList.map((id) => viewAssets.find((asset) => asset.assetId === id)).filter(Boolean)
     if (mySort.key === 'added') return mySort.dir === 'asc' ? list : [...list].reverse()
     return sortAssets(list, mySort)
-  }, [assets, myList, mySort])
+  }, [viewAssets, myList, mySort])
+  // ↑/↓ move the open asset card to the previous/next card in the current list
+  // (Assets or My List). Ignored while typing in a field, or when nothing is open.
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
+      if (!expandedId || (tab !== 'assets' && tab !== 'mylist')) return
+      const el = document.activeElement
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable)) return
+      const list = tab === 'mylist' ? myAssets : filteredAssets
+      const i = list.findIndex((a) => a.assetId === expandedId)
+      if (i < 0) return
+      const next = i + (e.key === 'ArrowDown' ? 1 : -1)
+      if (next < 0 || next >= list.length) return
+      e.preventDefault()
+      setExpandedId(list[next].assetId)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [expandedId, tab, myAssets, filteredAssets])
+
   // Classification lists (location / type) merged with asset values + item counts.
-  const locationList = useMemo(() => buildClassList('location', locations, assets), [locations, assets])
-  const typeList = useMemo(() => buildClassList('type', types, assets), [types, assets])
+  const locationList = useMemo(() => buildClassList('location', locations, viewAssets), [locations, viewAssets])
+  const typeList = useMemo(() => buildClassList('type', types, viewAssets), [types, viewAssets])
   // Existing class names — the asset edit form's location/type dropdowns.
   const classOptions = useMemo(() => ({
     location: locationList.map((l) => l.name),
@@ -752,9 +1002,18 @@ function App() {
   }, [locations])
   const latestRecords = records.slice(0, 80)
 
-  function show(message) {
-    setNotice(message)
-    window.setTimeout(() => setNotice(''), 1800)
+  // System message: takes over the whole top bar for 2s — a coloured dot
+  // (info/warn/error) + short text, centered. Must never overflow the bar.
+  // One timer, reset on every call: a burst of messages shows the LAST one for
+  // its full 2s (a stale earlier timer must not clear it prematurely).
+  function show(message, kind = 'info') {
+    setNotice({ text: message, kind })
+    setNoticeLog((log) => [{ text: message, kind, at: new Date().toISOString() }, ...log].slice(0, 20))
+    if (noticeTimer.current) window.clearTimeout(noticeTimer.current)
+    noticeTimer.current = window.setTimeout(() => {
+      noticeTimer.current = null
+      setNotice('')
+    }, 2000)
   }
 
   // Portal-safe replacements for window.confirm / window.prompt.
@@ -771,6 +1030,9 @@ function App() {
   }
 
   function toggleMyList(assetId) {
+    const target = assets.find((a) => a.assetId === assetId)
+    if (target?.hidden && !isAdmin) { show('추가할 수 없는 자산입니다.', 'warn'); return }
+    const label = `${assetId} ${target?.name || ''}`.trim()
     if (myList.includes(assetId)) {
       setMyList((list) => list.filter((id) => id !== assetId))
       bumpBadge(-1)
@@ -781,11 +1043,12 @@ function App() {
         delete next[assetId]
         return next
       })
+      show(`${label} 제거 · 총 ${myList.length - 1}개`)
     } else {
       setMyList((list) => [assetId, ...list])
       bumpBadge(1)
       markNew([assetId])
-      show('My List에 추가했습니다.')
+      show(`${label} 추가 · 총 ${myList.length + 1}개`)
     }
   }
 
@@ -813,9 +1076,9 @@ function App() {
   // Register a new location/type from the "새 등록" card. Name required, no dupes.
   function createClass(field, setStore, form) {
     const name = String(form.name || '').trim()
-    if (!name) { show('이름을 입력해야 등록할 수 있습니다.'); return false }
+    if (!name) { show('이름을 입력해야 등록할 수 있습니다.', 'warn'); return false }
     const list = field === 'location' ? locationList : typeList
-    if (list.some((l) => l.name === name)) { show(`'${name}'은(는) 이미 있습니다.`); return false }
+    if (list.some((l) => l.name === name)) { show(`'${name}'은(는) 이미 있습니다.`, 'warn'); return false }
     upsertClass(setStore, name, { ...form, name, lastUpdate: new Date().toISOString() })
     show(`'${name}'을(를) 등록했습니다.`)
     return true
@@ -836,11 +1099,11 @@ function App() {
     show('정보를 저장했습니다.')
   }
 
-  // Merge = rename into an (existing) target.
-  function mergeClass(field, setStore, name) {
-    askPrompt(`'${name}'을(를) 어디로 병합할까요? (대상 이름)`, '', (target) => {
-      if (target && target.trim()) updateClass(field, setStore, name, { name: target.trim() })
-    })
+  // Merge = reassign every asset of `src` to the EXISTING class `tgt` (picked in
+  // the ClassPage merge UI — free-text targets caused accidental renames).
+  function execMerge(field, setStore, src, tgt) {
+    updateClass(field, setStore, src, { name: tgt })
+    show(`'${src}' → '${tgt}' 병합 완료`)
   }
 
   function deleteClass(field, setStore, name) {
@@ -865,7 +1128,7 @@ function App() {
     })
     bumpBadge(added.length)
     markNew(added)
-    show(`${name}: ${ids.length}개를 My List에 추가했습니다.`)
+    show(`${name}: ${added.length}개 추가 · 총 ${myList.length + added.length}개`)
   }
 
   function onCaptureDone(shots) {
@@ -887,27 +1150,32 @@ function App() {
     if (n) upsertClass(setLocations, n, {})
   }
 
-  function editProjectName() {
-    askPrompt('목록 이름', projectName, (next) => renameProject(next))
-  }
-
   function recordAction(type, assetIds = myList) {
     if (!assetIds.length) {
       show('먼저 자산을 My List에 추가하세요.')
       return
     }
     const now = new Date().toISOString()
+    // Update / Check-in / Check-out / Extension all assign the items to the
+    // currently selected location (위치 입력칸). Plain Save (saveList) does not.
+    const targetLoc = String(myLocation || '').trim()
     const entry = {
       id: newId(),
       name: uniqueName(myListName || makeListName(records), records),
       type,
       assetIds,                         // store asset numbers only — reloadable from History
+      location: targetLoc,              // where the items were moved TO, at record time
       user: authUser?.email || '',
       createdAt: now,
     }
-    // Update / Check-in / Check-out / Extension all assign the items to the
-    // currently selected location (위치 입력칸). Plain Save (saveList) does not.
-    const targetLoc = String(myLocation || '').trim()
+    // History confirmation mode: a regular account's location-changing action is
+    // HELD as a pending record — nothing touches the assets until an admin
+    // approves it from the History card.
+    if (svcSettings.allowMove === false && !isAdmin) {
+      setRecords((items) => [{ ...entry, pending: true }, ...items])
+      show(`'${entry.name}' ${typeLabel(type)} 승인 대기로 등록되었습니다.`)
+      return
+    }
     setRecords((items) => [entry, ...items])
     setAssets((items) => items.map((asset) => {
       if (!assetIds.includes(asset.assetId)) return asset
@@ -928,7 +1196,7 @@ function App() {
       for (const id of assetIds) if (next[id]) { delete next[id]; changed = true }
       return changed ? next : photos
     })
-    show(`${typeLabel(type)} 기록을 저장했습니다.`)
+    show(`'${entry.name}' ${typeLabel(type)} 기록 저장`)
   }
 
   // Bump last-update on the affected assets' location AND type records.
@@ -951,7 +1219,7 @@ function App() {
     // Don't save a duplicate: same set of assets already saved today.
     const today = now.slice(0, 10)
     if (!currentListId && records.some((r) => String(r.createdAt).slice(0, 10) === today && sameIdSet(r.assetIds, myList))) {
-      show('동일한 목록이 오늘 이미 저장되어 있습니다.')
+      show('동일한 목록이 오늘 이미 저장되어 있습니다.', 'warn')
       return
     }
     // Unique name so History never shows duplicates (bumps the trailing index).
@@ -964,7 +1232,7 @@ function App() {
       setCurrentListId(id)
     }
     if (name !== myListName) setMyListName(name)
-    show('목록을 저장했습니다.')
+    show(`'${name}' 목록 저장 · ${myList.length}개`)
   }
 
   // Request verification: flag the assets so they float to the top of Assets
@@ -978,9 +1246,78 @@ function App() {
     const who = String(authUser?.email || '').split('@')[0] || authUser?.email || 'unknown'
     const reqLoc = `verification request by ${who}`
     const now = new Date().toISOString()
+    const entryName = uniqueName(myListName || makeListName(records), records)
     setAssets((items) => items.map((a) => (set.has(a.assetId) ? { ...a, verifyRequested: true, location: reqLoc, user: authUser?.email || '', lastUpdate: now } : a)))
-    setRecords((items) => [{ id: newId(), name: uniqueName(myListName || makeListName(records), records), type: 'request', assetIds: ids, user: authUser?.email || '', createdAt: now }, ...items])
-    show('확인 요청을 등록했습니다.')
+    setRecords((items) => [{ id: newId(), name: entryName, type: 'request', assetIds: ids, user: authUser?.email || '', createdAt: now }, ...items])
+    show(`'${entryName}' 확인 요청 등록`)
+  }
+
+  // Admin: hide/unhide the given assets. Hidden assets stay in the shared data
+  // but are invisible to non-admin accounts (no list, no search, no My List add).
+  function setHiddenBulk(ids, hidden) {
+    const idSet = new Set(ids)
+    if (!idSet.size) { show('먼저 자산을 My List에 추가하세요.', 'warn'); return }
+    const now = new Date().toISOString()
+    setAssets((items) => items.map((a) => (idSet.has(a.assetId) ? { ...a, hidden, lastUpdate: now } : a)))
+    // Logged to History, but as an admin-only record type (hidden from regular
+    // accounts and from every asset card's history panel).
+    setRecords((items) => [{
+      id: newId(),
+      name: uniqueName(myListName || makeListName(records), records),
+      type: hidden ? 'hide' : 'unhide',
+      assetIds: [...idSet],
+      user: authUser?.email || '',
+      createdAt: now,
+    }, ...items])
+    show(`${idSet.size}개 자산을 ${hidden ? '숨김' : '숨김 해제'} 처리했습니다.`)
+  }
+
+  // Bulk-restore asset locations to a saved { assetId: location } map — the
+  // My List Update → 복원 flow (one toast, not one per asset).
+  function restoreLocations(prevMap) {
+    const idSet = new Set(Object.keys(prevMap))
+    if (!idSet.size) return
+    const now = new Date().toISOString()
+    setAssets((items) => items.map((a) => (
+      idSet.has(a.assetId) ? { ...a, location: prevMap[a.assetId] || '', lastUpdate: now, user: authUser?.email || '' } : a
+    )))
+    touchClasses([...idSet], now)
+    show(`${idSet.size}개 자산 위치를 이전 위치로 복원했습니다.`)
+  }
+
+  // Admin approval of a held (pending) record: apply the location change the
+  // record describes, then mark it approved.
+  function approveRecord(id) {
+    const rec = records.find((r) => r.id === id)
+    if (!rec || !rec.pending) return
+    const set = new Set(rec.assetIds || [])
+    const now = new Date().toISOString()
+    const targetLoc = String(rec.location || '').trim()
+    setAssets((items) => items.map((a) => {
+      if (!set.has(a.assetId)) return a
+      const base = { ...a, lastUpdate: now, user: rec.user || '', ...(targetLoc ? { location: targetLoc } : {}) }
+      if (rec.type === 'update') return { ...base, verifyRequested: false, lastVerifiedDate: now, lastVerifiedBy: rec.user || '' }
+      return { ...base, lastInOutDate: now }
+    }))
+    if (targetLoc) upsertClass(setLocations, targetLoc, { lastUpdate: now })
+    touchClasses(rec.assetIds || [], now)
+    setRecords((items) => items.map((r) => (r.id === id ? { ...r, pending: false, approvedBy: authUser?.email || '', approvedAt: now } : r)))
+    show(`'${rec.name}' 승인 완료 — 위치 변경 적용됨`)
+  }
+
+  // Cancel a verification request (History card): clear the flag on the record's
+  // assets; a location still holding the request marker goes back to empty.
+  function cancelRequest(record) {
+    const set = new Set(record.assetIds || [])
+    const affected = assets.filter((a) => set.has(a.assetId) && a.verifyRequested)
+    if (!affected.length) { show('취소할 요청이 없습니다.', 'warn'); return }
+    const now = new Date().toISOString()
+    setAssets((items) => items.map((a) => {
+      if (!set.has(a.assetId) || !a.verifyRequested) return a
+      const loc = /^verification request by /.test(String(a.location || '')) ? '' : a.location
+      return { ...a, verifyRequested: false, location: loc, lastUpdate: now, user: authUser?.email || '' }
+    }))
+    show(`'${record.name || record.id}' 요청 ${affected.length}개 취소`)
   }
 
   function deleteRecord(id) {
@@ -1004,15 +1341,16 @@ function App() {
   async function importToMyList(file) {
     try {
       const numbers = await importFileToNumbers(file)
-      const existing = new Set(assets.map((a) => a.assetId))
+      const existing = new Set(viewAssets.map((a) => a.assetId))
       const matched = numbers.filter((n) => existing.has(n))
+      const added = matched.filter((n) => !myList.includes(n))
       setMyList((list) => {
         const set = new Set(list)
         return [...list, ...matched.filter((n) => !set.has(n))]
       })
-      show(matched.length ? `${matched.length}개 자산을 My List에 추가했습니다.` : '추가할 자산을 찾지 못했습니다.')
+      show(matched.length ? `${added.length}개 추가 · 총 ${myList.length + added.length}개` : '추가할 자산을 찾지 못했습니다.', matched.length ? 'info' : 'warn')
     } catch (e) {
-      show(`불러오기 실패: ${e.message || e}`)
+      show(`불러오기 실패: ${e.message || e}`, 'warn')
     }
   }
 
@@ -1023,7 +1361,7 @@ function App() {
     // One code (e.g. the "촬영" still-capture path) behaves exactly like a live
     // scan — including the unknown-number → new-asset-card flow.
     if (numbers.length === 1) { handleScannedNumber(numbers[0]); return }
-    const existing = new Set(assets.map((a) => a.assetId))
+    const existing = new Set(viewAssets.map((a) => a.assetId))
     const matched = numbers.filter((n) => existing.has(n))
     const added = matched.filter((n) => !myList.includes(n))
     setMyList((list) => {
@@ -1032,7 +1370,7 @@ function App() {
     })
     bumpBadge(added.length)
     markNew(added)
-    show(`QR ${matched.length}개 자산을 My List에 추가했습니다.`)
+    show(`QR ${added.length}개 추가 · 총 ${myList.length + added.length}개`)
   }
 
   // History "+": merge a saved list's assets INTO My List (keep existing items).
@@ -1045,13 +1383,14 @@ function App() {
     })
     bumpBadge(added.length)
     markNew(added)
-    show(`${ids.length}개를 My List에 추가했습니다.`)
+    show(`'${record.name || record.id}' ${added.length}개 추가 · 총 ${myList.length + added.length}개`)
   }
 
   // History "−": remove a saved list's assets from My List in one go.
   function removeListFromMyList(record) {
     const ids = new Set(Array.isArray(record.assetIds) ? record.assetIds : [])
-    bumpBadge(-myList.filter((id) => ids.has(id)).length)   // only those actually removed
+    const removed = myList.filter((id) => ids.has(id)).length   // only those actually removed
+    bumpBadge(-removed)
     unmarkNew(ids)
     setMyList((list) => list.filter((id) => !ids.has(id)))
     setMyPhotos((photos) => {
@@ -1060,7 +1399,7 @@ function App() {
       for (const id of ids) if (next[id]) { delete next[id]; changed = true }
       return changed ? next : photos
     })
-    show(`${ids.size}개를 My List에서 제거했습니다.`)
+    show(`'${record.name || record.id}' ${removed}개 제거 · 총 ${myList.length - removed}개`)
   }
 
   function clearMyList() {
@@ -1073,12 +1412,34 @@ function App() {
     })
   }
 
+  // Permanently delete the listed assets from the shared inventory, logging a
+  // History record (asset numbers only) so the removal is traceable.
+  function deleteAssets(assetIds = myList) {
+    const idSet = new Set(assetIds)
+    if (!idSet.size) return
+    const now = new Date().toISOString()
+    setRecords((items) => [{
+      id: newId(),
+      name: uniqueName(myListName || makeListName(records), records),
+      type: 'delete',
+      assetIds: [...idSet],
+      user: authUser?.email || '',
+      createdAt: now,
+    }, ...items])
+    setAssets((items) => items.filter((a) => !idSet.has(a.assetId)))
+    setMyList((list) => list.filter((id) => !idSet.has(id)))
+    setMyPhotos((m) => { const n = { ...m }; let ch = false; for (const id of idSet) if (n[id]) { delete n[id]; ch = true } return ch ? n : m })
+    show(`${idSet.size}개 자산을 삭제했습니다.`)
+  }
+
   // A scan is an "add to My List" action (same for live scan / capture / gallery):
   // a known number drops straight into My List with no card opening and no tab
   // jump; an UNKNOWN number opens the "새 자산 등록" card with it filled in.
   function handleScannedNumber(number) {
     const match = assets.find((asset) => asset.assetId === number)
+    if (match?.hidden && !isAdmin) { show('추가할 수 없는 자산입니다.', 'warn'); return }
     if (!match) {
+      if (svcSettings.allowCreate === false && !isAdmin) { show(`미등록 번호(${number})입니다.`, 'warn'); return }
       setQuery('')                     // the new-asset card only shows when un-searched
       setExpandedId('')
       setAssetDraft({ assetId: number })
@@ -1088,13 +1449,13 @@ function App() {
     }
     setQuery(number)                   // Assets search box shows the scanned item
     if (myList.includes(number)) {
-      show(`${number} 자산은 이미 My List에 있습니다.`)
+      show(`${number} 자산은 이미 My List에 있습니다.`, 'warn')
       return
     }
     setMyList((list) => [number, ...list])
     markNew([number])
     bumpBadge(1)
-    show(`${number} 자산을 My List에 추가했습니다.`)
+    show(`${number} ${match.name || ''} 추가 · 총 ${myList.length + 1}개`.replace(/\s+/g, ' '))
   }
 
   function onScanResult(text) {
@@ -1119,11 +1480,11 @@ function App() {
     // The asset number itself is editable — validate + carry references along.
     if ('assetId' in patch) {
       const newId = String(patch.assetId || '').trim()
-      if (!newId) { show('자산번호는 비울 수 없습니다.'); return false }
-      if ('name' in patch && !String(patch.name || '').trim()) { show('이름은 비울 수 없습니다.'); return false }
+      if (!newId) { show('자산번호는 비울 수 없습니다.', 'warn'); return false }
+      if ('name' in patch && !String(patch.name || '').trim()) { show('이름은 비울 수 없습니다.', 'warn'); return false }
       patch = { ...patch, assetId: newId }
       if (newId !== assetId) {
-        if (assets.some((a) => a.assetId === newId)) { show(`자산번호 ${newId}는 이미 있습니다.`); return false }
+        if (assets.some((a) => a.assetId === newId)) { show(`자산번호 ${newId}는 이미 있습니다.`, 'warn'); return false }
         setMyList((list) => list.map((id) => (id === assetId ? newId : id)))
         setMyPhotos((m) => {
           if (!m[assetId]) return m
@@ -1138,26 +1499,30 @@ function App() {
       asset.assetId === assetId ? { ...asset, ...patch, editedBy: appendEditedBy(asset.editedBy, me), lastUpdate: now } : asset
     )))
     touchClasses([assetId], now)
-    show('자산 정보를 저장했습니다.')
+    const cur = assets.find((a) => a.assetId === assetId)
+    const finalId = 'assetId' in patch ? patch.assetId : assetId
+    const finalName = ('name' in patch ? patch.name : cur?.name) || ''
+    show(`${finalId} ${finalName}의 정보를 변경했습니다.`.replace(/\s+/g, ' '))
     return true
   }
 
   // "전체추가" — add every asset currently listed (i.e. the filtered set) to My List.
   function addAllAssets(ids) {
     const added = ids.filter((id) => !myList.includes(id))
-    if (!added.length) { show('이미 모두 My List에 있습니다.'); return }
+    if (!added.length) { show('이미 모두 My List에 있습니다.', 'warn'); return }
     setMyList((list) => [...list, ...added.filter((id) => !list.includes(id))])
     bumpBadge(added.length)
     markNew(added)
-    show(`${added.length}개 자산을 My List에 추가했습니다.`)
+    show(`${added.length}개 추가 · 총 ${myList.length + added.length}개`)
   }
 
   // Register a brand-new asset (the "새 자산 등록" card). Number + name required.
   function createAsset(form) {
+    if (svcSettings.allowCreate === false && !isAdmin) { show('새 자산 추가가 허용되지 않았습니다.', 'warn'); return false }
     const id = String(form.assetId || '').trim()
     const name = String(form.name || '').trim()
-    if (!id || !name) { show('자산번호와 이름을 입력해야 등록할 수 있습니다.'); return false }
-    if (assets.some((a) => a.assetId === id)) { show(`자산번호 ${id}는 이미 있습니다.`); return false }
+    if (!id || !name) { show('자산번호와 이름을 입력해야 등록할 수 있습니다.', 'warn'); return false }
+    if (assets.some((a) => a.assetId === id)) { show(`자산번호 ${id}는 이미 있습니다.`, 'warn'); return false }
     const now = new Date().toISOString()
     const me = authUser?.email ? String(authUser.email).split('@')[0] : ''
     const asset = { photo1: '', photo2: '', photo3: '', createdAt: now, updatedAt: now, lastUpdate: now, user: authUser?.email || '', editedBy: me }
@@ -1170,17 +1535,27 @@ function App() {
     return true
   }
 
-  function renameProject(rawName) {
-    const name = String(rawName || '').trim()
-    if (!name) return
-    const id = projectState.currentProjectId
-    localStorage.setItem(projectKey(id, 'name'), name)
-    const projects = projectState.projects.map((project) => (project.projectId === id ? { ...project, name } : project))
-    if (!PORTAL_BASE) writeJson(STORAGE_KEYS.projects, projects)
-    setProjectState((current) => ({ ...current, projects }))
-    // Under the portal, push the new name so the portal's project list matches.
-    pushPortalName(name)
-    show('리스트 이름을 변경했습니다.')
+  // Bulk import from XLSX (the new-asset card): add only the NON-duplicate rows.
+  // Each row is already a field→value object; assetId is required, dups skipped.
+  function importAssets(newAssets) {
+    if (svcSettings.allowCreate === false && !isAdmin) { show('새 자산 추가가 허용되지 않았습니다.', 'warn'); return }
+    const have = new Set(assets.map((a) => a.assetId))
+    const now = new Date().toISOString()
+    const me = authUser?.email ? String(authUser.email).split('@')[0] : ''
+    const seen = new Set()
+    const toAdd = []
+    for (const r of newAssets) {
+      const id = String(r.assetId || '').trim()
+      if (!id || have.has(id) || seen.has(id)) continue
+      seen.add(id)
+      const a = { photo1: '', photo2: '', photo3: '', createdAt: now, updatedAt: now, lastUpdate: now, user: authUser?.email || '', editedBy: me }
+      EDIT_FIELDS.forEach((f) => { a[f.key] = String(r[f.key] || '').trim() })
+      a.assetId = id
+      toAdd.push(a)
+    }
+    if (!toAdd.length) { show('추가할 새 자산이 없습니다.', 'warn'); return }
+    setAssets((items) => [...toAdd, ...items])
+    show(`${toAdd.length}개 자산을 추가했습니다.`)
   }
 
   if (authStatus !== 'ready') {
@@ -1197,22 +1572,51 @@ function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <div className="topbar-title">
-          <Cube size={isMobile ? 24 : 20} weight="fill" color={BRAND} />
-          {projectName && <span className="topbar-project">{projectName}</span>}
-          {authUser && <span className="topbar-user">{String(authUser.email).split('@')[0]}</span>}
-        </div>
-        <div className="topbar-right">
-          {notice && <Badge tone="success">{notice}</Badge>}
-          {isAdmin && (
-            <button type="button" className="topbar-logout" title="목록 이름 편집" onClick={editProjectName}>
-              <PencilSimple size={logoutIconSize} weight="fill" color={BRAND} />
-            </button>
-          )}
-          <button type="button" className="topbar-logout" title="로그아웃" onClick={signOut}>
-            <SignOut size={logoutIconSize} weight="fill" color={BRAND} />
-          </button>
-        </div>
+        {notice ? (
+          <div
+            className={`topbar-notice${notice.text.length > 28 ? ' is-long' : ''}`}
+            role="button"
+            onClick={() => {
+              if (noticeTimer.current) { window.clearTimeout(noticeTimer.current); noticeTimer.current = null }
+              setNotice('')
+            }}
+          >
+            <span className={`notice-dot is-${notice.kind}`} />
+            <span className="topbar-notice-text">{notice.text}</span>
+          </div>
+        ) : (
+          <>
+            <div className="topbar-title">
+              <Cube size={isMobile ? 24 : 20} weight="fill" color={BRAND} />
+              {projectName && <span className="topbar-project">{projectName}</span>}
+              {authUser && <span className="topbar-user">{String(authUser.email).split('@')[0]}</span>}
+            </div>
+            <div className="topbar-right" ref={menuRef}>
+              <button type="button" className="topbar-logout" title="메뉴" onClick={() => setMenuOpen((o) => !o)}>
+                <ListIcon size={logoutIconSize} weight="bold" color={menuOpen || tab === 'notices' ? '#c98a2e' : BRAND} />
+              </button>
+              {menuOpen && (
+                <div className="topbar-menu-pop">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      if (tab === 'notices') { setTab(prevTabRef.current) } else { prevTabRef.current = tab; setTab('notices') }
+                    }}
+                  >
+                    <Bell size={17} weight="fill" /> 알림
+                  </button>
+                  <button type="button" onClick={() => { setMenuOpen(false); show('영어 번역은 준비 중입니다.', 'warn') }}>
+                    <Translate size={17} weight="fill" /> 언어변경
+                  </button>
+                  <button type="button" onClick={signOut}>
+                    <SignOut size={17} weight="fill" /> 나가기
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </header>
       <main className="page" ref={pageRef} onScroll={handlePageScroll}>
         {tab === 'assets' && (
@@ -1234,10 +1638,18 @@ function App() {
             sort={sort}
             setSort={setSort}
             onCreate={createAsset}
+            onImportAssets={importAssets}
+            existingIds={assets.map((a) => a.assetId)}
             draft={assetDraft}
             onDraftDone={() => setAssetDraft(null)}
             onAddAll={addAllAssets}
             classOptions={classOptions}
+            isAdmin={isAdmin}
+            canEditPhotos={canEditPhotos}
+            showField={showField}
+            canCreate={canCreate}
+            hiddenFilter={hiddenFilter}
+            onCycleHiddenFilter={() => setHiddenFilter((f) => (f === 'all' ? 'hidden' : f === 'hidden' ? 'visible' : 'all'))}
           />
         )}
         {tab === 'mylist' && (
@@ -1257,6 +1669,7 @@ function App() {
             setListName={setMyListName}
             onSave={saveList}
             onClear={clearMyList}
+            onDeleteAssets={deleteAssets}
             onRequest={requestVerification}
             onImport={importToMyList}
             profile={profile}
@@ -1272,12 +1685,22 @@ function App() {
             newIds={newIds}
             onSeenNew={(id) => unmarkNew([id])}
             classOptions={classOptions}
+            onRestoreLocations={restoreLocations}
+            isAdmin={isAdmin}
+            onSetHidden={setHiddenBulk}
+            canEditPhotos={canEditPhotos}
+            showField={showField}
+            svcSettings={svcSettings}
+            onChangeSettings={changeSettings}
           />
         )}
-        {tab === 'history' && <RecordsPage records={latestRecords} assets={assets} myListSet={myListSet} toggleMyList={toggleMyList} onAdd={addListToMyList} onRemove={removeListFromMyList} isAdmin={isAdmin} onDelete={deleteRecord} onRename={renameRecord} />}
+        {tab === 'history' && <RecordsPage records={latestRecords} assets={viewAssets} me={authUser?.email || ''} notify={show} myListSet={myListSet} toggleMyList={toggleMyList} onAdd={addListToMyList} onRemove={removeListFromMyList} isAdmin={isAdmin} onDelete={deleteRecord} onRename={renameRecord} onCancelRequest={cancelRequest} onApprove={approveRecord} showField={showField} />}
         {tab === 'classification' && (
           <ClassificationPage
-            assets={assets}
+            assets={viewAssets}
+            canEditPhotos={canEditPhotos}
+            notify={show}
+            showField={showField}
             myListSet={myListSet}
             isAdmin={isAdmin}
             toggleMyList={toggleMyList}
@@ -1286,16 +1709,30 @@ function App() {
             onCreateLocation={(f) => createClass('location', setLocations, f)}
             onCreateType={(f) => createClass('type', setTypes, f)}
             onUpdateLocation={(o, p) => updateClass('location', setLocations, o, p)}
-            onMergeLocation={(n) => mergeClass('location', setLocations, n)}
+            onMergeLocation={(src, tgt) => execMerge('location', setLocations, src, tgt)}
             onDeleteLocation={(n) => deleteClass('location', setLocations, n)}
             onAddAllLocation={(n) => addClassToMyList('location', n)}
             onPhotoLocation={(n) => setCapture({ kind: 'location', name: n })}
             onUpdateType={(o, p) => updateClass('type', setTypes, o, p)}
-            onMergeType={(n) => mergeClass('type', setTypes, n)}
+            onMergeType={(src, tgt) => execMerge('type', setTypes, src, tgt)}
             onDeleteType={(n) => deleteClass('type', setTypes, n)}
             onAddAllType={(n) => addClassToMyList('type', n)}
             onPhotoType={(n) => setCapture({ kind: 'type', name: n })}
           />
+        )}
+        {tab === 'notices' && (
+          <div className="stack">
+            {noticeLog.length === 0 && <Card><p className="muted">알림이 없습니다.</p></Card>}
+            {noticeLog.map((n, i) => (
+              <Card key={`${n.at}-${i}`}>
+                <div className="notice-item">
+                  <span className={`notice-dot is-${n.kind || 'info'}`} />
+                  <span className="notice-item-text">{n.text}</span>
+                  <span className="notice-item-time">{formatNoticeTime(n.at)}</span>
+                </div>
+              </Card>
+            ))}
+          </div>
         )}
       </main>
       <nav className="tabbar">
@@ -1322,7 +1759,10 @@ function App() {
                 <item.Glyph size={tabIconSize} weight="fill" color={tab === item.id ? BRAND : '#9aa3b2'} />
                 {item.id === 'mylist' && myListBadge > 0 && <span className="tab-badge">{myListBadge}</span>}
               </span>
-              <span className="tabbar-label">{item.label}</span>
+              <span className="tabbar-label">
+                {item.label}
+                {item.id === 'mylist' && myList.length > 0 && <span className="tab-total"> {myList.length}</span>}
+              </span>
             </button>
           ),
         )}
@@ -1369,7 +1809,9 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
     const stop = () => {
       if (stopped) return
       stopped = true
-      return scanner.stop().catch(() => {})
+      // stop() THROWS synchronously while the camera is still starting up —
+      // an uncaught throw in the unmount cleanup blanks the whole app.
+      try { return scanner.stop().catch(() => {}) } catch { /* not running yet */ }
     }
     scanner
       .start(
@@ -1392,7 +1834,12 @@ function ScannerModal({ onResult, onResultMany, onClose }) {
         },
         (decodedText) => { stop(); onResult(decodedText) },
       )
-      .catch((err) => setError(`카메라를 시작할 수 없습니다: ${err?.message || err}`))
+      .then(() => {
+        // Cancelled while the camera was still starting: the just-started
+        // stream must be shut down, or the camera stays on after unmount.
+        if (stopped) scanner.stop().catch(() => {})
+      })
+      .catch((err) => { if (!stopped) setError(`카메라를 시작할 수 없습니다: ${err?.message || err}`) })
     return () => { stop() }
   }, [])
 
@@ -1492,7 +1939,7 @@ function PhotoCaptureModal({ title, steps, onDone, onClose }) {
     if (!files.length) return
     streamRef.current?.getTracks().forEach((t) => t.stop())
     const shots = {}
-    for (let i = 0; i < files.length; i += 1) shots[steps[i].key] = await fileToDataUrl(files[i])
+    for (let i = 0; i < files.length; i += 1) shots[steps[i].key] = await fileToJpegDataUrl(files[i])
     onDone(shots)
   }
 
@@ -1725,8 +2172,8 @@ function SearchBox({ query, setQuery, placeholder }) {
 // React commit have run by then, whatever their order in the list.
 let _lastOpenAt = -1
 const OPEN_DELAY_MS = 30  // past the other card's 0ms instant-close + reflow
-const GLIDE_MS = 200      // let the open-glide land before the body grows
-const SHRINK_MS = 300     // must match .card-expando's transition duration
+const GLIDE_MS = 160      // let the open-glide land before the body grows
+const SHRINK_MS = 240     // must match .card-expando's transition duration
 const SETTLE_MS = OPEN_DELAY_MS + GLIDE_MS + SHRINK_MS + 60   // everything done
 
 function useCardGlide(open, ref) {
@@ -1763,6 +2210,28 @@ function useCardGlide(open, ref) {
   return { mounted, grown }
 }
 
+// ↑/↓ move the open card to the prev/next item in `list` (by `keyOf`). Shared by
+// Class + History pages (Assets/My List handle it at the App level). Ignored while
+// typing in a field, when nothing is open, or when the merge/other mode is active.
+function useArrowNav(enabled, openKey, setOpenKey, list, keyOf) {
+  useEffect(() => {
+    if (!enabled || !openKey) return
+    function onKey(e) {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
+      const el = document.activeElement
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable)) return
+      const i = list.findIndex((x) => keyOf(x) === openKey)
+      if (i < 0) return
+      const next = i + (e.key === 'ArrowDown' ? 1 : -1)
+      if (next < 0 || next >= list.length) return
+      e.preventDefault()
+      setOpenKey(keyOf(list[next]))
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [enabled, openKey, list, setOpenKey, keyOf])
+}
+
 function Expando({ grown, children }) {
   return (
     <div className={`card-expando${grown ? ' is-grown' : ''}`}>
@@ -1773,24 +2242,87 @@ function Expando({ grown, children }) {
 
 // "새 자산 등록" — the first card on the Assets tab (normal, un-searched state).
 // Opens inline with the same form as Edit; number + name are required to save.
-function NewAssetCard({ onCreate, classOptions, draft, onDraftDone }) {
+function NewAssetCard({ onCreate, onImportAssets, existingIds = [], classOptions, draft, onDraftDone }) {
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({})
   const cardRef = useRef(null)
+  const fileRef = useRef(null)
+  const [dragOver, setDragOver] = useState(false)
+  // XLSX import flow: step 'header' → 'map' → 'preview'.
+  const [imp, setImp] = useState(null)              // null | 'bad' | 'empty' | { rows }
+  const [step, setStep] = useState('')              // '' | 'header' | 'map' | 'preview'
+  const [headerRow, setHeaderRow] = useState(0)     // 0-based index of the header row
+  const [mapping, setMapping] = useState({})        // appFieldKey → header string
+  const [preview, setPreview] = useState(null)      // { total, dup, add, newAssets }
   const { mounted, grown } = useCardGlide(open, cardRef)
-  // A scanned-but-unknown number arrives as `draft`: open with it filled in, and
-  // consume it right away so a later remount can't re-apply a stale draft.
   useEffect(() => {
     if (draft) { setForm((f) => ({ ...f, ...draft })); setOpen(true); onDraftDone?.() }
   }, [draft])
   function done() {
-    setForm({}); setOpen(false)
+    setForm({}); setOpen(false); setImp(null); setStep(''); setMapping({}); setPreview(null)
   }
   function save() {
     if (onCreate(form)) done()
   }
+
+  const norm = (x) => String(x || '').toLowerCase().replace(/[\s._()·]/g, '')
+  // Headers of the currently-selected row; blank cells become "(빈 열 N)".
+  const headers = (imp && imp.rows ? (imp.rows[headerRow] || []) : []).map((h) => String(h || '').trim())
+  const dataRows = imp && imp.rows ? imp.rows.slice(headerRow + 1).filter((r) => r.some((c) => String(c || '').trim())) : []
+
+  async function loadFile(file) {
+    if (!file || !/\.xlsx$/i.test(file.name)) { setOpen(true); setImp('bad'); return }
+    try {
+      const { rows, headerIdx } = await parseXlsx(file)
+      if (!rows.length) { setOpen(true); setImp('empty'); return }
+      setOpen(true); setImp({ rows }); setHeaderRow(headerIdx); setStep('header'); setMapping({}); setPreview(null)
+    } catch (e) { setOpen(true); setImp('bad'); console.error(e) }
+  }
+  // Confirm the header row → auto-map columns to app fields → go to mapping.
+  function confirmHeader() {
+    const hs = (imp.rows[headerRow] || []).map((h) => String(h || '').trim())
+    const auto = {}
+    for (const f of EDIT_FIELDS) {
+      const cand = [f.key, f.label, ...(FIELD_ALIASES[f.key] || [])].map(norm)
+      const hit = hs.find((h) => h && cand.includes(norm(h)))
+      if (hit) auto[f.key] = hit
+    }
+    if (!auto.assetId) { const h = hs.find((x) => /자산.*번호|asset.*(no|id|number)/i.test(x)); if (h) auto.assetId = h }
+    setMapping(auto); setStep('map')
+  }
+  function analyze() {
+    const idH = mapping.assetId
+    if (!idH) return
+    const cols = {}
+    headers.forEach((h, i) => { if (h && cols[h] === undefined) cols[h] = i })   // header → col index
+    const have = new Set(existingIds)
+    const seen = new Set()
+    const newAssets = []
+    let total = 0, dup = 0
+    for (const row of dataRows) {
+      const id = String(row[cols[idH]] ?? '').trim()
+      if (!id) continue
+      total += 1
+      if (have.has(id) || seen.has(id)) { dup += 1; continue }
+      seen.add(id)
+      const a = {}
+      for (const f of EDIT_FIELDS) { const h = mapping[f.key]; a[f.key] = h && cols[h] != null ? String(row[cols[h]] ?? '').trim() : '' }
+      a.assetId = id
+      newAssets.push(a)
+    }
+    setPreview({ total, dup, add: newAssets.length, newAssets }); setStep('preview')
+  }
+  function confirmImport() { onImportAssets(preview.newAssets); done() }
+
   return (
-    <div ref={cardRef} className={`asset-row${open ? ' is-open' : ''}`}>
+    <div
+      ref={cardRef}
+      className={`asset-row${open ? ' is-open' : ''}${dragOver ? ' is-dropping' : ''}`}
+      onDragOver={(e) => { if (open) { e.preventDefault(); setDragOver(true) } }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={(e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files?.[0]; if (f) loadFile(f) }}
+    >
+      <input ref={fileRef} type="file" accept=".xlsx" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) loadFile(f) }} />
       <div className="asset-row-head" role="button" tabIndex={0} onClick={() => (open ? done() : setOpen(true))}>
         <div className="asset-photo"><Plus size={24} weight="bold" color={BRAND} /></div>
         <div className="asset-row-open">
@@ -1800,15 +2332,69 @@ function NewAssetCard({ onCreate, classOptions, draft, onDraftDone }) {
       {mounted && (
         <Expando grown={grown}>
           <div className="asset-row-body">
-            <div className="asset-edit">
-              <div className="action-row">
-                <button type="button" className="amber-btn" onClick={save}>Save</button>
-                <Button variant="secondary" size="md" style={ACTION_BTN} onClick={done}>Cancel</Button>
+            {step === 'header' ? (
+              <div className="asset-edit">
+                <p className="import-hint">제목(헤더) 행을 확인하세요. 자동 감지: <b>{headerRow + 1}번째 행</b></p>
+                <div className="header-pick">
+                  <button type="button" className="hp-nav" disabled={headerRow <= 0} onClick={() => setHeaderRow((r) => Math.max(0, r - 1))}>▲ 이전 행</button>
+                  <span className="hp-num">{headerRow + 1} / {imp.rows.length} 행</span>
+                  <button type="button" className="hp-nav" disabled={headerRow >= imp.rows.length - 1} onClick={() => setHeaderRow((r) => Math.min(imp.rows.length - 1, r + 1))}>다음 행 ▼</button>
+                </div>
+                <div className="header-preview">
+                  {headers.length === 0 || headers.every((h) => !h)
+                    ? <span className="hp-empty">(빈 행 — 다른 행을 고르세요)</span>
+                    : headers.map((h, i) => <span key={i} className="hp-cell">{h || `(빈칸 ${i + 1})`}</span>)}
+                </div>
+                <p className="import-hint">이 행 아래 데이터 <b>{dataRows.length}</b>행</p>
+                <div className="action-row">
+                  <button type="button" className="amber-btn" disabled={headers.every((h) => !h)} onClick={confirmHeader}>확인</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={done}>취소</Button>
+                </div>
               </div>
-              {EDIT_FIELDS.map((field) => (
-                <EditField key={field.key} field={field} form={form} setForm={setForm} classOptions={classOptions} />
-              ))}
-            </div>
+            ) : step === 'map' ? (
+              <div className="asset-edit">
+                <p className="import-hint">XLSX 열을 자산 필드에 연결하세요. (자산번호 필수) — {dataRows.length}행</p>
+                <div className="map-list">
+                  {EDIT_FIELDS.map((f) => (
+                    <div className="map-row" key={f.key}>
+                      <select className="edit-select" value={mapping[f.key] || ''} onChange={(e) => setMapping((m) => ({ ...m, [f.key]: e.target.value }))}>
+                        <option value="">(연결 안 함)</option>
+                        {headers.map((h, i) => <option key={`${h}-${i}`} value={h}>{h || `(빈 열 ${i + 1})`}</option>)}
+                      </select>
+                      <span className="map-arrow">→</span>
+                      <span className="map-field">{f.label}{f.required ? ' *' : ''}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="action-row">
+                  <button type="button" className="amber-btn" disabled={!mapping.assetId} onClick={analyze}>분석</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setStep('header')}>← 헤더</Button>
+                </div>
+              </div>
+            ) : step === 'preview' ? (
+              <div className="asset-edit">
+                <div className="import-summary">
+                  <p>전체 <b>{preview.total}</b>행 · 중복 <b>{preview.dup}</b> · <b className="add-n">추가 {preview.add}</b></p>
+                </div>
+                <div className="action-row">
+                  <button type="button" className="amber-btn" disabled={!preview.add} onClick={confirmImport}>{preview.add}개 추가</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setStep('map')}>← 다시 매핑</Button>
+                </div>
+              </div>
+            ) : (
+              <div className="asset-edit">
+                <div className="action-row">
+                  <button type="button" className="amber-btn" onClick={save}>Save</button>
+                  <button type="button" className="amber-btn tone-xlsx" onClick={() => fileRef.current?.click()}><UploadSimple size={18} weight="bold" /> XLSX</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={done}>Cancel</Button>
+                </div>
+                {imp === 'bad' && <p className="import-hint is-warn">XLSX 파일을 읽지 못했습니다.</p>}
+                {imp === 'empty' && <p className="import-hint is-warn">데이터가 없습니다.</p>}
+                {EDIT_FIELDS.map((field) => (
+                  <EditField key={field.key} field={field} form={form} setForm={setForm} classOptions={classOptions} />
+                ))}
+              </div>
+            )}
           </div>
         </Expando>
       )}
@@ -1816,7 +2402,24 @@ function NewAssetCard({ onCreate, classOptions, draft, onDraftDone }) {
   )
 }
 
-function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myListSet, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, sort, setSort, onCreate, onAddAll, classOptions, draft, onDraftDone }) {
+// Extra header names that map to an app field during XLSX auto-mapping.
+const FIELD_ALIASES = {
+  assetId: ['자산번호', 'assetno', 'asset number', 'asset id', '자산 번호'],
+  name: ['자산명', 'assetname', '이름', '품명'],
+  location: ['위치', '동호실', '설치위치'],
+  type: ['타입', '종류'],
+  assetClass: ['자산분류', '분류'],
+  accountHolder: ['관리책임자', '사용책임자', '책임자'],
+  applicationName: ['신청품목명', '신청명'],
+  spec: ['규격', 'specification'],
+  description: ['설명', '자산명영문', '비고'],
+  memo: ['메모', 'note'],
+  manufacturerProvider: ['제조사', '거래처명', '공급처', 'maker'],
+  acquisitionDate: ['취득일', '취득일자'],
+  acquisitionPriceKrw: ['취득가', '취득금액', '가격'],
+}
+
+function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myListSet, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, sort, setSort, onCreate, onImportAssets, existingIds, onAddAll, classOptions, draft, onDraftDone, isAdmin, hiddenFilter, onCycleHiddenFilter, canEditPhotos, showField, canCreate = true }) {
   return (
     <div className="stack">
       <Card>
@@ -1828,10 +2431,22 @@ function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myL
           총 {assets.length}개
           <button type="button" className="sort-btn add-all" onClick={() => onAddAll(assets.map((a) => a.assetId))}>전체추가</button>
         </span>
-        <SortBar sort={sort} setSort={setSort} />
+        <div className="sort-side">
+          <SortBar sort={sort} setSort={setSort} />
+          {isAdmin && (
+            <button
+              type="button"
+              className={`sort-btn hide-filter${hiddenFilter !== 'all' ? ' is-active' : ''}`}
+              title="숨김 필터: 전체 → 숨김만 → 노출만"
+              onClick={onCycleHiddenFilter}
+            >
+              {hiddenFilter === 'all' ? '전체' : hiddenFilter === 'hidden' ? '숨김만' : '노출만'}
+            </button>
+          )}
+        </div>
       </div>
       <div className="result-list result-list-full">
-        {!query.trim() && <NewAssetCard onCreate={onCreate} classOptions={classOptions} draft={draft} onDraftDone={onDraftDone} />}
+        {!query.trim() && canCreate && <NewAssetCard onCreate={onCreate} onImportAssets={onImportAssets} existingIds={existingIds} classOptions={classOptions} draft={draft} onDraftDone={onDraftDone} />}
         {assets.length === 0 && <Card><p className="muted">일치하는 자산이 없습니다.</p></Card>}
         {assets.map((asset) => (
           <AssetRow
@@ -1849,6 +2464,9 @@ function AssetListPage({ query, setQuery, assets, expandedId, setExpandedId, myL
             locationPhoto={locationPhoto}
             records={records}
             classOptions={classOptions}
+            isAdmin={isAdmin}
+            canEditPhotos={canEditPhotos}
+            showField={showField}
           />
         ))}
       </div>
@@ -1861,9 +2479,10 @@ const EDIT_FIELDS = [
   { key: 'name', label: 'Name', required: true },
   { key: 'location', label: 'Location', options: 'location' },
   { key: 'type', label: 'Type', options: 'type' },
+  { key: 'assetClass', label: '자산분류' },
   { key: 'accountHolder', label: 'Account holder' },
   { key: 'applicationName', label: 'Application name (반출·반입·연장용)' },
-  { key: 'weight', label: 'Weight (kg)' },
+  { key: 'spec', label: '규격' },
   { key: 'description', label: 'Description', textarea: true },
   { key: 'memo', label: 'Memo', textarea: true },
   { key: 'manufacturerProvider', label: 'Manufacturer' },
@@ -1871,10 +2490,11 @@ const EDIT_FIELDS = [
   { key: 'acquisitionPriceKrw', label: 'Price' },
 ]
 
-function AssetThumb({ asset, inMyList, shots, onCapture }) {
+function AssetThumb({ asset, inMyList, canShoot = true, shots, onCapture }) {
   // The photo is the card's whole left section (flush, like the +/- square on the
-  // right). In My List it doubles as the camera hitbox for the guided photos.
-  if (inMyList) {
+  // right). In My List it doubles as the camera hitbox for the guided photos —
+  // unless the admin turned photo changes off (canShoot).
+  if (inMyList && canShoot) {
     // Pending shot wins; otherwise the asset's whole-photo fills the section like
     // a profile picture. The camera icon only shows when there's no photo at all.
     const src = shots?.sticker || asset.photo1 || asset.photo2
@@ -1907,7 +2527,7 @@ function ImageViewer({ src, onClose }) {
 
 // Minimal photo editor: rotate 90° + drag-to-crop. Edits happen on a full-
 // resolution offscreen canvas; the visible canvas is just a scaled view of it.
-function PhotoEditModal({ src, onSave, onClose }) {
+function PhotoEditModal({ src, onSave, onClose, onRetake, onDelete }) {
   const workRef = useRef(null)          // offscreen canvas — the real image state
   const viewRef = useRef(null)          // on-screen, scaled-to-fit
   const dragRef = useRef(null)
@@ -2036,6 +2656,20 @@ function PhotoEditModal({ src, onSave, onClose }) {
             저장
           </button>
         </div>
+        {(onRetake || onDelete) && (
+          <div className="action-row scanner-actions">
+            {onRetake && (
+              <button type="button" className="amber-btn" onClick={onRetake}>
+                <CameraPlus size={20} weight="fill" /> 다시 찍기
+              </button>
+            )}
+            {onDelete && (
+              <button type="button" className="amber-btn danger-btn" disabled={!ready} onClick={onDelete}>
+                <Trash size={20} weight="fill" /> 삭제
+              </button>
+            )}
+          </div>
+        )}
       </section>
     </div>
   )
@@ -2054,14 +2688,14 @@ function PhotoSlot({ src, label }) {
   )
 }
 
-function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, classOptions }) {
+function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, classOptions, isAdmin, canEditPhotos = true, showField = () => true }) {
   const [editing, setEditing] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const [editPhoto, setEditPhoto] = useState('')   // slot key being edited ('photo1'…)
   const [form, setForm] = useState(asset)
   // Per-asset history is derived from the shared records — never stored twice.
   const history = useMemo(
-    () => (records || []).filter((r) => (r.assetIds || []).includes(asset.assetId)),
+    () => (records || []).filter((r) => r.type !== 'hide' && r.type !== 'unhide' && (r.assetIds || []).includes(asset.assetId)),
     [records, asset.assetId],
   )
 
@@ -2090,9 +2724,9 @@ function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleM
   }
 
   return (
-    <div ref={rowRef} className={`asset-row${expanded ? ' is-open' : ''}${isNew ? ' is-new' : ''}`}>
+    <div ref={rowRef} className={`asset-row${expanded ? ' is-open' : ''}${isNew ? ' is-new' : ''}${asset.hidden ? ' is-hidden' : ''}`}>
       <div className="asset-row-head">
-        <AssetThumb asset={asset} inMyList={inMyList} shots={shots} onCapture={onCapture} />
+        <AssetThumb asset={asset} inMyList={inMyList} canShoot={canEditPhotos} shots={shots} onCapture={onCapture} />
         <div className="asset-row-open" role="button" tabIndex={0} onClick={onToggle}>
           <div className="asset-row-main">
             <span className="mono asset-id2">
@@ -2127,11 +2761,9 @@ function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleM
                       {asset[p.slot] ? <img src={asset[p.slot]} alt={p.label} /> : <Images size={28} weight="fill" color="#c2c8d2" />}
                     </div>
                     <span className="photo-label">{p.label}</span>
-                    <div className="slot-actions">
-                      <button type="button" className="slot-btn" onClick={() => onCaptureSlot(asset.assetId, p.slot)}>다시 찍기</button>
-                      <button type="button" className="slot-btn" disabled={!asset[p.slot]} onClick={() => setEditPhoto(p.slot)}>편집</button>
-                      <button type="button" className="slot-btn slot-del" disabled={!asset[p.slot]} onClick={() => updateAsset(asset.assetId, { [p.slot]: '' })}>삭제</button>
-                    </div>
+                    <button type="button" className="slot-edit-btn" onClick={() => setEditPhoto(p.slot)}>
+                      <PencilSimple size={16} weight="fill" /> 편집
+                    </button>
                   </div>
                 ))}
               </div>
@@ -2145,7 +2777,9 @@ function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleM
           ) : (
             <div className="detail-body">
               <div className="action-row">
-                <button type="button" className="amber-btn" onClick={() => setEditing(true)}><PencilSimple size={18} weight="fill" /> Edit</button>
+                {isAdmin && (
+                  <button type="button" className="amber-btn" onClick={() => setEditing(true)}><PencilSimple size={18} weight="fill" /> Edit</button>
+                )}
                 <button type="button" className="amber-btn" onClick={() => setShowHistory((s) => !s)}><ClockCounterClockwise size={18} weight="fill" /> History</button>
               </div>
               <div className="asset-full-id mono">{asset.assetId}</div>
@@ -2155,9 +2789,9 @@ function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleM
                   {history.length === 0 && <p className="muted">이 자산의 기록이 없습니다.</p>}
                   {history.map((r) => (
                     <div key={r.id} className="asset-history-row">
-                      <span className={`type-chip type-${r.type}`}>{typeLabel(r.type)}</span>
+                      <span className={`type-chip type-${r.type}`}>{typeLabelShort(r.type)}</span>
                       <span className="asset-history-meta">
-                        {[r.name, r.user ? String(r.user).split('@')[0] : '', formatDate(r.createdAt)].filter(Boolean).join(' · ')}
+                        {[r.name, r.user ? String(r.user).split('@')[0] : '', formatDateOnly(r.createdAt)].filter(Boolean).join(' · ') + (r.location ? ` → ${r.location}` : '')}
                       </span>
                     </div>
                   ))}
@@ -2176,17 +2810,14 @@ function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleM
                 <dd>{asset.user ? String(asset.user).split('@')[0] : '-'}</dd>
                 <dt>Type</dt>
                 <dd>{asset.type || '-'}</dd>
-                <dt>Account holder</dt>
-                <dd>{asset.accountHolder || '-'}</dd>
-                <dt>Application</dt>
-                <dd>{asset.applicationName || '-'}</dd>
-                <dt>Weight</dt>
-                <dd>{asset.weight ? `${asset.weight} kg` : '-'}</dd>
-                {asset.memo && <><dt>Memo</dt><dd>{asset.memo}</dd></>}
-                <dt>Manufacturer</dt>
-                <dd>{asset.manufacturerProvider || '-'}</dd>
-                <dt>Acquired</dt>
-                <dd>{asset.acquisitionDate || '-'}</dd>
+                <dt>자산분류</dt>
+                <dd>{asset.assetClass || '-'}</dd>
+                {showField('accountHolder') && <><dt>Account holder</dt><dd>{asset.accountHolder || '-'}</dd></>}
+                {showField('applicationName') && <><dt>Application</dt><dd>{asset.applicationName || '-'}</dd></>}
+                {showField('spec') && <><dt>규격</dt><dd>{asset.spec || '-'}</dd></>}
+                {showField('memo') && asset.memo && <><dt>Memo</dt><dd>{asset.memo}</dd></>}
+                {showField('manufacturerProvider') && <><dt>Manufacturer</dt><dd>{asset.manufacturerProvider || '-'}</dd></>}
+                {showField('acquisitionDate') && <><dt>Acquired</dt><dd>{asset.acquisitionDate || '-'}</dd></>}
                 <dt>Edited by</dt>
                 <dd>{asset.editedBy || '-'}</dd>
                 <dt>Last update</dt>
@@ -2197,39 +2828,108 @@ function AssetRow({ asset, expanded, onToggle, inMyList, isNew, shots, onToggleM
         </div>
         </Expando>
       )}
-      {editPhoto && asset[editPhoto] && (
+      {editPhoto && (
         <PhotoEditModal
-          src={asset[editPhoto]}
+          src={asset[editPhoto] || ''}
           onSave={(url) => { updateAsset(asset.assetId, { [editPhoto]: url }); setEditPhoto('') }}
           onClose={() => setEditPhoto('')}
+          onRetake={() => { const slot = editPhoto; setEditPhoto(''); onCaptureSlot(asset.assetId, slot) }}
+          onDelete={asset[editPhoto] ? () => { updateAsset(asset.assetId, { [editPhoto]: '' }); setEditPhoto('') } : undefined}
         />
       )}
     </div>
   )
 }
 
-function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, listName, setListName, onSave, onClear, onRequest, onImport, profile, onSaveProfile, notify, locationList, myLocation, setMyLocation, addLocation, onLocationPhoto, sort, setSort, newIds, onSeenNew, classOptions }) {
+function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList, onCapture, onCaptureSlot, recordAction, updateAsset, locationPhoto, records, listName, setListName, onSave, onClear, onDeleteAssets, onRequest, onImport, profile, onSaveProfile, notify, locationList, myLocation, setMyLocation, addLocation, onLocationPhoto, sort, setSort, newIds, onSeenNew, classOptions, onRestoreLocations, isAdmin, onSetHidden, canEditPhotos, showField, svcSettings, onChangeSettings }) {
   const ids = assets.map((asset) => asset.assetId)
   const empty = !assets.length
-  const [panel, setPanel] = useState('')        // '', 'takeout', 'return', 'extension'
-  const [fields, setFields] = useState({ applicantName: profile?.name || '', applicantOrg: profile?.org || '' })
+  // The open request form + its field values survive tab switches and reloads
+  // (they used to reset because this component unmounts on tab change).
+  const reqStore = (k) => projectKey(PORTAL_PROJECT || 'local', k)
+  const [panel, setPanel] = useState(() => localStorage.getItem(reqStore('reqPanel')) || '')   // '', 'takeout', 'return', 'extension'
+  const [fields, setFields] = useState(() => ({ applicantName: profile?.name || '', applicantOrg: profile?.org || '', ...readJson(reqStore('reqFields'), {}) }))
+  useEffect(() => { localStorage.setItem(reqStore('reqPanel'), panel) }, [panel])
+  useEffect(() => { writeJson(reqStore('reqFields'), fields) }, [fields])
   const [dragOver, setDragOver] = useState(false)
   const [locOpen, setLocOpen] = useState(false)
   const importRef = useRef(null)
-  async function runExport(kind) {
-    const placeKey = REQUEST_FORMS[panel].placeKey
-    const exFields = placeKey ? { ...fields, [placeKey]: myLocation } : { ...fields }
+  // HWPX flow: tap HWPX → spinner while the per-class files + one ZIP are built
+  // → the button turns into [⬇ ZIP] + [공유], with per-class save buttons below.
+  // Every download happens on its own tap (browsers allow ONE download per
+  // gesture — a loop of programmatic clicks silently saves only the first file).
+  const [hwpx, setHwpx] = useState({ state: 'idle' })   // idle | building | ready{files, zipBlob, zipName, zipFile}
+  const hwpxSigRef = useRef('')
+  const hwpxJobRef = useRef(0)
+  function classGroups() {
+    const m = new Map()
+    for (const a of assets) {
+      const cls = String(a.assetClass || '').trim() || '미분류'
+      if (!m.has(cls)) m.set(cls, [])
+      m.get(cls).push(a)
+    }
+    return [...m.entries()]
+  }
+  // Fingerprint of what actually PRINTS in the documents. Deliberately excludes
+  // lastUpdate/location, and measures the *effective* photo source (My List shot
+  // falling back to the stored photo) — so recordAction()'s own writes right
+  // after preparing do NOT wipe the ready buttons.
+  function hwpxSig(forPanel) {
+    return JSON.stringify({
+      panel: forPanel, fields, myLocation, listName,
+      a: assets.map((x) => [
+        x.assetId, x.name || '', x.description || '', x.assetClass || '',
+        ((myPhotos[x.assetId] && myPhotos[x.assetId].sticker) || x.photo2 || '').length,
+        ((myPhotos[x.assetId] && myPhotos[x.assetId].whole) || x.photo1 || '').length,
+      ]),
+    })
+  }
+  useEffect(() => {
+    if (hwpx.state === 'idle') return
+    if (hwpxSigRef.current !== hwpxSig(panel)) { hwpxJobRef.current += 1; setHwpx({ state: 'idle' }) }
+  }, [panel, fields, myLocation, listName, assets, myPhotos])
+
+  async function prepareHwpx() {
+    const job = ++hwpxJobRef.current
+    const sig = hwpxSig(panel)
+    setHwpx({ state: 'building' })
     try {
-      if (kind === 'pdf') exportRequestPdf(panel, exFields, assets, listName)
-      else await exportRequestHwpx(panel, exFields, assets, myPhotos, listName)
+      const placeKey = REQUEST_FORMS[panel].placeKey
+      const exFields = placeKey ? { ...fields, [placeKey]: myLocation } : { ...fields }
+      const files = []
+      for (const [cls, group] of classGroups()) {
+        // The class goes into the doc as a normal intro field (자산 분류: …),
+        // not into the title; the FILE name still carries it apart.
+        const blob = await buildRequestHwpxBlob(panel, { ...exFields, assetClass: cls }, group, myPhotos, listName)
+        files.push({ cls, count: group.length, blob, name: `${sanitizeFileName(listName)}_${sanitizeFileName(cls)}.hwpx` })
+      }
+      const entries = []
+      for (const f of files) entries.push({ name: f.name, data: new Uint8Array(await f.blob.arrayBuffer()) })
+      const zipBlob = window.CensHwpx?.makeZip ? window.CensHwpx.makeZip(entries) : null
+      const zipName = `${sanitizeFileName(listName)}.zip`
+      const zipFile = zipBlob ? new File([zipBlob], zipName, { type: 'application/zip' }) : null
+      if (job !== hwpxJobRef.current) return          // inputs changed meanwhile
+      hwpxSigRef.current = sig
+      setHwpx({ state: 'ready', files, zipBlob, zipName, zipFile })
       onSaveProfile(fields.applicantName, fields.applicantOrg)
       // Record the action (check-in/out/extension): logs to History + assigns location.
       const actionType = { takeout: 'checkout', return: 'checkin', extension: 'extension' }[panel]
       recordAction(actionType, ids)
     } catch (e) {
-      notify(`${kind.toUpperCase()} 실패: ${e.message || e}`)
+      if (job === hwpxJobRef.current) { setHwpx({ state: 'idle' }); notify(`HWPX 실패: ${e.message || e}`, 'error') }
     }
   }
+
+  async function shareHwpxZip() {
+    try {
+      if (hwpx.zipFile && navigator.canShare?.({ files: [hwpx.zipFile] })) {
+        await navigator.share({ files: [hwpx.zipFile], title: listName })
+      } else {
+        notify('이 브라우저는 파일 공유를 지원하지 않습니다.', 'warn')
+      }
+    } catch { /* share sheet dismissed */ }
+  }
+
   function onDrop(event) {
     event.preventDefault()
     setDragOver(false)
@@ -2256,16 +2956,52 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
     setLocNudge(false)
     fn()
   }
+
+  // Update → 복원: an Update remembers each listed asset's location as it was
+  // right before the overwrite, and the button flips to 복원 until the list
+  // itself changes (add/remove/clear), which discards the undo snapshot.
+  // Persisted per device so tab switches / edits / reloads don't lose the undo.
+  const [restore, setRestore] = useState(() => readJson(reqStore('updateRestore'), null))   // null | { prev: {id: loc}, sig }
+  const [restoreAsk, setRestoreAsk] = useState(false)
+  useEffect(() => { writeJson(reqStore('updateRestore'), restore) }, [restore])
+  const listSig = [...ids].sort().join(',')
+  useEffect(() => {
+    if (restore && restore.sig !== listSig) { setRestore(null); setRestoreAsk(false) }
+  }, [listSig])
+  function doUpdate() {
+    requireLocation(() => {
+      const prev = {}
+      for (const a of assets) prev[a.assetId] = a.location || ''
+      recordAction('update', ids)
+      setRestore({ prev, sig: listSig })
+      setRestoreAsk(false)
+    })
+  }
+  function doRestore() {
+    if (restore) onRestoreLocations(restore.prev)
+    setRestore(null)
+    setRestoreAsk(false)
+  }
   function togglePanel(type) {
     if (panel === type) { setPanel(''); return }        // closing needs no location
+    // Warm the HWPX template while the user fills the form — the first export
+    // tap must not spend its user-gesture window on a network fetch (iOS drops
+    // a programmatic download click that comes too late after the tap).
+    window.CensHwpx?.preload?.()
     requireLocation(() => setPanel(type))
   }
   // Top row (slate) — list actions. Bottom row (amber) — application forms / import.
+  // Inline confirm for Update / Request / Delete (like 복원): the button toggles
+  // a question area below the rows; only the confirm button runs the action.
+  const [confirm, setConfirm] = useState('')      // '' | 'update' | 'request' | 'delete'
+  useEffect(() => { setConfirm('') }, [listSig])   // list changed → drop any pending question
   const rowTop = [
-    { key: 'clear', label: 'Clear', Glyph: Trash, onClick: onClear, disabled: empty },
-    { key: 'update', label: 'Update', Glyph: CheckCircle, onClick: () => requireLocation(() => recordAction('update', ids)), disabled: empty, cls: 'is-filled' },
-    { key: 'request', label: 'Request', Glyph: ShieldCheck, onClick: () => onRequest(ids), disabled: empty },
     { key: 'save', label: 'Save', Glyph: FloppyDisk, onClick: onSave, disabled: empty },
+    restore
+      ? { key: 'update', label: '복원', Glyph: ArrowCounterClockwise, onClick: () => setRestoreAsk((v) => !v), active: restoreAsk, cls: 'is-filled' }
+      : { key: 'update', label: 'Update', Glyph: CheckCircle, onClick: () => setConfirm((c) => (c === 'update' ? '' : 'update')), active: confirm === 'update', disabled: empty, cls: 'is-filled' },
+    { key: 'request', label: 'Request', Glyph: ShieldCheck, onClick: () => setConfirm((c) => (c === 'request' ? '' : 'request')), active: confirm === 'request', disabled: empty, cls: 'tone-green', iconColor: '#2f6b3a' },
+    { key: 'clear', label: 'Clear', Glyph: Broom, onClick: onClear, disabled: empty },
   ]
   const rowBottom = [
     { key: 'checkin', label: 'Check-in', Glyph: ArrowCircleDown, onClick: () => togglePanel('return'), active: panel === 'return', disabled: empty },
@@ -2273,6 +3009,17 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
     { key: 'extension', label: 'Extension', Glyph: CalendarPlus, onClick: () => togglePanel('extension'), active: panel === 'extension', disabled: empty },
     { key: 'import', label: 'Import', Glyph: UploadSimple, onClick: () => importRef.current?.click(), cls: 'no-bg' },
   ]
+  // Admin: hide/unhide the listed assets, with a restore-style inline confirm.
+  const [hideAsk, setHideAsk] = useState(null)     // null | 'hide' | 'unhide'
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const rowAdmin = isAdmin ? [
+    { key: 'hide', label: 'Hide', Glyph: EyeSlash, onClick: () => setHideAsk((v) => (v === 'hide' ? null : 'hide')), active: hideAsk === 'hide', disabled: empty, cls: 'tone-dark', iconColor: '#26292e' },
+    { key: 'unhide', label: 'Unhide', Glyph: Eye, onClick: () => setHideAsk((v) => (v === 'unhide' ? null : 'unhide')), active: hideAsk === 'unhide', disabled: empty, cls: 'tone-dark', iconColor: '#26292e' },
+    { key: 'delete', label: 'Delete', Glyph: Trash, onClick: () => setConfirm((c) => (c === 'delete' ? '' : 'delete')), active: confirm === 'delete', disabled: empty, cls: 'tone-red', iconColor: '#a32d2d' },
+    { key: 'settings', label: 'Settings', Glyph: GearSix, onClick: () => setSettingsOpen((o) => !o), active: settingsOpen, cls: 'tone-dark', iconColor: '#26292e' },
+  ] : []
+  // One boolean per toggleable field: visible unless explicitly false.
+  const fieldOn = (k) => svcSettings?.fieldVis?.[k] !== false
   const form = panel ? REQUEST_FORMS[panel] : null
   const locFiltered = locationList.filter((l) => !myLocation.trim() || String(l.name).toLowerCase().includes(myLocation.trim().toLowerCase()))
   const titleReq = panel && !String(listName || '').trim()
@@ -2324,8 +3071,8 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
           <>
             <div className="mylist-actions">
               {rowTop.map((item) => (
-                <button key={item.key} type="button" className={`mylist-btn${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
-                  <item.Glyph size={20} weight="fill" color="#3d5a80" />
+                <button key={item.key} type="button" className={`mylist-btn${item.active ? ' is-active' : ''}${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
+                  <item.Glyph size={20} weight="fill" color={item.active ? '#ffffff' : item.iconColor || '#3d5a80'} />
                   <span>{item.label}</span>
                 </button>
               ))}
@@ -2338,6 +3085,67 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
                 </button>
               ))}
             </div>
+            {rowAdmin.length > 0 && (
+              <div className="mylist-actions">
+                {rowAdmin.map((item) => (
+                  <button key={item.key} type="button" className={`mylist-btn${item.active ? ' is-active' : ''}${item.cls ? ` ${item.cls}` : ''}`} disabled={item.disabled} onClick={item.onClick}>
+                    <item.Glyph size={20} weight="fill" color={item.active ? '#ffffff' : item.iconColor || '#3d5a80'} />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {hideAsk && (
+              <div className="restore-confirm">
+                <p>{hideAsk === 'hide'
+                  ? `자산 ${ids.length}개를 숨길까요? 일반 계정에서는 보이지 않게 됩니다.`
+                  : `자산 ${ids.length}개의 숨김을 해제할까요?`}</p>
+                <div className="action-row">
+                  <button type="button" className="amber-btn" onClick={() => { onSetHidden(ids, hideAsk === 'hide'); setHideAsk(null) }}>
+                    {hideAsk === 'hide' ? <EyeSlash size={18} weight="fill" /> : <Eye size={18} weight="fill" />} {hideAsk === 'hide' ? '숨김' : '숨김 해제'}
+                  </button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setHideAsk(null)}>취소</Button>
+                </div>
+              </div>
+            )}
+            {restoreAsk && restore && (
+              <div className="restore-confirm">
+                <p>자산 {Object.keys(restore.prev).length}개의 위치를 Update 이전 위치로 되돌릴까요?</p>
+                <div className="action-row">
+                  <button type="button" className="amber-btn" onClick={doRestore}><ArrowCounterClockwise size={18} weight="bold" /> 복원</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setRestoreAsk(false)}>취소</Button>
+                </div>
+              </div>
+            )}
+            {confirm === 'update' && (
+              <div className="restore-confirm">
+                <p>{myLocation.trim()
+                  ? `지금 목록 ${ids.length}개를 '${myLocation.trim()}' 위치로 업데이트할까요?`
+                  : `위치를 먼저 선택하세요. (지금 목록 ${ids.length}개의 위치를 바꿉니다)`}</p>
+                <div className="action-row">
+                  <button type="button" className="amber-btn" onClick={() => { setConfirm(''); doUpdate() }}><CheckCircle size={18} weight="fill" /> Update</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setConfirm('')}>취소</Button>
+                </div>
+              </div>
+            )}
+            {confirm === 'request' && (
+              <div className="restore-confirm">
+                <p>목록 {ids.length}개에 확인 요청을 걸까요?</p>
+                <div className="action-row">
+                  <button type="button" className="amber-btn green-btn" onClick={() => { setConfirm(''); onRequest(ids) }}><ShieldCheck size={18} weight="fill" /> Request</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setConfirm('')}>취소</Button>
+                </div>
+              </div>
+            )}
+            {confirm === 'delete' && (
+              <div className="restore-confirm is-danger">
+                <p>목록 {ids.length}개 자산을 <b>영구 삭제</b>할까요? 되돌릴 수 없습니다. (History에 기록됩니다)</p>
+                <div className="action-row">
+                  <button type="button" className="amber-btn danger-btn" onClick={() => { setConfirm(''); onDeleteAssets(ids) }}><Trash size={18} weight="fill" /> 삭제</button>
+                  <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setConfirm('')}>취소</Button>
+                </div>
+              </div>
+            )}
             {form && (
               <div className="request-panel">
                 <h4>{form.label}</h4>
@@ -2353,15 +3161,111 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
                 ))}
                 {form.placeKey && <p className="muted">장소는 위 위치 입력칸 값으로 들어갑니다: {myLocation || '(미입력)'}</p>}
                 <div className="action-row">
-                  <button type="button" className="amber-btn" onClick={() => runExport('pdf')}>PDF</button>
-                  <button type="button" className="amber-btn" onClick={() => runExport('hwpx')}>HWPX</button>
+                  {hwpx.state === 'idle' && (
+                    <button type="button" className="amber-btn" onClick={prepareHwpx}>Confirm and get HWPX</button>
+                  )}
+                  {hwpx.state === 'building' && (
+                    <button type="button" className="amber-btn is-loading" disabled>
+                      <span className="spin-ring" /> HWPX
+                    </button>
+                  )}
+                  {hwpx.state === 'ready' && (
+                    <>
+                      <button type="button" className="amber-btn" onClick={() => downloadBlob(hwpx.zipBlob, hwpx.zipName)}>
+                        <DownloadSimple size={18} weight="bold" /> ZIP
+                      </button>
+                      <button type="button" className="amber-btn" onClick={shareHwpxZip}>
+                        <ShareNetwork size={18} weight="fill" /> 공유
+                      </button>
+                    </>
+                  )}
                 </div>
+                {hwpx.state === 'ready' && (
+                  <div className="hwpx-files">
+                    {hwpx.files.map((f) => (
+                      <button
+                        key={f.cls}
+                        type="button"
+                        className="hwpx-file-btn"
+                        onClick={() => downloadBlob(f.blob, f.name)}
+                      >
+                        <FloppyDisk size={16} weight="fill" /> {f.cls} ({f.count}개) 저장
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </>
         )}
       </Card>
-      {locOpen ? (
+      {settingsOpen && isAdmin ? (
+        <>
+          <Card>
+            <div className="settings-row">
+              <div className="settings-info">
+                <strong>위치 변경 허용 모드</strong>
+                <span className="settings-desc">켜면 일반 계정도 위치 변경(Update·Check-in/out·Extension)이 바로 적용됩니다. 끄면 그 액션이 보류되어 관리자가 History에서 승인해야 적용됩니다.</span>
+              </div>
+              <button
+                type="button"
+                className={`setting-toggle${svcSettings.allowMove !== false ? ' is-on' : ''}`}
+                onClick={() => onChangeSettings({ allowMove: !(svcSettings.allowMove !== false) })}
+              >
+                {svcSettings.allowMove !== false ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </Card>
+          <Card>
+            <div className="settings-row">
+              <div className="settings-info">
+                <strong>새 자산 추가 허용 모드</strong>
+                <span className="settings-desc">끄면 일반 계정은 Assets 탭 맨 위의 '새 자산 등록' 카드로 자산을 추가할 수 없습니다.</span>
+              </div>
+              <button
+                type="button"
+                className={`setting-toggle${svcSettings.allowCreate !== false ? ' is-on' : ''}`}
+                onClick={() => onChangeSettings({ allowCreate: !(svcSettings.allowCreate !== false) })}
+              >
+                {svcSettings.allowCreate !== false ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </Card>
+          <Card>
+            <div className="settings-row">
+              <div className="settings-info">
+                <strong>사진 변경 허용</strong>
+                <span className="settings-desc">끄면 일반 계정은 자산·위치 카드의 왼쪽 사진 버튼으로 사진을 추가·변경할 수 없습니다.</span>
+              </div>
+              <button
+                type="button"
+                className={`setting-toggle${svcSettings.allowPhoto !== false ? ' is-on' : ''}`}
+                onClick={() => onChangeSettings({ allowPhoto: !(svcSettings.allowPhoto !== false) })}
+              >
+                {svcSettings.allowPhoto !== false ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </Card>
+          <Card>
+            <div className="settings-info" style={{ marginBottom: 10 }}>
+              <strong>자산 카드 필드 표시 (일반 계정)</strong>
+              <span className="settings-desc">번호·이름·사진·위치·유저·Type·자산분류·Description·Last update·Edited by는 항상 표시됩니다.</span>
+            </div>
+            {VIS_FIELDS.map((f) => (
+              <div key={f.k} className="settings-row">
+                <span className="settings-field-label">{f.l}</span>
+                <button
+                  type="button"
+                  className={`setting-toggle${fieldOn(f.k) ? ' is-on' : ''}`}
+                  onClick={() => onChangeSettings({ fieldVis: { ...(svcSettings.fieldVis || {}), [f.k]: !fieldOn(f.k) } })}
+                >
+                  {fieldOn(f.k) ? 'ON' : 'OFF'}
+                </button>
+              </div>
+            ))}
+          </Card>
+        </>
+      ) : locOpen ? (
         <div className="result-list result-list-full">
           {locFiltered.length === 0 && (
             <Card><p className="muted">{locationList.length ? '일치하는 위치가 없습니다.' : '등록된 위치가 없습니다.'}{String(myLocation).trim() ? ` 입력한 "${String(myLocation).trim()}" 이름으로 새 위치가 등록됩니다.` : ''}</p></Card>
@@ -2410,6 +3314,9 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
                 locationPhoto={locationPhoto}
                 records={records}
                 classOptions={classOptions}
+                isAdmin={isAdmin}
+                canEditPhotos={canEditPhotos}
+                showField={showField}
               />
             ))}
           </div>
@@ -2419,7 +3326,7 @@ function MyListPage({ assets, expandedId, setExpandedId, myPhotos, toggleMyList,
   )
 }
 
-function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove, isAdmin, onDelete, onRename }) {
+function RecordsPage({ records, assets, me, myListSet, toggleMyList, onAdd, onRemove, isAdmin, onDelete, onRename, onCancelRequest, onApprove, notify, showField }) {
   const [query, setQuery] = useState('')
   const [openId, setOpenId] = useState('')
   const assetMap = useMemo(() => {
@@ -2427,21 +3334,26 @@ function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove
     for (const a of assets) m[a.assetId] = a
     return m
   }, [assets])
+  const visible = useMemo(
+    () => records.filter((r) => isAdmin || (r.type !== 'hide' && r.type !== 'unhide')),
+    [records, isAdmin],
+  )
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return records
-    return records.filter((r) =>
+    if (!q) return visible
+    return visible.filter((r) =>
       String(r.name || '').toLowerCase().includes(q) ||
       String(r.user || '').toLowerCase().includes(q) ||
       (r.assetIds || []).some((id) => String(id).toLowerCase().includes(q)),
     )
-  }, [records, query])
+  }, [visible, query])
+  useArrowNav(true, openId, setOpenId, filtered, (r) => r.id)
   return (
     <div className="stack">
       <Card>
         <SearchBox query={query} setQuery={setQuery} placeholder="제목 · 작성자 · 자산번호 검색" />
       </Card>
-      {filtered.length === 0 && <Card><p className="muted">{records.length ? '검색 결과가 없습니다.' : '저장된 기록이 없습니다.'}</p></Card>}
+      {filtered.length === 0 && <Card><p className="muted">{visible.length ? '검색 결과가 없습니다.' : '저장된 기록이 없습니다.'}</p></Card>}
       {filtered.map((record) => (
         <HistoryCard
           key={record.id}
@@ -2449,20 +3361,27 @@ function RecordsPage({ records, assets, myListSet, toggleMyList, onAdd, onRemove
           assetMap={assetMap}
           myListSet={myListSet}
           isAdmin={isAdmin}
+          me={me}
           open={openId === record.id}
           onToggle={() => setOpenId(openId === record.id ? '' : record.id)}
           onAdd={onAdd}
           onRemove={onRemove}
           onDelete={onDelete}
           onRename={onRename}
+          onCancelRequest={onCancelRequest}
+          onApprove={onApprove}
           toggleMyList={toggleMyList}
+          notify={notify}
+          showField={showField}
         />
       ))}
     </div>
   )
 }
 
-function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onAdd, onRemove, onDelete, onRename, toggleMyList }) {
+function HistoryCard({ record, assetMap, myListSet, isAdmin, me, open, onToggle, onAdd, onRemove, onDelete, onRename, onCancelRequest, onApprove, toggleMyList, notify, showField }) {
+  // 삭제/요청 취소 is for the record's creator or an admin.
+  const canModerate = isAdmin || (!!me && record.user === me)
   const cardRef = useRef(null)
   // Two-phase open/close: glide up first then grow; shrink in place then glide back.
   const { mounted, grown } = useCardGlide(open, cardRef)
@@ -2474,10 +3393,11 @@ function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onA
             <strong>{record.name || record.id}</strong>
             <span className="history-meta">
               <span className={`type-chip type-${record.type}`}>{typeLabel(record.type)}</span>
+              {record.pending && <span className="type-chip type-pending">승인 대기</span>}
               <span>
                 {[`${(record.assetIds || []).length}개`, record.user ? String(record.user).split('@')[0] : '', formatDate(record.createdAt)]
                   .filter(Boolean)
-                  .join(' · ')}
+                  .join(' · ') + (record.location ? ` → ${record.location}` : '')}
               </span>
             </span>
           </button>
@@ -2485,16 +3405,23 @@ function HistoryCard({ record, assetMap, myListSet, isAdmin, open, onToggle, onA
         {mounted && (
           <Expando grown={grown}>
           <div className="loc-detail">
-            <div className="class-admin-row">
-              <button type="button" className="class-admin-btn" onClick={() => onAdd(record)}><Plus size={16} weight="bold" /> 추가</button>
-              <button type="button" className="class-admin-btn" onClick={() => onRemove(record)}><Minus size={16} weight="bold" /> 제거</button>
-              {isAdmin && (
-                <button type="button" className="class-admin-btn" onClick={() => onRename(record.id)}><PencilSimple size={16} weight="fill" /> 이름</button>
+            {record.pending && isAdmin && (
+              <button type="button" className="amber-btn green-btn hcard-full" onClick={() => onApprove(record.id)}><CheckCircle size={18} weight="fill" /> 승인 — 위치 변경 적용</button>
+            )}
+            <div className="hcard-actions">
+              <button type="button" className="amber-btn" onClick={() => onAdd(record)}><Plus size={18} weight="bold" /> My List</button>
+              <button type="button" className="amber-btn" onClick={() => onRemove(record)}><Minus size={18} weight="bold" /> My List</button>
+              {(isAdmin || canModerate) && (
+                <button type="button" className="amber-btn danger-btn" onClick={() => onDelete(record.id)}><Trash size={18} weight="fill" /> Delete</button>
               )}
-              {isAdmin && (
-                <button type="button" className="class-admin-btn danger" onClick={() => onDelete(record.id)}><Trash size={16} weight="fill" /> 삭제</button>
+              {record.type === 'request' && canModerate && (
+                <button type="button" className="amber-btn danger-btn" onClick={() => onCancelRequest(record)}><X size={18} weight="bold" /> 요청 취소</button>
               )}
             </div>
+            {(() => {
+              const rows = (record.assetIds || []).map((id) => assetMap[id]).filter(Boolean)
+              return rows.length > 0 ? <ExportButtons assets={rows} title={record.name || record.id} notify={notify} showField={showField} /> : null
+            })()}
             <div className="loc-items">
               {(record.assetIds || []).length === 0 && <p className="muted">항목이 없습니다.</p>}
               {(record.assetIds || []).map((id) => (
@@ -2536,6 +3463,7 @@ const CLASS_CONFIG = {
   },
   type: {
     field: 'type',
+    hasPhoto: false,          // types are text-only categories — no photo UI
     createLabel: '새 타입 등록',
     searchPlaceholder: '타입 이름 · 자산번호 검색',
     emptyText: '타입이 없습니다. 자산에 타입을 지정하세요.',
@@ -2550,12 +3478,17 @@ const CLASS_CONFIG = {
 
 function ClassificationPage(props) {
   const [sub, setSub] = useState('location')
+  // While a merge is underway the Location/Type subtabs are hidden — switching
+  // sub-lists mid-merge would silently drop the flow.
+  const [merging, setMerging] = useState(false)
   return (
     <div className="stack">
-      <div className="subtabs">
-        <button type="button" className={`subtab${sub === 'location' ? ' is-active' : ''}`} onClick={() => setSub('location')}>Location</button>
-        <button type="button" className={`subtab${sub === 'type' ? ' is-active' : ''}`} onClick={() => setSub('type')}>Type</button>
-      </div>
+      {!merging && (
+        <div className="subtabs">
+          <button type="button" className={`subtab${sub === 'location' ? ' is-active' : ''}`} onClick={() => setSub('location')}>Location</button>
+          <button type="button" className={`subtab${sub === 'type' ? ' is-active' : ''}`} onClick={() => setSub('type')}>Type</button>
+        </div>
+      )}
       {sub === 'location' ? (
         <ClassPage
           cfg={CLASS_CONFIG.location}
@@ -2570,6 +3503,10 @@ function ClassificationPage(props) {
           onAddAll={props.onAddAllLocation}
           onPhoto={props.onPhotoLocation}
           onCreate={props.onCreateLocation}
+          onMergeMode={setMerging}
+          canEditPhotos={props.canEditPhotos}
+          notify={props.notify}
+          showField={props.showField}
         />
       ) : (
         <ClassPage
@@ -2585,6 +3522,10 @@ function ClassificationPage(props) {
           onAddAll={props.onAddAllType}
           onPhoto={props.onPhotoType}
           onCreate={props.onCreateType}
+          onMergeMode={setMerging}
+          canEditPhotos={props.canEditPhotos}
+          notify={props.notify}
+          showField={props.showField}
         />
       )}
     </div>
@@ -2595,8 +3536,18 @@ function ClassificationPage(props) {
 function NewClassCard({ cfg, onCreate }) {
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({})
+  const photoRef = useRef(null)
   function save() {
     if (onCreate(form)) { setForm({}); setOpen(false) }
+  }
+  // Photo can be attached right at creation — camera or gallery via the native
+  // picker, rasterized to JPEG like every other photo intake.
+  async function onPickPhoto(e) {
+    const f = e.target.files?.[0]
+    e.target.value = ''
+    if (!f) return
+    const url = await fileToJpegDataUrl(f)
+    setForm((c) => ({ ...c, photo: url }))
   }
   return (
     <div className={`asset-row${open ? ' is-open' : ''}`}>
@@ -2612,6 +3563,19 @@ function NewClassCard({ cfg, onCreate }) {
             <button type="button" className="amber-btn" onClick={save}>Save</button>
             <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => { setForm({}); setOpen(false) }}>Cancel</Button>
           </div>
+          {cfg.hasPhoto !== false && (
+            <>
+              <div className="photo-row">
+                <div className="photo-stack">
+                  <PhotoSlot src={form.photo} label={cfg.field === 'location' ? '위치 사진' : '사진'} />
+                  <button type="button" className="slot-edit-btn" onClick={() => photoRef.current?.click()}>
+                    <CameraPlus size={16} weight="fill" /> {form.photo ? '사진 변경' : '사진 추가'}
+                  </button>
+                </div>
+              </div>
+              <input ref={photoRef} type="file" accept="image/*" hidden onChange={onPickPhoto} />
+            </>
+          )}
           {cfg.editFields.map((x) => (
             <label key={x.k}>
               {x.l}
@@ -2634,9 +3598,44 @@ function NewClassCard({ cfg, onCreate }) {
   )
 }
 
-function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMerge, onDelete, onPhoto, onAddAll, toggleMyList, onCreate }) {
+// A non-editing class card used by the merge flow (pick list + confirmation).
+function ClassPickCard({ rec, onSelect }) {
+  const body = (
+    <span className="loc-main">
+      <strong>{rec.name}</strong>
+      <span className="history-meta">{rec.count}개 물품{rec.lastUpdate ? ` · 최근변경 ${formatDate(rec.lastUpdate)}` : ''}</span>
+    </span>
+  )
+  return (
+    <div className="asset-row">
+      <div className="asset-row-head">
+        <span className="asset-photo">
+          {rec.photo ? <img src={rec.photo} alt="" /> : <Tag size={22} weight="fill" color="#9aa3b2" />}
+        </span>
+        {onSelect ? (
+          <button type="button" className="asset-row-open" onClick={onSelect}>{body}</button>
+        ) : (
+          <div className="asset-row-open">{body}</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMerge, onDelete, onPhoto, onAddAll, toggleMyList, onCreate, onMergeMode, canEditPhotos = true, notify, showField }) {
   const [openName, setOpenName] = useState('')
   const [query, setQuery] = useState('')
+  // Merge flow: null | { source, target: null } (picking) | { source, target } (confirming)
+  const [merge, setMerge] = useState(null)
+  const [mergeQuery, setMergeQuery] = useState('')
+  const mergeTopRef = useRef(null)
+  // Merge mode: tell the parent (it hides the Location/Type subtabs) and jump to
+  // the top on every step (enter picking / move to confirmation).
+  useEffect(() => {
+    onMergeMode?.(!!merge)
+    if (merge) mergeTopRef.current?.scrollIntoView({ block: 'start' })
+    return () => onMergeMode?.(false)
+  }, [merge])
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return classList
@@ -2645,6 +3644,50 @@ function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMer
       assets.some((a) => a[cfg.field] === c.name && String(a.assetId).toLowerCase().includes(q)),
     )
   }, [classList, assets, query, cfg.field])
+  useArrowNav(!merge, openName, setOpenName, filtered, (c) => c.name)
+
+  if (merge) {
+    const source = classList.find((c) => c.name === merge.source) || { name: merge.source, count: 0 }
+    const target = merge.target ? classList.find((c) => c.name === merge.target) : null
+    if (target) {
+      // Final confirmation: source ↓ target, then 확인/취소.
+      return (
+        <>
+          <div ref={mergeTopRef}><Card><p className="merge-title">아래와 같이 병합할까요? 되돌릴 수 없습니다.</p></Card></div>
+          <ClassPickCard rec={source} />
+          <div className="merge-arrow"><ArrowCircleDown size={28} weight="fill" color="#c98a2e" /></div>
+          <ClassPickCard rec={target} />
+          <div className="action-row">
+            <button type="button" className="amber-btn" onClick={() => { onMerge(merge.source, merge.target); setMerge(null) }}>확인</button>
+            <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setMerge({ source: merge.source, target: null })}>취소</Button>
+          </div>
+        </>
+      )
+    }
+    // Pick mode: instruction + cancel, search, and every card except the source.
+    const q = mergeQuery.trim().toLowerCase()
+    const candidates = classList
+      .filter((c) => c.name !== merge.source)
+      .filter((c) => !q || String(c.name).toLowerCase().includes(q))
+    return (
+      <>
+        <div ref={mergeTopRef}>
+        <Card>
+          <div className="merge-head">
+            <p className="merge-title">'{merge.source}'을(를) 병합할 대상을 선택하세요</p>
+            <Button variant="secondary" size="md" style={ACTION_BTN} onClick={() => setMerge(null)}>취소</Button>
+          </div>
+          <SearchBox query={mergeQuery} setQuery={setMergeQuery} placeholder={cfg.searchPlaceholder} />
+        </Card>
+        </div>
+        {candidates.length === 0 && <Card><p className="muted">선택할 수 있는 대상이 없습니다.</p></Card>}
+        {candidates.map((c) => (
+          <ClassPickCard key={c.name} rec={c} onSelect={() => setMerge({ source: merge.source, target: c.name })} />
+        ))}
+      </>
+    )
+  }
+
   return (
     <>
       <Card>
@@ -2663,25 +3706,29 @@ function ClassPage({ cfg, classList, assets, myListSet, isAdmin, onUpdate, onMer
           open={openName === c.name}
           onToggle={() => setOpenName(openName === c.name ? '' : c.name)}
           onUpdate={onUpdate}
-          onMerge={onMerge}
+          onMerge={(name) => { setMerge({ source: name, target: null }); setMergeQuery(''); setOpenName('') }}
           onDelete={onDelete}
           onPhoto={onPhoto}
           onAddAll={onAddAll}
           toggleMyList={toggleMyList}
+          canEditPhotos={canEditPhotos}
+          notify={notify}
+          showField={showField}
         />
       ))}
     </>
   )
 }
 
-function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpdate, onMerge, onDelete, onPhoto, onAddAll, toggleMyList }) {
+function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpdate, onMerge, onDelete, onPhoto, onAddAll, toggleMyList, canEditPhotos = true, notify, showField }) {
   const items = useMemo(() => assets.filter((a) => a[cfg.field] === rec.name), [assets, rec.name, cfg.field])
   const [editing, setEditing] = useState(false)
+  const [editPhoto, setEditPhoto] = useState(false)
   const initForm = () => { const f = {}; cfg.editFields.forEach((x) => { f[x.k] = x.k === 'name' ? rec.name : (rec[x.k] || '') }); return f }
   const [form, setForm] = useState(initForm)
   const cardRef = useRef(null)
   useEffect(() => { setForm(initForm()) }, [rec.name, rec.address, rec.description, rec.memo])
-  useEffect(() => { if (!open) setEditing(false) }, [open])
+  useEffect(() => { if (!open) { setEditing(false); setEditPhoto(false) } }, [open])
   // Two-phase open/close: glide up first then grow; shrink in place then glide back.
   const { mounted, grown } = useCardGlide(open, cardRef)
   function saveEdit() {
@@ -2692,9 +3739,17 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
   return (
     <div ref={cardRef} className={`asset-row${open ? ' is-open' : ''}`}>
       <div className="asset-row-head">
-        <button type="button" className="asset-photo is-photo" title="사진 촬영" onClick={() => onPhoto(rec.name)}>
-          {rec.photo ? <img src={rec.photo} alt="" /> : <CameraPlus size={24} weight="fill" color={PHOTO_COLOR} />}
-        </button>
+        {cfg.hasPhoto !== false && canEditPhotos ? (
+          <button type="button" className="asset-photo is-photo" title="사진 촬영" onClick={() => onPhoto(rec.name)}>
+            {rec.photo ? <img src={rec.photo} alt="" /> : <CameraPlus size={24} weight="fill" color={PHOTO_COLOR} />}
+          </button>
+        ) : cfg.hasPhoto !== false ? (
+          <div className="asset-photo">
+            {rec.photo ? <img src={rec.photo} alt="" /> : <Images size={22} weight="fill" color="#c2c8d2" />}
+          </div>
+        ) : (
+          <div className="asset-photo"><Tag size={22} weight="fill" color="#9aa3b2" /></div>
+        )}
         <button type="button" className="asset-row-open" onClick={onToggle}>
           <span className="loc-main">
             <strong>{rec.name}</strong>
@@ -2705,6 +3760,16 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
       {mounted && editing && isAdmin && (
         <Expando grown={grown}>
         <div className="asset-row-body loc-body loc-edit">
+          {cfg.hasPhoto !== false && (
+            <div className="photo-row">
+              <div className="photo-stack">
+                <PhotoSlot src={rec.photo} label={cfg.field === 'location' ? '위치 사진' : '사진'} />
+                <button type="button" className="slot-edit-btn" onClick={() => setEditPhoto(true)}>
+                  <PencilSimple size={16} weight="fill" /> 편집
+                </button>
+              </div>
+            </div>
+          )}
           {cfg.editFields.map((x) => (
             <label key={x.k}>
               {x.l}
@@ -2725,11 +3790,16 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
       {mounted && !editing && (
         <Expando grown={grown}>
         <div className="asset-row-body loc-body">
-          {isAdmin && (
-            <div className="class-admin-row">
-              <button type="button" className="class-admin-btn" onClick={() => setEditing(true)}><PencilSimple size={16} weight="fill" /> 편집</button>
-              <button type="button" className="class-admin-btn" onClick={() => onMerge(rec.name)}><ArrowsMerge size={16} weight="fill" /> 병합</button>
-              <button type="button" className="class-admin-btn danger" onClick={() => onDelete(rec.name)}><Trash size={16} weight="fill" /> 제거</button>
+          <div className="hcard-actions">
+            <button type="button" className="amber-btn" onClick={() => setEditing(true)}><PencilSimple size={18} weight="fill" /> 편집</button>
+            <button type="button" className="amber-btn tone-hwpx" onClick={() => onMerge(rec.name)}><Unite size={18} weight="fill" /> 병합</button>
+            {isAdmin && (
+              <button type="button" className="amber-btn danger-btn" onClick={() => onDelete(rec.name)}><Trash size={18} weight="fill" /> 제거</button>
+            )}
+          </div>
+          {cfg.hasPhoto !== false && (
+            <div className="photo-row">
+              <PhotoSlot src={rec.photo} label={cfg.field === 'location' ? '위치 사진' : '사진'} />
             </div>
           )}
           <dl className="kv">
@@ -2737,9 +3807,10 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
             {cfg.detailFields.map((x) => (rec[x.k] ? <React.Fragment key={x.k}><dt>{x.l}</dt><dd>{rec[x.k]}</dd></React.Fragment> : null))}
             <dt>최근 변경</dt><dd>{formatDate(rec.lastUpdate) || '-'}</dd>
           </dl>
-          <div className="action-row">
-            <button type="button" className="amber-btn" onClick={() => onAddAll(rec.name)}>전부 My List에 추가</button>
+          <div className="hcard-actions">
+            <button type="button" className="amber-btn" onClick={() => onAddAll(rec.name)}><Plus size={18} weight="bold" /> My List</button>
           </div>
+          {items.length > 0 && <ExportButtons assets={items} title={rec.name} notify={notify} showField={showField} />}
           <div className="loc-items">
             {items.length === 0 && <p className="muted">물품이 없습니다.</p>}
             {items.map((a) => (
@@ -2760,8 +3831,109 @@ function ClassCard({ cfg, rec, assets, myListSet, isAdmin, open, onToggle, onUpd
         </div>
         </Expando>
       )}
+      {editPhoto && (
+        <PhotoEditModal
+          src={rec.photo || ''}
+          onSave={(url) => { onUpdate(rec.name, { photo: url }); setEditPhoto(false) }}
+          onClose={() => setEditPhoto(false)}
+          onRetake={() => { setEditPhoto(false); onPhoto(rec.name) }}
+          onDelete={rec.photo ? () => { onUpdate(rec.name, { photo: '' }); setEditPhoto(false) } : undefined}
+        />
+      )}
     </div>
   )
+}
+
+// Short chip labels — used only in the asset card's compact history rows.
+// Reusable export block for a list of assets (Class card / History card).
+//  • HWPX: table-only doc per 자산분류 → spinner → [ZIP][공유] + per-class buttons.
+//  • XLSX: one sheet, all fields but photos → [다운로드][공유].
+// Each download is its own tap (browsers allow one download per gesture).
+function ExportButtons({ assets, title, notify, showField }) {
+  const [hwpx, setHwpx] = useState({ state: 'idle' })   // idle | building | ready
+  const [xlsx, setXlsx] = useState({ state: 'idle' })
+  const jobRef = useRef(0)
+  const safe = sanitizeFileName(title || '목록')
+
+  async function prepareHwpx() {
+    const job = ++jobRef.current
+    setHwpx({ state: 'building' })
+    try {
+      const files = []
+      for (const [cls, group] of groupByClass(assets)) {
+        const blob = await buildTableHwpxBlob(group, `${title} - ${cls}`)
+        files.push({ cls, count: group.length, blob, name: `${safe}_${sanitizeFileName(cls)}.hwpx` })
+      }
+      const entries = []
+      for (const f of files) entries.push({ name: f.name, data: new Uint8Array(await f.blob.arrayBuffer()) })
+      const zipBlob = window.CensHwpx?.makeZip ? window.CensHwpx.makeZip(entries) : null
+      const zipName = `${safe}.zip`
+      const zipFile = zipBlob ? new File([zipBlob], zipName, { type: 'application/zip' }) : null
+      if (job !== jobRef.current) return
+      setHwpx({ state: 'ready', files, zipBlob, zipName, zipFile })
+    } catch (e) { if (job === jobRef.current) { setHwpx({ state: 'idle' }); notify?.(`HWPX 실패: ${e.message || e}`, 'error') } }
+  }
+
+  function prepareXlsx() {
+    try {
+      const blob = buildXlsxBlob(assets, showField)
+      const name = `${safe}.xlsx`
+      const file = new File([blob], name, { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      setXlsx({ state: 'ready', blob, name, file })
+    } catch (e) { notify?.(`XLSX 실패: ${e.message || e}`, 'error') }
+  }
+
+  async function shareFile(file, name) {
+    try {
+      if (file && navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], title })
+      else notify?.('이 브라우저는 파일 공유를 지원하지 않습니다.', 'warn')
+    } catch { /* dismissed */ }
+  }
+
+  return (
+    <>
+      <div className="hcard-actions">
+        {hwpx.state === 'idle' && <button type="button" className="amber-btn tone-hwpx" onClick={prepareHwpx}>HWPX</button>}
+        {hwpx.state === 'building' && <button type="button" className="amber-btn tone-hwpx is-loading" disabled><span className="spin-ring" /> HWPX</button>}
+        {hwpx.state === 'ready' && (
+          <>
+            <button type="button" className="amber-btn tone-hwpx" onClick={() => downloadBlob(hwpx.zipBlob, hwpx.zipName)}><DownloadSimple size={18} weight="bold" /> ZIP</button>
+            <button type="button" className="amber-btn tone-hwpx" onClick={() => shareFile(hwpx.zipFile, hwpx.zipName)}><ShareNetwork size={18} weight="fill" /> 공유</button>
+          </>
+        )}
+      </div>
+      {hwpx.state === 'ready' && (
+        <div className="hcard-actions">
+          {hwpx.files.map((f) => (
+            <button key={f.cls} type="button" className="amber-btn tone-hwpx" onClick={() => downloadBlob(f.blob, f.name)}>
+              <FloppyDisk size={16} weight="fill" /> {f.cls} ({f.count})
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="hcard-actions">
+        {xlsx.state !== 'ready' ? (
+          <button type="button" className="amber-btn tone-xlsx" onClick={prepareXlsx}>XLSX</button>
+        ) : (
+          <>
+            <button type="button" className="amber-btn tone-xlsx" onClick={() => downloadBlob(xlsx.blob, xlsx.name)}><DownloadSimple size={18} weight="bold" /> 다운로드</button>
+            <button type="button" className="amber-btn tone-xlsx" onClick={() => shareFile(xlsx.file, xlsx.name)}><ShareNetwork size={18} weight="fill" /> 공유</button>
+          </>
+        )}
+      </div>
+    </>
+  )
+}
+
+function typeLabelShort(type) {
+  if (type === 'checkout') return 'co'
+  if (type === 'checkin') return 'ci'
+  if (type === 'extension') return 'ex'
+  if (type === 'update' || type === 'verify') return 'up'
+  if (type === 'request') return 'rq'
+  if (type === 'save') return 'sv'
+  if (type === 'delete') return 'dl'
+  return typeLabel(type)
 }
 
 function typeLabel(type) {
@@ -2772,7 +3944,28 @@ function typeLabel(type) {
   if (type === 'verify') return 'Update'
   if (type === 'request') return 'Request'
   if (type === 'save') return 'Saved'
+  if (type === 'hide') return 'Hide'
+  if (type === 'unhide') return 'Unhide'
+  if (type === 'delete') return 'Delete'
   return type
+}
+
+// Notification time: HH:MM for today, date+time otherwise.
+function formatNoticeTime(value) {
+  const d = new Date(value)
+  if (Number.isNaN(d.getTime())) return ''
+  const sameDay = d.toDateString() === new Date().toDateString()
+  return sameDay
+    ? d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : d.toLocaleString([], { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+}
+
+// Date only, no clock time (asset-card history rows).
+function formatDateOnly(value) {
+  if (!value) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return date.toLocaleDateString()
 }
 
 function formatDate(value) {

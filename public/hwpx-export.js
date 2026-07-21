@@ -200,6 +200,7 @@
 
   function makeLines(payload, requestTypeLabel) {
     const labels = {
+      assetClass: "자산 분류",
       applicantName: "신청자 이름",
       applicantOrg: "소속",
       takeoutPeriod: "반출 기간",
@@ -244,6 +245,7 @@
 
   function makeIntroLines(payload, requestTypeLabel) {
     const labels = {
+      assetClass: "자산 분류",
       applicantName: "신청자 이름",
       applicantOrg: "소속",
       takeoutPeriod: "반출 기간",
@@ -638,11 +640,50 @@
     entry.data = data;
   }
 
+  // 한글 renders BinData images by their png/jpg name — an SVG (or other
+  // non-raster) data URI stored as a photo would come out broken. Re-encode any
+  // such photo to a real PNG via canvas before collecting images.
+  const RASTER_MIMES = ["image/jpeg", "image/png", "image/gif", "image/bmp"];
+
+  async function rasterizeDataUrl(src) {
+    const mime = (/^data:([^;,]+)/.exec(String(src || "")) || [])[1] || "";
+    if (!mime || RASTER_MIMES.includes(mime)) return src;
+    try {
+      const img = await new Promise((resolve, reject) => {
+        const el = new Image();
+        el.onload = () => resolve(el);
+        el.onerror = reject;
+        el.src = src;
+      });
+      const w = img.naturalWidth || img.width || 1000;
+      const h = img.naturalHeight || img.height || 1000;
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      return canvas.toDataURL("image/png");
+    } catch (e) {
+      return "";                       // undecodable → drop the photo, keep the doc
+    }
+  }
+
+  async function normalizePayloadPhotos(payload) {
+    for (const row of payload.rows || []) {
+      for (const key of ["numberPhoto", "wholePhoto"]) {
+        if (row[key]) row[key] = await rasterizeDataUrl(row[key]);
+      }
+    }
+  }
+
   async function build(payload, requestTypeLabel) {
     const entries = await loadTemplateEntries();
     const templateSection = decoder.decode(entries.find((entry) => entry.name === "Contents/section0.xml")?.data || new Uint8Array());
     const lines = makeIntroLines(payload, requestTypeLabel);
     const previewLines = makeLines(payload, requestTypeLabel);
+    await normalizePayloadPhotos(payload);
     const images = collectImages(payload);
     const title = payload.title || "자산 목록";
 
@@ -663,5 +704,12 @@
     templateBytesPromise = null;
   }
 
-  window.CensHwpx = { build, setTemplateBytes };
+  // Kick off the template fetch ahead of time. Without this, the FIRST export
+  // tap spends its user-gesture window downloading template.hwpx, and the
+  // browser (iOS especially) then ignores the programmatic download click.
+  function preload() {
+    loadTemplateEntries().catch(() => { templateBytesPromise = null; });
+  }
+
+  window.CensHwpx = { build, setTemplateBytes, preload, makeZip: createStoredZip };
 })();
