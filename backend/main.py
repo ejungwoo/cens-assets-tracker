@@ -31,7 +31,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from lilak_portal_auth import identity
+from lilak_portal_auth import identity, signed_in
 
 # The portal hands each project process its own data dir via {project_data}.
 DATA = Path(os.environ.get("ASSET_DATA_DIR", "./data"))
@@ -95,13 +95,13 @@ class SaveBody(BaseModel):
 
 
 @app.get("/api/data")
-def get_data(_: dict = Depends(identity)) -> dict:
+def get_data(_: dict = Depends(signed_in)) -> dict:
     with _lock:
         return _read()
 
 
 @app.put("/api/data")
-def put_data(body: SaveBody, me: dict = Depends(identity)):
+def put_data(body: SaveBody, me: dict = Depends(signed_in)):
     with _lock:
         cur = _read()
         if body.baseVersion != cur["version"]:
@@ -124,7 +124,7 @@ def put_data(body: SaveBody, me: dict = Depends(identity)):
 
 
 @app.get("/api/data/version")
-def get_version(_: dict = Depends(identity)) -> dict:
+def get_version(_: dict = Depends(signed_in)) -> dict:
     """Cheap poll target: clients ask for just the version every few seconds and
     fetch the full document only when it moved (the doc carries inline photos, so
     polling GET /api/data itself would be megabytes per tick)."""
@@ -145,8 +145,8 @@ if _assets.is_dir():
 
 @app.get("/{path:path}")
 def spa(path: str):
-    candidate = DIST / path
-    if path and candidate.is_file():
+    candidate = (DIST / path).resolve()
+    if path and candidate.is_file() and candidate.is_relative_to(DIST.resolve()):
         return FileResponse(candidate)
     index = DIST / "index.html"
     if index.is_file():
